@@ -6,10 +6,18 @@
   <title>pawIQ</title>
   
 <script>
-  if (
-    location.hostname === "pawiqpets.ca" ||
-    location.hostname === "www.pawiqpets.ca"
-  ) {
+  const redirects = [
+    "pawiqpets.ca",
+    "www.pawiqpets.ca",
+    "pawiq.ca",
+    "www.pawiq.ca",
+    "pawzbest.com",
+    "www.pawzbest.com"
+  ];
+
+  const host = location.hostname.toLowerCase();
+
+  if (redirects.includes(host)) {
     location.replace("https://www.pawiqpets.com" + location.pathname);
   }
 </script>
