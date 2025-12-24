@@ -4,7 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>pawIQ</title>
-
+  
+<script>
+  if (
+    location.hostname === "pawiqpets.ca" ||
+    location.hostname === "www.pawiqpets.ca"
+  ) {
+    location.replace("https://www.pawiqpets.com" + location.pathname);
+  }
+</script>
+  
   <style>
     html, body { height: 100%; }
     body {
