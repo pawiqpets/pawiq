@@ -18,7 +18,7 @@
   const host = location.hostname.toLowerCase();
 
   if (redirects.includes(host)) {
-    location.replace("https://www.pawiqpets.com" + location.pathname);
+    location.replace("https://www.pawiqpets.com" + location.pathname + location.search);
   }
 </script>
   
