@@ -66,23 +66,24 @@ body {
 .page {
   position: relative;
   z-index: 2;
+
+  min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 28px;
-  padding: 28px 24px 24px;
+  justify-content: space-between; /* top content + bottom signup */
+  padding: 22px 20px 18px;
   text-align: center;
   color: #fff;
   box-sizing: border-box;
 }
 
 .center {
-  flex: 0;
   display: grid;
   place-items: center;
   align-content: center;
   gap: 6px;
+  padding-top: 10px;
 }
 
 .center img {
@@ -105,7 +106,7 @@ body {
   gap: 10px;
   padding-bottom: env(safe-area-inset-bottom);
 }
-
+    
 .signup-title {
   font-size: 16px;
   font-weight: 400;
@@ -143,34 +144,23 @@ body {
 .consent input { margin-top: 2px; }
 
 .btn {
-  width: min(520px, 100%);
-  margin: 0 auto;
-  border: 1px solid rgba(255,255,255,0.25);
+  width: auto;
+  margin: 6px auto 0;
+  border: 0;
   background: transparent;
-  color: rgba(255,255,255,0.95);
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-weight: 500;
+  padding: 0;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  transition: background 150ms ease, border-color 150ms ease;
 }
 
-.btn:hover {
+.btn:hover .btn-icon {
   background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.35);
+  border-color: rgba(255,255,255,0.45);
 }
 
-.btn:active {
+.btn:active .btn-icon {
   background: rgba(255,255,255,0.14);
 }
-    
-.btn-text {
-  font-size: 14px;
-}
+
 
 .btn-icon {
   width: 34px;
@@ -181,6 +171,7 @@ body {
   place-items: center;
   font-size: 18px;
   line-height: 1;
+  transition: background 150ms ease, border-color 150ms ease;
 }
 
 .success {
@@ -194,19 +185,11 @@ body {
 .hidden { display: none; }
 
 @media (max-height: 700px) {
-  .page {
-    gap: 18px;
-    padding: 18px 18px 16px;
-  }
-
-  .sub,
-  .signup-title {
-    font-size: 15px;
-  }
-
-  .email {
-    width: min(240px, 100%);
-  }
+  .page { padding: 18px 18px 14px; }
+  .signup { gap: 8px; }
+  .sub, .signup-title { font-size: 15px; }
+  .email { width: min(240px, 100%); padding: 10px 12px; }
+  .btn-icon { width: 32px; height: 32px; }
 }
 
   </style>
@@ -214,7 +197,7 @@ body {
 
 <body>
 <div class="bg">
-  <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="./assets/comingsoon-poster.jpg">
+  <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="./assets/comingsoon-poster.jpg" disablepictureinpicture>
     <source src="./assets/comingsoon.mp4" type="video/mp4" />
   </video>
   <div class="bg-overlay"></div>
@@ -252,8 +235,7 @@ body {
       </label>
 
       <button class="btn" type="submit" aria-label="Sign up and be the first to know.">
-        <span class="btn-text">Sign up and be the first to know.</span>
-        <span class="btn-icon" aria-hidden="true">→</span>
+      <span class="btn-icon" aria-hidden="true">→</span>
       </button>
 
       <div id="successMsg" class="success" aria-live="polite">Thank You.</div>
