@@ -30,36 +30,189 @@
   
   <style>
     html, body { height: 100%; }
-    body {
-      margin: 0;
-      background: #5dc6ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-      font-family: system-ui, -apple-system, Arial, sans-serif;
-    }
 
-    .wrap { display: grid; place-items: center; gap: 6px; }
+body {
+  margin: 0;
+  background: #000;
+  font-family: system-ui, -apple-system, Arial, sans-serif;
+  overflow-x: hidden;
+}
 
-    img {
-      width: 140px;
-      height: auto;
-      display: block;
-    }
+/* Background video layer */
+.bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* cover the screen */
+}
 
-    .sub {
-      font-size: 14px;
-      color: #ffffff;
-    }
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+    
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35); /* subtle dark overlay */
+}
+
+/* Foreground content */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 24px 28px;
+  text-align: center;
+  color: #fff;
+}
+
+.center {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+}
+
+.center img {
+  width: 160px;
+  height: auto;
+  display: block;
+}
+
+.sub {
+  font-size: 16px;
+  letter-spacing: 0.2px;
+  opacity: 0.95;
+}
+
+/* Signup block near bottom, visible on load */
+.signup {
+  width: min(520px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 10px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.signup-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.email {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.30);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 10px;
+  outline: none;
+}
+
+.email::placeholder { color: rgba(255,255,255,0.65); }
+
+.consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.3;
+  color: rgba(255,255,255,0.9);
+}
+
+.consent input { margin-top: 2px; }
+
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.success {
+  display: none;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.hidden { display: none; }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
+<div class="bg">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="./assets/comingsoon.mp4" type="video/mp4" />
+  </video>
+  <div class="bg-overlay"></div>
+</div>
+  
+<div class="page">
+  <div class="center">
     <img src="./assets/logo-white.png" alt="pawIQ logo" />
-    <div class="sub">Coming soon..</div>
+    <div class="sub">Smart Habits. Coming Soon</div>
   </div>
+
+  <div class="signup">
+    <div class="signup-title">Get All the Updates</div>
+
+    <!-- Replace YOUR_WEB_APP_URL below -->
+    <form id="signupForm" action="https://script.google.com/macros/s/AKfycbz6CxMlLWQfRH2Gr-ABYvTSzNEqmxu-sMjJLJJS795Hl8z2vxntJo590CBm8PWev6xjGw/exec" method="POST" target="hidden_iframe">
+      <input type="hidden" name="page" value="https://www.pawiqpets.com/" />
+      <input type="hidden" name="user_agent" id="uaField" value="" />
+
+      <input class="email" type="email" name="email" placeholder="Email address" required />
+
+      <label class="consent">
+        <input type="checkbox" name="consent" value="yes" required />
+        I agree to receive email updates from pawIQ.
+      </label>
+
+      <button class="btn" type="submit">Sign up and be the first to know.</button>
+
+      <div id="successMsg" class="success" aria-live="polite">Thank You.</div>
+    </form>
+
+    <iframe name="hidden_iframe" id="hidden_iframe" class="hidden"></iframe>
+  </div>
+</div>
+
+<script>
+  // Populate user agent field
+  const ua = document.getElementById("uaField");
+  if (ua) ua.value = navigator.userAgent;
+
+  // Show "Thank You." after the form posts (iframe load)
+  const form = document.getElementById("signupForm");
+  const iframe = document.getElementById("hidden_iframe");
+  const success = document.getElementById("successMsg");
+
+  if (form && iframe && success) {
+    let submitted = false;
+    form.addEventListener("submit", () => {
+  submitted = true;
+  success.style.display = "none";
+});
+
+    iframe.addEventListener("load", () => {
+      if (!submitted) return;
+      success.style.display = "block";
+      form.reset();
+      submitted = false;
+    });
+  }
+</script>  
 </body>
 </html>
