@@ -40,13 +40,14 @@ body {
 
 /* Background video layer */
 .bg-video {
-  position: absolute;
+  position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* cover the screen */
+  object-fit: cover;
+  z-index: 0;
 }
-
+    
 .bg {
   position: fixed;
   inset: 0;
@@ -55,26 +56,29 @@ body {
 }
     
 .bg-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.35); /* subtle dark overlay */
+  z-index: 1;
 }
 
 /* Foreground content */
 .page {
   position: relative;
-  z-index: 1;
-  min-height: 100vh;
+  z-index: 2;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 40px 24px 28px;
+  justify-content: center;
+  gap: 28px;
+  padding: 28px 24px 24px;
   text-align: center;
   color: #fff;
+  box-sizing: border-box;
 }
 
 .center {
-  flex: 1;
+  flex: 0;
   display: grid;
   place-items: center;
   align-content: center;
@@ -82,7 +86,7 @@ body {
 }
 
 .center img {
-  width: 160px;
+  width: min(160px, 45vw);
   height: auto;
   display: block;
 }
@@ -103,18 +107,22 @@ body {
 }
 
 .signup-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  opacity: 0.95;
 }
 
 .email {
-  width: 100%;
+  width: min(260px, 100%);
+  margin: 0 auto;
   border: 1px solid rgba(255,255,255,0.25);
   background: rgba(0,0,0,0.30);
   color: #fff;
   padding: 12px 14px;
   border-radius: 10px;
   outline: none;
+  box-sizing: border-box;
 }
 
 .email::placeholder { color: rgba(255,255,255,0.65); }
@@ -123,37 +131,90 @@ body {
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  text-align: left;
+  justify-content: center;
+  text-align: center;
   font-size: 13px;
   line-height: 1.3;
   color: rgba(255,255,255,0.9);
+  max-width: 360px;
+  margin: 0 auto;
 }
 
 .consent input { margin-top: 2px; }
 
 .btn {
-  width: 100%;
-  border: 0;
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-weight: 700;
+  width: min(520px, 100%);
+  margin: 0 auto;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: transparent;
+  color: rgba(255,255,255,0.95);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 500;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.35);
+}
+
+.btn:active {
+  background: rgba(255,255,255,0.14);
+}
+    
+.btn-text {
+  font-size: 14px;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .success {
   display: none;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   margin-top: 6px;
+  opacity: 0.95;
 }
 
 .hidden { display: none; }
+
+@media (max-height: 700px) {
+  .page {
+    gap: 18px;
+    padding: 18px 18px 16px;
+  }
+
+  .sub,
+  .signup-title {
+    font-size: 15px;
+  }
+
+  .email {
+    width: min(240px, 100%);
+  }
+}
+
   </style>
 </head>
 
 <body>
 <div class="bg">
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+  <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="./assets/comingsoon-poster.jpg">
     <source src="./assets/comingsoon.mp4" type="video/mp4" />
   </video>
   <div class="bg-overlay"></div>
@@ -162,25 +223,38 @@ body {
 <div class="page">
   <div class="center">
     <img src="./assets/logo-white.png" alt="pawIQ logo" />
-    <div class="sub">Smart Habits. Coming Soon</div>
+    <div class="sub">Smart Habits. Coming Soon.</div>
   </div>
 
   <div class="signup">
-    <div class="signup-title">Get All the Updates</div>
+    <div class="signup-title">Get all the updates.</div>
 
     <!-- Replace YOUR_WEB_APP_URL below -->
     <form id="signupForm" action="https://script.google.com/macros/s/AKfycbz6CxMlLWQfRH2Gr-ABYvTSzNEqmxu-sMjJLJJS795Hl8z2vxntJo590CBm8PWev6xjGw/exec" method="POST" target="hidden_iframe">
       <input type="hidden" name="page" value="https://www.pawiqpets.com/" />
       <input type="hidden" name="user_agent" id="uaField" value="" />
 
-      <input class="email" type="email" name="email" placeholder="Email address" required />
+      <input
+      class="email"
+      type="email"
+      name="email"
+      placeholder="Email address"
+      required
+      inputmode="email"
+      autocomplete="email"
+      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+      title="Please enter a valid email address (example: name@example.com)"
+    />
 
       <label class="consent">
         <input type="checkbox" name="consent" value="yes" required />
         I agree to receive email updates from pawIQ.
       </label>
 
-      <button class="btn" type="submit">Sign up and be the first to know.</button>
+      <button class="btn" type="submit" aria-label="Sign up and be the first to know.">
+        <span class="btn-text">Sign up and be the first to know.</span>
+        <span class="btn-icon" aria-hidden="true">→</span>
+      </button>
 
       <div id="successMsg" class="success" aria-live="polite">Thank You.</div>
     </form>
@@ -201,7 +275,7 @@ body {
 
   if (form && iframe && success) {
     let submitted = false;
-    form.addEventListener("submit", () => {
+  form.addEventListener("submit", () => {
   submitted = true;
   success.style.display = "none";
 });
