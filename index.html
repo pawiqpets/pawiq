@@ -194,16 +194,6 @@ body {
 }
 
 /* Gentle restart fade */
-.bg-fade {
-  position: fixed;
-  inset: 0;
-  background: #000;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 2; /* above video and overlay, below content */
-  transition: opacity 450ms ease;
-}
-.bg-fade.on { opacity: 1; }
 
 /* Mobile framing: shift focal point slightly left */
 @media (max-width: 768px){
@@ -220,7 +210,6 @@ body {
    <video id="bgVideo" class="bg-video" autoplay muted playsinline preload="metadata" poster="./assets/comingsoon-poster.jpg" disablepictureinpicture>
     <source src="./assets/comingsoon.mp4" type="video/mp4" />
   </video>
-  <div id="bgFade" class="bg-fade"></div>
   <div class="bg-overlay"></div>
 </div>
   
@@ -293,32 +282,22 @@ body {
   /* Background video: play -> wait 10s -> restart gently */
 (function () {
   const video = document.getElementById("bgVideo");
-  const fade = document.getElementById("bgFade");
   if (!video) return;
 
   const WAIT_MS = 10000;
-  const FADE_MS = 450;
   const IS_MOBILE = window.matchMedia("(max-width: 768px)").matches;
 
   let timer = null;
 
   function restartGently() {
-    if (fade) fade.classList.add("on");
+  try {
+    video.pause();
+    video.currentTime = 0;
 
-    window.setTimeout(() => {
-      try {
-        video.pause();
-        video.currentTime = 0;
-
-        const p = video.play();
-        if (p && typeof p.catch === "function") p.catch(() => {});
-      } catch (e) {}
-
-      window.setTimeout(() => {
-        if (fade) fade.classList.remove("on");
-      }, 120);
-    }, FADE_MS);
-  }
+    const p = video.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  } catch (e) {}
+}
 
   function scheduleRestart() {
     if (timer) window.clearTimeout(timer);
