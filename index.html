@@ -65,7 +65,7 @@ body {
 /* Foreground content */
 .page {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 
   min-height: 100vh;
   min-height: 100svh;
@@ -193,14 +193,34 @@ body {
   .btn-icon { width: 32px; height: 32px; }
 }
 
+/* Gentle restart fade */
+.bg-fade {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2; /* above video and overlay, below content */
+  transition: opacity 450ms ease;
+}
+.bg-fade.on { opacity: 1; }
+
+/* Mobile framing: shift focal point slightly left */
+@media (max-width: 768px){
+  .bg-video{
+    object-position: 40% 50%;
+  }
+}
+    
   </style>
 </head>
 
 <body>
 <div class="bg">
-  <video class="bg-video" autoplay muted loop playsinline preload="metadata" poster="./assets/comingsoon-poster.jpg" disablepictureinpicture>
+   <video id="bgVideo" class="bg-video" autoplay muted playsinline preload="metadata" poster="./assets/comingsoon-poster.jpg" disablepictureinpicture>
     <source src="./assets/comingsoon.mp4" type="video/mp4" />
   </video>
+  <div id="bgFade" class="bg-fade"></div>
   <div class="bg-overlay"></div>
 </div>
   
@@ -235,7 +255,7 @@ body {
         I agree to receive email updates from pawIQ.
       </label>
 
-      <button class="btn" type="submit" aria-label="Sign up and be the first to know.">
+      <button class="btn" type="submit" aria-label="Notify me.">
       <span class="btn-icon" aria-hidden="true">→</span>
       </button>
 
@@ -270,6 +290,63 @@ body {
       submitted = false;
     });
   }
-</script>  
+  /* Background video: play -> wait 10s -> restart gently */
+(function () {
+  const video = document.getElementById("bgVideo");
+  const fade = document.getElementById("bgFade");
+  if (!video) return;
+
+  const WAIT_MS = 10000;
+  const FADE_MS = 450;
+  const IS_MOBILE = window.matchMedia("(max-width: 768px)").matches;
+
+  let timer = null;
+
+  function restartGently() {
+    if (fade) fade.classList.add("on");
+
+    window.setTimeout(() => {
+      try {
+        video.pause();
+        video.currentTime = 0;
+
+        const p = video.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      } catch (e) {}
+
+      window.setTimeout(() => {
+        if (fade) fade.classList.remove("on");
+      }, 120);
+    }, FADE_MS);
+  }
+
+  function scheduleRestart() {
+    if (timer) window.clearTimeout(timer);
+    timer = window.setTimeout(restartGently, WAIT_MS);
+  }
+
+  // Desktop behavior: when video ends, wait 10s, then restart gently
+  // Mobile behavior: play once only, never restart
+  video.addEventListener("ended", () => {
+    if (IS_MOBILE) return;
+    scheduleRestart();
+  });
+
+  // If user switches tabs, do NOT auto-replay on mobile.
+  // On desktop, only resume the delayed restart if the video already ended.
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (timer) window.clearTimeout(timer);
+      timer = null;
+      return;
+    }
+
+    if (IS_MOBILE) return;
+
+    if (video.ended) scheduleRestart();
+  });
+})();
+  
+</script>
 </body>
 </html>
