@@ -47,6 +47,12 @@ body {
   object-fit: cover;
   z-index: 0;
 }
+
+    /* Soft restart: brief blur to hide the cut */
+.bg-video.soft-restart {
+  filter: blur(2px);
+  transition: filter 120ms ease;
+}
     
 .bg {
   position: fixed;
@@ -138,7 +144,7 @@ body {
   line-height: 1.3;
   color: rgba(255,255,255,0.9);
   max-width: 360px;
-  margin: 0 auto;
+  margin: 6px auto;
 }
 
 .consent input { margin-top: 2px; }
@@ -291,12 +297,21 @@ body {
 
   function restartGently() {
   try {
+    // brief blur to mask the jump cut
+    video.classList.add("soft-restart");
+
     video.pause();
     video.currentTime = 0;
 
     const p = video.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
-  } catch (e) {}
+
+    window.setTimeout(() => {
+      video.classList.remove("soft-restart");
+    }, 120);
+  } catch (e) {
+    video.classList.remove("soft-restart");
+  }
 }
 
   function scheduleRestart() {
