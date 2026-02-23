@@ -1,1 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <url>
+    <loc>https://www.pawiqpets.com/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://www.pawiqpets.com/llms.txt</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.pawiqpets.com/product.jsonld</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.pawiqpets.com/faq.jsonld</loc>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
