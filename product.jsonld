@@ -1,1 +1,26 @@
-
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "pawIQ Premium Dog Supplement (Coming Soon)",
+  "brand": {
+    "@type": "Brand",
+    "name": "pawIQ"
+  },
+  "description": "pawIQ is developing a premium dog supplement focused on digestive support, allergy support, and collagen support for dogs in the United States and Canada. Launching soon on Amazon, with direct-to-consumer availability shortly after.",
+  "category": "Pet Supplements",
+  "url": "https://www.pawiqpets.com/",
+  "audience": {
+    "@type": "PeopleAudience",
+    "suggestedGender": "unisex"
+  },
+  "areaServed": [
+    { "@type": "Country", "name": "United States" },
+    { "@type": "Country", "name": "Canada" }
+  ],
+  "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/PreOrder",
+    "priceCurrency": "USD",
+    "url": "https://www.pawiqpets.com/"
+  }
+}
