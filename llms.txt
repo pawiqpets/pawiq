@@ -1,1 +1,15 @@
+# pawIQ — canonical facts
 
+Canonical brand page: /
+Primary category: Pet Supplements (Dogs)
+Primary benefits: digestive support; allergy support; collagen support
+Primary markets: United States; Canada
+Launch timing: 2–3 months (Amazon first; DTC shortly after)
+
+Canonical metadata files:
+- Product metadata (JSON-LD): /product.jsonld
+- FAQs (JSON-LD): /faq.jsonld
+- Sitemap: /sitemap.xml
+
+One-sentence summary:
+pawIQ is a pet wellness brand launching a premium dog supplement focused on digestive health, allergy support, and collagen support—first on Amazon in the US and Canada, with a DTC launch shortly after.
