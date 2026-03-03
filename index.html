@@ -183,7 +183,7 @@ body {
 
 /* Fade swap between signup and question */
 .fade-swap {
-  transition: opacity 220ms ease;
+  transition: opacity 320ms ease-in-out;
 }
 
 .is-hidden {
@@ -310,11 +310,6 @@ body {
   opacity: 0.95;
 }
 
-/* Make sure it’s not display:none so opacity fade works */
-#postQThanks {
-  display: block;
-}
-     
 .hidden { display: none; }
 
 @media (max-height: 700px) {
@@ -416,8 +411,9 @@ body {
       <span class="btn-icon" aria-hidden="true">→</span>
     </button>
 
-    <div id="postQThanks" class="success fade-swap is-hidden">Appreciate it.</div>
   </form>
+
+  <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
 </div>
  
   </div>
@@ -439,31 +435,7 @@ body {
   const postQAnswer = document.getElementById("postQAnswer");
   const postQThanks = document.getElementById("postQThanks");
 
-  let lastEmail = "";
-  let isEmailSubmit = false;
-
-  if (form && iframe) {
-    let submitted = false;
-  form.addEventListener("submit", () => {
-  submitted = true;
-  isEmailSubmit = true;
-
-
-  const emailField = form.querySelector('input[name="email"]');
-  lastEmail = emailField ? emailField.value.trim() : "";
-});
-
-iframe.addEventListener("load", () => {
-  if (!submitted || !isEmailSubmit) return;
-  isEmailSubmit = false;
-
-  // Fade out signup section
-  if (signupBlock) {
-    signupBlock.classList.add("is-hidden");
-    window.setTimeout(() => {
-      signupBlock.classList.add("is-gone");
-    }, 240);
-  }
+    let lastEmail = "";
 
   const prompts = [
     { id: "q1", text: "What makes staying consistent with supplements hard?" },
@@ -471,70 +443,129 @@ iframe.addEventListener("load", () => {
     { id: "q3", text: "Why did you start using supplements in the first place?" }
   ];
 
-  const pick = prompts[Math.floor(Math.random() * prompts.length)];
+  function showPostQuestion() {
+    if (!postQWrap || !postQPrompt || !postQPromptId) return;
 
-  if (postQPrompt && postQPromptId && postQWrap) {
+    // Reset visibility (important if user refreshes partial state via bfcache)
+    if (postQThanks) {
+      postQThanks.classList.add("is-hidden");
+      postQThanks.classList.add("hidden");
+    }
+    if (postQForm) {
+      postQForm.classList.remove("is-hidden");
+      postQForm.classList.remove("is-gone");
+    }
+    if (postQPrompt) {
+      postQPrompt.classList.remove("is-hidden");
+      postQPrompt.classList.remove("is-gone");
+    }
+    const title = postQWrap.querySelector(".post-q-title");
+    if (title) {
+      title.classList.remove("is-hidden");
+      title.classList.remove("is-gone");
+    }
+
+    const pick = prompts[Math.floor(Math.random() * prompts.length)];
     postQPrompt.textContent = pick.text;
     postQPromptId.value = pick.id;
-
-    if (postQThanks) postQThanks.classList.add("is-hidden");
 
     postQWrap.classList.remove("is-gone");
     postQWrap.classList.remove("hidden");
 
+    // allow layout to apply before fade-in
     window.setTimeout(() => {
       postQWrap.classList.remove("is-hidden");
     }, 20);
   }
 
-  form.reset();
-  submitted = false;
-});
-    
-  }
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-   if (postQForm && postQAnswer) {
-  postQForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      const emailField = form.querySelector('input[name="email"]');
+      const consentField = form.querySelector('input[name="consent"]');
 
-    const answer = (postQAnswer.value || "").trim();
-    if (!answer) return;
+      const email = emailField ? emailField.value.trim() : "";
+      const consent = consentField ? consentField.checked : false;
+      if (!email || !consent) return;
 
-    // Immediately lock UI
-    postQAnswer.disabled = true;
-    const btn = postQForm.querySelector("button");
-    if (btn) btn.style.display = "none";
+      lastEmail = email;
 
-    // Crossfade: prompt + form fade out while Appreciate it fades in
-if (postQPrompt) postQPrompt.classList.add("is-hidden");
-if (postQForm) postQForm.classList.add("is-hidden");
-if (postQThanks) postQThanks.classList.remove("is-hidden");
+      // Smooth transition immediately (do not wait for network)
+      if (signupBlock) {
+        signupBlock.classList.add("is-hidden");
+        window.setTimeout(() => {
+          signupBlock.classList.add("is-gone");
+        }, 320); // match .fade-swap duration
+      }
 
-// After fade completes, remove prompt + form from layout (optional)
-window.setTimeout(() => {
-  if (postQPrompt) postQPrompt.classList.add("is-gone");
-  if (postQForm) postQForm.classList.add("is-gone");
-}, 220);
+      showPostQuestion();
 
-    // Send in background (no UI waiting)
-    const payload = new URLSearchParams();
-    payload.set("email", lastEmail);
-    payload.set("consent", "yes");
-    payload.set("page", "https://www.pawiqpets.com/");
-    payload.set("user_agent", navigator.userAgent);
-    payload.set("feedback", answer);
-    payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
+      // Send email capture in background
+      const payload = new URLSearchParams();
+      payload.set("email", email);
+      payload.set("consent", "yes");
+      payload.set("page", "https://www.pawiqpets.com/");
+      payload.set("user_agent", navigator.userAgent);
 
-    try {
       fetch(form.action, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: payload.toString()
       }).catch(() => {});
-    } catch (err) {}
-  });
-}
-  
+
+      form.reset();
+    });
+  }
+
+  if (postQForm && postQAnswer) {
+    postQForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const answer = (postQAnswer.value || "").trim();
+      if (!answer) return;
+
+      // Immediately lock UI
+      postQAnswer.disabled = true;
+      const btn = postQForm.querySelector("button");
+      if (btn) btn.style.display = "none";
+
+      // Crossfade: question content out, Appreciate it in
+      const title = postQWrap ? postQWrap.querySelector(".post-q-title") : null;
+      if (title) title.classList.add("is-hidden");
+      if (postQPrompt) postQPrompt.classList.add("is-hidden");
+      if (postQForm) postQForm.classList.add("is-hidden");
+      if (postQThanks) {
+        postQThanks.classList.remove("hidden");
+        window.setTimeout(() => {
+          postQThanks.classList.remove("is-hidden");
+        }, 20);
+      }
+
+      // After fade completes, remove question content from layout so Appreciate it stays centered/clean
+      window.setTimeout(() => {
+        if (title) title.classList.add("is-gone");
+        if (postQPrompt) postQPrompt.classList.add("is-gone");
+        if (postQForm) postQForm.classList.add("is-gone");
+      }, 320);
+
+      // Send feedback in background (no UI waiting)
+      const payload = new URLSearchParams();
+      payload.set("email", lastEmail);
+      payload.set("consent", "yes");
+      payload.set("page", "https://www.pawiqpets.com/");
+      payload.set("user_agent", navigator.userAgent);
+      payload.set("feedback", answer);
+      payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
+
+      fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: payload.toString()
+      }).catch(() => {});
+    });
+  }
+
   /* Background video: play -> wait 10s -> restart gently */
 (function () {
   const video = document.getElementById("bgVideo");
