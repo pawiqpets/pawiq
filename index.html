@@ -494,6 +494,8 @@ iframe.addEventListener("load", () => {
 
     const answer = (postQAnswer.value || "").trim();
     if (!answer) return;
+    postQAnswer.disabled = true;
+    postQForm.querySelector("button").style.display = "none";
 
     const payload = new URLSearchParams();
     payload.set("email", lastEmail);
