@@ -466,6 +466,9 @@ body {
   const postQThanks = document.getElementById("postQThanks");
 
   let lastEmail = "";
+  let lastRowId = "";
+  let rowIdPromise = null;
+
 
   const prompts = [
     { id: "q1", text: "What makes staying consistent with supplements hard?" },
@@ -534,23 +537,34 @@ body {
       payload.set("page", "https://www.pawiqpets.com/");
       payload.set("user_agent", navigator.userAgent);
 
-      fetch(FORM_ENDPOINT, {
+      rowIdPromise = fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: payload.toString()
-      }).catch(() => {});
+      })
+        .then((res) => res.text())
+        .then((txt) => {
+          lastRowId = String(txt || "").trim();
+          return lastRowId;
+        })
+        .catch(() => "");
 
       form.reset();
     });
   }
 
   if (postQForm && postQAnswer) {
-    postQForm.addEventListener("submit", (e) => {
+    postQForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const answer = (postQAnswer.value || "").trim();
       if (!answer) return;
 
+
+      // Ensure we have the row id from the email submission
+      if (!lastRowId && rowIdPromise) {
+        try { await rowIdPromise; } catch (e) {}
+      }
       postQAnswer.disabled = true;
       const btn = postQForm.querySelector("button");
       if (btn) btn.style.display = "none";
@@ -580,6 +594,7 @@ body {
       payload.set("user_agent", navigator.userAgent);
       payload.set("feedback", answer);
       payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
+    payload.set("row_id", lastRowId);
 
       fetch(FORM_ENDPOINT, {
         method: "POST",
