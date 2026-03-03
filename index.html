@@ -428,7 +428,6 @@ body {
   // Show "Thank You." after the form posts (iframe load)
   const form = document.getElementById("signupForm");
   const iframe = document.getElementById("hidden_iframe");
-  const success = document.getElementById("successMsg");
   const signupBlock = document.getElementById("signupBlock");
   const postQWrap = document.getElementById("postQuestion");
   const postQPrompt = document.getElementById("postQPrompt");
@@ -439,7 +438,7 @@ body {
 
   let lastEmail = "";
 
-  if (form && iframe && success) {
+  if (form && iframe) {
     let submitted = false;
   form.addEventListener("submit", () => {
   submitted = true;
@@ -472,6 +471,8 @@ iframe.addEventListener("load", () => {
     postQPrompt.textContent = pick.text;
     postQPromptId.value = pick.id;
 
+    if (postQThanks) postQThanks.style.display = "none";
+    
     // Prepare question block for fade in
     postQWrap.classList.remove("is-gone");
     postQWrap.classList.remove("hidden");
@@ -517,6 +518,7 @@ window.setTimeout(() => {
 
     window.setTimeout(() => {
       postQWrap.classList.add("is-gone");
+      postQWrap.classList.add("hidden");
 
       // Reset UI for future interactions
       postQAnswer.disabled = false;
