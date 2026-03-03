@@ -180,6 +180,20 @@ body {
   gap: 10px;
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* Fade swap between signup and question */
+.fade-swap {
+  transition: opacity 220ms ease;
+}
+
+.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-gone {
+  display: none;
+}
     
 .signup-title {
   font-size: 16px;
@@ -345,6 +359,7 @@ body {
   </div>
 
   <div class="signup">
+    <div id="signupBlock" class="fade-swap">
     <div class="signup-title">Get all the updates.</div>
 
     <!-- Replace YOUR_WEB_APP_URL below -->
@@ -373,12 +388,12 @@ body {
       <span class="btn-icon" aria-hidden="true">→</span>
       </button>
 
-      <div id="successMsg" class="success" aria-live="polite">Thank You.</div>
     </form>
 
     <iframe name="hidden_iframe" id="hidden_iframe" class="hidden"></iframe>
+    </div>
  
-    <div id="postQuestion" class="post-q hidden" aria-live="polite">
+    <div id="postQuestion" class="post-q fade-swap hidden is-gone is-hidden" aria-live="polite">
   <div class="post-q-title">One quick question.</div>
   <div id="postQPrompt" class="post-q-prompt"></div>
 
@@ -414,6 +429,7 @@ body {
   const form = document.getElementById("signupForm");
   const iframe = document.getElementById("hidden_iframe");
   const success = document.getElementById("successMsg");
+  const signupBlock = document.getElementById("signupBlock");
   const postQWrap = document.getElementById("postQuestion");
   const postQPrompt = document.getElementById("postQPrompt");
   const postQPromptId = document.getElementById("postQPromptId");
@@ -427,16 +443,22 @@ body {
     let submitted = false;
   form.addEventListener("submit", () => {
   submitted = true;
-  success.style.display = "none";
+
 
   const emailField = form.querySelector('input[name="email"]');
   lastEmail = emailField ? emailField.value.trim() : "";
 });
 
-    iframe.addEventListener("load", () => {
+iframe.addEventListener("load", () => {
   if (!submitted) return;
 
-  success.style.display = "block";
+  // Fade out signup section
+  if (signupBlock) {
+    signupBlock.classList.add("is-hidden");
+    window.setTimeout(() => {
+      signupBlock.classList.add("is-gone");
+    }, 240);
+  }
 
   const prompts = [
     { id: "q1", text: "What makes staying consistent with supplements hard?" },
@@ -449,7 +471,14 @@ body {
   if (postQPrompt && postQPromptId && postQWrap) {
     postQPrompt.textContent = pick.text;
     postQPromptId.value = pick.id;
+
+    // Prepare question block for fade in
+    postQWrap.classList.remove("is-gone");
     postQWrap.classList.remove("hidden");
+
+    window.setTimeout(() => {
+      postQWrap.classList.remove("is-hidden");
+    }, 20);
   }
 
   form.reset();
@@ -480,10 +509,24 @@ body {
         body: payload.toString()
       });
 
-      if (postQThanks) postQThanks.style.display = "block";
+     if (postQThanks) postQThanks.style.display = "block";
+
+window.setTimeout(() => {
+  if (postQWrap) {
+    postQWrap.classList.add("is-hidden");
+
+    window.setTimeout(() => {
+      postQWrap.classList.add("is-gone");
+
+      // Reset UI for future interactions
+      postQAnswer.disabled = false;
       postQAnswer.value = "";
-      postQAnswer.disabled = true;
-      postQForm.querySelector("button").style.display = "none";
+      postQForm.querySelector("button").style.display = "";
+      if (postQThanks) postQThanks.style.display = "none";
+    }, 240);
+  }
+}, 450);
+     
       
     } catch (err) {}
   });
