@@ -515,20 +515,23 @@ iframe.addEventListener("load", () => {
      if (postQThanks) postQThanks.style.display = "block";
 
 window.setTimeout(() => {
-  if (postQWrap) {
-    postQWrap.classList.add("is-hidden");
+  if (!postQWrap) return;
 
-    window.setTimeout(() => {
-      postQWrap.classList.add("is-gone");
-      postQWrap.classList.add("hidden");
+  // fade out
+  postQWrap.classList.add("is-hidden");
 
-      // Reset UI for future interactions
-      postQAnswer.disabled = false;
-      postQAnswer.value = "";
-      postQForm.querySelector("button").style.display = "";
-      if (postQThanks) postQThanks.style.display = "none";
-    }, 240);
-  }
+  // remove from layout after fade
+  window.setTimeout(() => {
+    postQWrap.classList.add("is-gone");
+    postQWrap.classList.add("hidden");
+
+    // Reset UI for future interactions
+    postQAnswer.disabled = false;
+    postQAnswer.value = "";
+    const btn = postQForm.querySelector("button");
+    if (btn) btn.style.display = "";
+    if (postQThanks) postQThanks.style.display = "none";
+  }, 240);
 }, 450);
      
       
