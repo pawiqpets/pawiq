@@ -394,7 +394,7 @@ body {
     </div>
  
     <div id="postQuestion" class="post-q fade-swap hidden is-gone is-hidden" aria-live="polite">
-  <div class="post-q-title">One quick question.</div>
+  <div class="post-q-title">Thank you. One quick question.</div>
   <div id="postQPrompt" class="post-q-prompt"></div>
 
   <form id="postQForm" class="post-q-form">
@@ -416,7 +416,7 @@ body {
     <div id="postQThanks" class="success" style="display:none;">Appreciate it.</div>
   </form>
 </div>
-    
+ 
   </div>
 </div>
 
@@ -435,13 +435,16 @@ body {
   const postQForm = document.getElementById("postQForm");
   const postQAnswer = document.getElementById("postQAnswer");
   const postQThanks = document.getElementById("postQThanks");
+  const finalThanks = document.getElementById("finalThanks");
 
   let lastEmail = "";
+  let isEmailSubmit = false;
 
   if (form && iframe) {
     let submitted = false;
   form.addEventListener("submit", () => {
   submitted = true;
+  isEmailSubmit = true;
 
 
   const emailField = form.querySelector('input[name="email"]');
@@ -449,7 +452,8 @@ body {
 });
 
 iframe.addEventListener("load", () => {
-  if (!submitted) return;
+  if (!submitted || !isEmailSubmit) return;
+  isEmailSubmit = false;
 
   // Fade out signup section
   if (signupBlock) {
@@ -472,8 +476,7 @@ iframe.addEventListener("load", () => {
     postQPromptId.value = pick.id;
 
     if (postQThanks) postQThanks.style.display = "none";
-    
-    // Prepare question block for fade in
+
     postQWrap.classList.remove("is-gone");
     postQWrap.classList.remove("hidden");
 
@@ -513,28 +516,7 @@ iframe.addEventListener("load", () => {
         body: payload.toString()
       });
 
-     if (postQThanks) postQThanks.style.display = "block";
-
-window.setTimeout(() => {
-  if (!postQWrap) return;
-
-  // fade out
-  postQWrap.classList.add("is-hidden");
-
-  // remove from layout after fade
-  window.setTimeout(() => {
-    postQWrap.classList.add("is-gone");
-    postQWrap.classList.add("hidden");
-
-    // Reset UI for future interactions
-    postQAnswer.disabled = false;
-    postQAnswer.value = "";
-    const btn = postQForm.querySelector("button");
-    if (btn) btn.style.display = "";
-    if (postQThanks) postQThanks.style.display = "none";
-  }, 240);
-}, 450);
-     
+     if (postQThanks) postQThanks.style.display = "block";     
       
     } catch (err) {}
   });
