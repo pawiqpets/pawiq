@@ -399,9 +399,8 @@ body {
  
     <div id="postQuestion" class="post-q fade-swap hidden is-gone is-hidden" aria-live="polite">
   <div class="post-q-title">Thank you. One quick question.</div>
-  <div id="postQPrompt" class="post-q-prompt"></div>
-
-  <form id="postQForm" class="post-q-form">
+  <div id="postQPrompt" class="post-q-prompt fade-swap"></div>
+  <form id="postQForm" class="post-q-form fade-swap">
     <input type="hidden" id="postQPromptId" value="" />
 
     <input
@@ -506,26 +505,16 @@ iframe.addEventListener("load", () => {
     const btn = postQForm.querySelector("button");
     if (btn) btn.style.display = "none";
 
-    // Immediately start fade out of question UI
-    if (postQWrap) postQWrap.classList.add("is-hidden");
+    // Crossfade: prompt + form fade out while Appreciate it fades in
+if (postQPrompt) postQPrompt.classList.add("is-hidden");
+if (postQForm) postQForm.classList.add("is-hidden");
+if (postQThanks) postQThanks.classList.remove("is-hidden");
 
-    // After fade out completes, hide question content and fade in Appreciate it
-    window.setTimeout(() => {
-      if (postQForm) postQForm.classList.add("is-gone");      // removes input + button
-      if (postQPrompt) postQPrompt.classList.add("is-gone");  // removes prompt text
-      // Title can stay, or remove it too:
-      // const title = postQWrap.querySelector(".post-q-title");
-      // if (title) title.classList.add("is-gone");
-
-      if (postQThanks) {
-        postQThanks.classList.remove("is-gone");
-        postQThanks.classList.remove("hidden");
-        postQThanks.classList.remove("is-hidden"); // fade in
-      }
-
-      // Fade the wrapper back in so Appreciate it appears smoothly
-      if (postQWrap) postQWrap.classList.remove("is-hidden");
-    }, 220); // matches .fade-swap transition (220ms)
+// After fade completes, remove prompt + form from layout (optional)
+window.setTimeout(() => {
+  if (postQPrompt) postQPrompt.classList.add("is-gone");
+  if (postQForm) postQForm.classList.add("is-gone");
+}, 220);
 
     // Send in background (no UI waiting)
     const payload = new URLSearchParams();
