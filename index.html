@@ -302,11 +302,19 @@ body {
 }
 
 .post-q-input::placeholder { color: rgba(255,255,255,0.65); }
-    
-iframe.addEventListener("load", () => {
-  if (!submitted || !isEmailSubmit) return;
-  isEmailSubmit = false;
-  
+
+.success {
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 6px;
+  opacity: 0.95;
+}
+
+/* Make sure it’s not display:none so opacity fade works */
+#postQThanks {
+  display: block;
+}
+     
 .hidden { display: none; }
 
 @media (max-height: 700px) {
@@ -431,7 +439,6 @@ iframe.addEventListener("load", () => {
   const postQForm = document.getElementById("postQForm");
   const postQAnswer = document.getElementById("postQAnswer");
   const postQThanks = document.getElementById("postQThanks");
-  const finalThanks = document.getElementById("finalThanks");
 
   let lastEmail = "";
   let isEmailSubmit = false;
@@ -471,7 +478,7 @@ iframe.addEventListener("load", () => {
     postQPrompt.textContent = pick.text;
     postQPromptId.value = pick.id;
 
-    if (postQThanks) postQThanks.style.display = "none";
+    if (postQThanks) postQThanks.classList.add("is-hidden");
 
     postQWrap.classList.remove("is-gone");
     postQWrap.classList.remove("hidden");
