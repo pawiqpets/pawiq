@@ -214,8 +214,8 @@ body {
 }
 
 .is-hidden {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .is-gone {
@@ -391,7 +391,7 @@ body {
     <div id="signupBlock" class="fade-swap">
     <div class="signup-title">Get all the updates.</div>
 
-    <form id="signupForm" action="https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec" method="POST" target="hidden_iframe">
+    <form id="signupForm" action="https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec" method="POST">
       <input type="hidden" name="page" value="https://www.pawiqpets.com/" />
       <input type="hidden" name="user_agent" id="uaField" value="" />
 
@@ -418,7 +418,6 @@ body {
 
     </form>
 
-    <iframe name="hidden_iframe" id="hidden_iframe" class="hidden"></iframe>
     </div>
 
     <div id="postQuestion" class="post-q fade-swap hidden is-gone is-hidden" aria-live="polite">
@@ -458,7 +457,6 @@ body {
   const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec";
 
   const form = document.getElementById("signupForm");
-  const iframe = document.getElementById("hidden_iframe");
   const signupBlock = document.getElementById("signupBlock");
   const postQWrap = document.getElementById("postQuestion");
   const postQPrompt = document.getElementById("postQPrompt");
@@ -533,7 +531,7 @@ body {
       const payload = new URLSearchParams();
       payload.set("email", email);
       payload.set("consent", "yes");
-      payload.set("page", ("https://www.pawiqpets.com/");
+      payload.set("page", "https://www.pawiqpets.com/");
       payload.set("user_agent", navigator.userAgent);
 
       fetch(FORM_ENDPOINT, {
@@ -581,12 +579,7 @@ body {
       payload.set("page", "https://www.pawiqpets.com/");
       payload.set("user_agent", navigator.userAgent);
       payload.set("feedback", answer);
-      payload.set("Feedback", answer);
-      
-      const pid = postQPromptId ? postQPromptId.value : "";
-      payload.set("prompt_id", pid);
-      payload.set("Prompt ID", pid);
-      payload.set("promptId", pid);
+      payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
 
       fetch(FORM_ENDPOINT, {
         method: "POST",
