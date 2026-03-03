@@ -533,7 +533,7 @@ body {
       const payload = new URLSearchParams();
       payload.set("email", email);
       payload.set("consent", "yes");
-      payload.set("page", "https://www.pawiqpets.com/");
+      payload.set("page", ("https://www.pawiqpets.com/");
       payload.set("user_agent", navigator.userAgent);
 
       fetch(FORM_ENDPOINT, {
@@ -581,7 +581,12 @@ body {
       payload.set("page", "https://www.pawiqpets.com/");
       payload.set("user_agent", navigator.userAgent);
       payload.set("feedback", answer);
-      payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
+      payload.set("Feedback", answer);
+      
+      const pid = postQPromptId ? postQPromptId.value : "";
+      payload.set("prompt_id", pid);
+      payload.set("Prompt ID", pid);
+      payload.set("promptId", pid);
 
       fetch(FORM_ENDPOINT, {
         method: "POST",
