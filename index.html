@@ -303,14 +303,10 @@ body {
 
 .post-q-input::placeholder { color: rgba(255,255,255,0.65); }
     
-.success {
-  display: none;
-  font-size: 14px;
-  font-weight: 400;
-  margin-top: 6px;
-  opacity: 0.95;
-}
-
+iframe.addEventListener("load", () => {
+  if (!submitted || !isEmailSubmit) return;
+  isEmailSubmit = false;
+  
 .hidden { display: none; }
 
 @media (max-height: 700px) {
@@ -413,7 +409,7 @@ body {
       <span class="btn-icon" aria-hidden="true">→</span>
     </button>
 
-    <div id="postQThanks" class="success" style="display:none;">Appreciate it.</div>
+    <div id="postQThanks" class="success fade-swap is-hidden">Appreciate it.</div>
   </form>
 </div>
  
@@ -497,10 +493,34 @@ iframe.addEventListener("load", () => {
 
     const answer = (postQAnswer.value || "").trim();
     if (!answer) return;
+
+    // Immediately lock UI
     postQAnswer.disabled = true;
     const btn = postQForm.querySelector("button");
     if (btn) btn.style.display = "none";
 
+    // Immediately start fade out of question UI
+    if (postQWrap) postQWrap.classList.add("is-hidden");
+
+    // After fade out completes, hide question content and fade in Appreciate it
+    window.setTimeout(() => {
+      if (postQForm) postQForm.classList.add("is-gone");      // removes input + button
+      if (postQPrompt) postQPrompt.classList.add("is-gone");  // removes prompt text
+      // Title can stay, or remove it too:
+      // const title = postQWrap.querySelector(".post-q-title");
+      // if (title) title.classList.add("is-gone");
+
+      if (postQThanks) {
+        postQThanks.classList.remove("is-gone");
+        postQThanks.classList.remove("hidden");
+        postQThanks.classList.remove("is-hidden"); // fade in
+      }
+
+      // Fade the wrapper back in so Appreciate it appears smoothly
+      if (postQWrap) postQWrap.classList.remove("is-hidden");
+    }, 220); // matches .fade-swap transition (220ms)
+
+    // Send in background (no UI waiting)
     const payload = new URLSearchParams();
     payload.set("email", lastEmail);
     payload.set("consent", "yes");
@@ -510,14 +530,11 @@ iframe.addEventListener("load", () => {
     payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
 
     try {
-      await fetch(form.action, {
+      fetch(form.action, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: payload.toString()
-      });
-
-     if (postQThanks) postQThanks.style.display = "block";     
-      
+      }).catch(() => {});
     } catch (err) {}
   });
 }
