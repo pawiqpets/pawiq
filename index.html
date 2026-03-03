@@ -9,10 +9,10 @@
   <meta name="description" content="pawIQ is coming soon. Smart habits for healthier pets." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://www.pawiqpets.com/" />
- 
-  <link rel="alternate" type="application/ld+json" href="/product.jsonld">
-  <link rel="alternate" type="application/ld+json" href="/faq.jsonld">
-  
+
+  <!-- FIX 1: Removed incorrect <link rel="alternate"> tags for JSON-LD.
+       Inline <script type="application/ld+json"> blocks below handle structured data correctly. -->
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -47,6 +47,40 @@
 }
 </script>
 
+<!-- FIX 2: Added FAQ schema block to replace the missing /faq.jsonld reference -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is pawIQ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "pawIQ is a premium dog supplement brand launching soon on Amazon. Our products are veterinarian-formulated to support digestive health, allergy relief, and collagen production in dogs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where can I buy pawIQ supplements?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "pawIQ will be available on Amazon.com in the United States. Sign up for updates to be notified at launch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When does pawIQ launch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "pawIQ is coming soon. Join our email list for launch updates and early access."
+      }
+    }
+  ]
+}
+</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -59,8 +93,8 @@
   ]
 }
 </script>
-  
-<!-- Domain redirects --> 
+
+<!-- Domain redirects -->
 <script>
   const redirects = [
     "pawiqpets.ca",
@@ -77,7 +111,7 @@
     location.replace("https://www.pawiqpets.com" + location.pathname + location.search);
   }
 </script>
-  
+
   <style>
     html, body { height: 100%; }
 
@@ -98,22 +132,15 @@ body {
   z-index: 0;
 }
 
-    /* Soft restart: brief blur to hide the cut */
-/* Soft restart: opacity + slight blur to hide the cut */
+/* Soft restart: brief blur to hide the cut */
 .bg-video.soft-restart {
   opacity: 0.85;
   filter: blur(2px);
   transition: opacity 180ms ease, filter 180ms ease;
 }
 
-.seo-text {
-  max-width: 520px;
-  margin: 12px auto 0;
-  font-size: 14px;
-  line-height: 1.5;
-  opacity: 0.85;
-}
-    
+/* FIX 5: Removed unused .seo-text class */
+
 .seo-h1 {
   position: absolute;
   left: -9999px;
@@ -121,18 +148,18 @@ body {
   height: 1px;
   overflow: hidden;
 }
-    
+
 .bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
 }
-    
+
 .bg-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.35); /* subtle dark overlay */
+  background: rgba(0,0,0,0.35);
   z-index: 1;
 }
 
@@ -145,7 +172,7 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* top content + bottom signup */
+  justify-content: space-between;
   padding: 22px 20px 18px;
   text-align: center;
   color: #fff;
@@ -194,12 +221,14 @@ body {
 .is-gone {
   display: none;
 }
-    
+
+/* FIX 6: Thinner weight on signup title + added bottom margin for spacing */
 .signup-title {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: 0.2px;
   opacity: 0.95;
+  margin-bottom: 10px; /* matches space between email and consent below */
 }
 
 .email {
@@ -249,7 +278,6 @@ body {
   background: rgba(255,255,255,0.14);
 }
 
-
 .btn-icon {
   width: 34px;
   height: 34px;
@@ -259,7 +287,7 @@ body {
   place-items: center;
   font-size: 18px;
   line-height: 1;
-  color: #fff; /* forces arrow to white */
+  color: #fff;
   transition: background 150ms ease, border-color 150ms ease;
 }
 
@@ -306,7 +334,7 @@ body {
 .success {
   font-size: 14px;
   font-weight: 400;
-  margin-top: 6px;
+  margin-top: 0;
   opacity: 0.95;
 }
 
@@ -320,15 +348,16 @@ body {
   .btn-icon { width: 32px; height: 32px; }
 }
 
-/* Gentle restart fade */
-
 /* Mobile framing: shift focal point slightly left */
 @media (max-width: 768px){
   .bg-video{
     object-position: 30% 50%;
   }
+  .email, .post-q-input {
+    font-size: 16px;
+  }
 }
-    
+
   </style>
 </head>
 
@@ -339,13 +368,14 @@ body {
   autoplay
   muted
   playsinline
-  preload="none"
+  preload="metadata"
   poster="./assets/comingsoon-poster.jpg"
   disablepictureinpicture
 >
+  <!-- FIX 4: Changed preload="none" to preload="metadata" for faster video start -->
   <source src="./assets/comingsoon.mp4?v=2" type="video/mp4" />
 </video>
-  
+
 <div class="page">
   <div class="center">
     <img src="./assets/logo-white.png" alt="pawIQ logo" />
@@ -353,7 +383,7 @@ body {
     <h1 class="seo-h1">
     pawIQ Premium Dog Supplements for Digestive Health, Allergy Support and Collagen Support
     </h1>
-    
+
     <div class="sub">Smart Habits. Coming Soon.</div>
   </div>
 
@@ -361,22 +391,21 @@ body {
     <div id="signupBlock" class="fade-swap">
     <div class="signup-title">Get all the updates.</div>
 
-    <!-- Replace YOUR_WEB_APP_URL below -->
     <form id="signupForm" action="https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec" method="POST" target="hidden_iframe">
       <input type="hidden" name="page" value="https://www.pawiqpets.com/" />
       <input type="hidden" name="user_agent" id="uaField" value="" />
 
       <input
-      class="email"
-      type="email"
-      name="email"
-      placeholder="Email address"
-      required
-      inputmode="email"
-      autocomplete="email"
-      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-      title="Please enter a valid email address (example: name@example.com)"
-    />
+        class="email"
+        type="email"
+        name="email"
+        placeholder="Email address"
+        required
+        inputmode="email"
+        autocomplete="email"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        title="Please enter a valid email address (example: name@example.com)"
+      />
 
       <label class="consent">
         <input type="checkbox" name="consent" value="yes" required />
@@ -384,38 +413,38 @@ body {
       </label>
 
       <button class="btn" type="submit" aria-label="Notify me.">
-      <span class="btn-icon" aria-hidden="true">→</span>
+        <span class="btn-icon" aria-hidden="true">→</span>
       </button>
 
     </form>
 
     <iframe name="hidden_iframe" id="hidden_iframe" class="hidden"></iframe>
     </div>
- 
+
     <div id="postQuestion" class="post-q fade-swap hidden is-gone is-hidden" aria-live="polite">
-  <div class="post-q-title">Thank you. One quick question.</div>
-  <div id="postQPrompt" class="post-q-prompt fade-swap"></div>
-  <form id="postQForm" class="post-q-form fade-swap">
-    <input type="hidden" id="postQPromptId" value="" />
+      <div class="post-q-title">Thank you. One quick question.</div>
+      <div id="postQPrompt" class="post-q-prompt fade-swap"></div>
+      <form id="postQForm" class="post-q-form fade-swap">
+        <input type="hidden" id="postQPromptId" value="" />
 
-    <input
-      id="postQAnswer"
-      class="post-q-input"
-      type="text"
-      placeholder="One sentence is enough."
-      maxlength="240"
-      autocomplete="off"
-    />
+        <input
+          id="postQAnswer"
+          class="post-q-input"
+          type="text"
+          placeholder="One sentence is enough."
+          maxlength="240"
+          autocomplete="off"
+        />
 
-    <button class="btn" type="submit" aria-label="Send feedback">
-      <span class="btn-icon" aria-hidden="true">→</span>
-    </button>
+        <button class="btn" type="submit" aria-label="Send feedback">
+          <span class="btn-icon" aria-hidden="true">→</span>
+        </button>
 
-  </form>
+      </form>
 
-  <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
-</div>
- 
+      <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
+    </div>
+
   </div>
 </div>
 
@@ -424,7 +453,10 @@ body {
   const ua = document.getElementById("uaField");
   if (ua) ua.value = navigator.userAgent;
 
-  // Show "Thank You." after the form posts (iframe load)
+  // FIX 3: Dedicated endpoint variable so feedback submissions don't rely on
+  // a stale reference to signupForm.action if the endpoint ever changes.
+  const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec";
+
   const form = document.getElementById("signupForm");
   const iframe = document.getElementById("hidden_iframe");
   const signupBlock = document.getElementById("signupBlock");
@@ -435,7 +467,7 @@ body {
   const postQAnswer = document.getElementById("postQAnswer");
   const postQThanks = document.getElementById("postQThanks");
 
-    let lastEmail = "";
+  let lastEmail = "";
 
   const prompts = [
     { id: "q1", text: "What makes staying consistent with supplements hard?" },
@@ -446,7 +478,6 @@ body {
   function showPostQuestion() {
     if (!postQWrap || !postQPrompt || !postQPromptId) return;
 
-    // Reset visibility (important if user refreshes partial state via bfcache)
     if (postQThanks) {
       postQThanks.classList.add("is-hidden");
       postQThanks.classList.add("hidden");
@@ -472,7 +503,6 @@ body {
     postQWrap.classList.remove("is-gone");
     postQWrap.classList.remove("hidden");
 
-    // allow layout to apply before fade-in
     window.setTimeout(() => {
       postQWrap.classList.remove("is-hidden");
     }, 20);
@@ -491,24 +521,22 @@ body {
 
       lastEmail = email;
 
-      // Smooth transition immediately (do not wait for network)
       if (signupBlock) {
         signupBlock.classList.add("is-hidden");
         window.setTimeout(() => {
           signupBlock.classList.add("is-gone");
-        }, 320); // match .fade-swap duration
+        }, 320);
       }
 
       showPostQuestion();
 
-      // Send email capture in background
       const payload = new URLSearchParams();
       payload.set("email", email);
       payload.set("consent", "yes");
       payload.set("page", "https://www.pawiqpets.com/");
       payload.set("user_agent", navigator.userAgent);
 
-      fetch(form.action, {
+      fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: payload.toString()
@@ -525,12 +553,10 @@ body {
       const answer = (postQAnswer.value || "").trim();
       if (!answer) return;
 
-      // Immediately lock UI
       postQAnswer.disabled = true;
       const btn = postQForm.querySelector("button");
       if (btn) btn.style.display = "none";
 
-      // Crossfade: question content out, Appreciate it in
       const title = postQWrap ? postQWrap.querySelector(".post-q-title") : null;
       if (title) title.classList.add("is-hidden");
       if (postQPrompt) postQPrompt.classList.add("is-hidden");
@@ -542,14 +568,13 @@ body {
         }, 20);
       }
 
-      // After fade completes, remove question content from layout so Appreciate it stays centered/clean
       window.setTimeout(() => {
         if (title) title.classList.add("is-gone");
         if (postQPrompt) postQPrompt.classList.add("is-gone");
         if (postQForm) postQForm.classList.add("is-gone");
       }, 320);
 
-      // Send feedback in background (no UI waiting)
+      // FIX 3: Using FORM_ENDPOINT instead of form.action
       const payload = new URLSearchParams();
       payload.set("email", lastEmail);
       payload.set("consent", "yes");
@@ -558,7 +583,7 @@ body {
       payload.set("feedback", answer);
       payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
 
-      fetch(form.action, {
+      fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: payload.toString()
@@ -567,65 +592,59 @@ body {
   }
 
   /* Background video: play -> wait 10s -> restart gently */
-(function () {
-  const video = document.getElementById("bgVideo");
-  if (!video) return;
+  (function () {
+    const video = document.getElementById("bgVideo");
+    if (!video) return;
 
-  const WAIT_MS = 10000;
-  const IS_MOBILE = window.matchMedia("(max-width: 768px)").matches;
+    const WAIT_MS = 10000;
+    const IS_MOBILE = window.matchMedia("(max-width: 768px)").matches;
 
-  let timer = null;
+    let timer = null;
 
-  function restartGently() {
-  try {
-    // start soft fade/blur
-    video.classList.add("soft-restart");
+    function restartGently() {
+      try {
+        video.classList.add("soft-restart");
 
-    window.setTimeout(() => {
-      video.pause();
-      video.currentTime = 0;
+        window.setTimeout(() => {
+          video.pause();
+          video.currentTime = 0;
 
-      const p = video.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
+          const p = video.play();
+          if (p && typeof p.catch === "function") p.catch(() => {});
 
-      // remove effect after restart settles
-      window.setTimeout(() => {
+          window.setTimeout(() => {
+            video.classList.remove("soft-restart");
+          }, 180);
+        }, 80);
+      } catch (e) {
         video.classList.remove("soft-restart");
-      }, 180);
-    }, 80);
-  } catch (e) {
-    video.classList.remove("soft-restart");
-  }
-}
-
-  function scheduleRestart() {
-    if (timer) window.clearTimeout(timer);
-    timer = window.setTimeout(restartGently, WAIT_MS);
-  }
-
-  // Desktop behavior: when video ends, wait 10s, then restart gently
-  // Mobile behavior: play once only, never restart
-  video.addEventListener("ended", () => {
-    if (IS_MOBILE) return;
-    scheduleRestart();
-  });
-
-  // If user switches tabs, do NOT auto-replay on mobile.
-  // On desktop, only resume the delayed restart if the video already ended.
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      if (timer) window.clearTimeout(timer);
-      timer = null;
-      return;
+      }
     }
 
-    if (IS_MOBILE) return;
+    function scheduleRestart() {
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(restartGently, WAIT_MS);
+    }
 
-    if (video.ended) scheduleRestart();
-  });
-  
-})();
-  
+    video.addEventListener("ended", () => {
+      if (IS_MOBILE) return;
+      scheduleRestart();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (timer) window.clearTimeout(timer);
+        timer = null;
+        return;
+      }
+
+      if (IS_MOBILE) return;
+
+      if (video.ended) scheduleRestart();
+    });
+
+  })();
+
 </script>
 </body>
 </html>
