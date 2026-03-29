@@ -681,6 +681,10 @@ body {
 }
 
 /* End screen */
+#endScreen {
+  background: #0A1628;
+}
+
 #endScreen .end-icon {
   font-size: 52px;
   margin-bottom: 12px;
@@ -1374,6 +1378,7 @@ body {
       pawTrigger.classList.remove('hidden');
       gameHUD.classList.add('hidden');
       endScreen.classList.add('hidden');
+      gameCanvas.style.display = 'block';
       emailGate.classList.remove('visible');
       slomoText.classList.remove('visible');
     }
@@ -1634,6 +1639,7 @@ body {
       gameState = 'playing';
       dogX = gameCanvas.width / 2;
       dogTargetX = gameCanvas.width / 2;
+      gameCanvas.style.display = 'block';
       updateHUD();
       gameHUD.classList.remove('hidden');
       frame = 0;
@@ -1798,6 +1804,7 @@ body {
       slomoActive = true;
       slomoFactor = 0.12;
       gameState = 'slomoGate';
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
 
       // Show text after 300ms
       setTimeout(() => {
@@ -1866,24 +1873,29 @@ body {
       resumeAfterGate();
     });
 
-    // Leaderboard (localStorage, top 3)
-    function getLeaderboard() {
-      try {
-        return JSON.parse(localStorage.getItem('pawiq_lb') || '[]');
-      } catch(e) { return []; }
+    // Leaderboard — shared via Google Sheets
+    const LB_READ_URL = 'https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec?action=leaderboard';
+
+    function fetchLeaderboard(cb) {
+      fetch(LB_READ_URL)
+        .then(r => r.json())
+        .then(data => { cb(Array.isArray(data) ? data.slice(0, 3) : []); })
+        .catch(() => { cb([]); });
     }
 
-    function saveLeaderboard(lb) {
-      try { localStorage.setItem('pawiq_lb', JSON.stringify(lb)); } catch(e) {}
-    }
-
-    function addToLeaderboard(name, s) {
-      let lb = getLeaderboard();
-      lb.push({ name, score: s });
-      lb.sort((a, b) => b.score - a.score);
-      lb = lb.slice(0, 3);
-      saveLeaderboard(lb);
-      return lb;
+    function submitScore(name, s, cb) {
+      const payload = new URLSearchParams();
+      payload.set('leaderboard_name', name);
+      payload.set('leaderboard_score', String(s));
+      payload.set('page', 'leaderboard');
+      payload.set('user_agent', navigator.userAgent);
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: payload.toString()
+      })
+        .then(() => fetchLeaderboard(cb))
+        .catch(() => cb([]));
     }
 
     function renderLeaderboard(lb) {
@@ -1928,6 +1940,7 @@ body {
     // End screen
     function showEndScreen(win) {
       gameHUD.classList.add('hidden');
+      gameCanvas.style.display = 'none';
       endScreen.classList.remove('hidden');
       const leaderboardSection = document.getElementById('leaderboardSection');
       const nameCapture = document.getElementById('nameCapture');
@@ -1955,11 +1968,12 @@ body {
           if (nameError) nameError.textContent = '';
 
           // Show existing leaderboard below name input
-          const currentLb = getLeaderboard();
-          if (currentLb.length > 0) {
-            leaderboardDisplay.style.display = 'block';
-            renderLeaderboard(currentLb);
-          }
+          fetchLeaderboard(function(currentLb) {
+            if (currentLb.length > 0) {
+              leaderboardDisplay.style.display = 'block';
+              renderLeaderboard(currentLb);
+            }
+          });
 
           if (submitNameBtn) {
             submitNameBtn.onclick = () => {
@@ -1977,10 +1991,15 @@ body {
                 return;
               }
               nameError.textContent = '';
-              const updated = addToLeaderboard(raw, score);
-              nameCapture.style.display = 'none';
-              leaderboardDisplay.style.display = 'block';
-              renderLeaderboard(updated);
+              submitNameBtn.textContent = 'Saving...';
+              submitNameBtn.disabled = true;
+              submitScore(raw, score, function(updated) {
+                submitNameBtn.textContent = 'Add to Leaderboard';
+                submitNameBtn.disabled = false;
+                nameCapture.style.display = 'none';
+                leaderboardDisplay.style.display = 'block';
+                renderLeaderboard(updated);
+              });
             };
           }
         }
