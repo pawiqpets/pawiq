@@ -3,116 +3,151 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0A1628" />
   <title>pawIQ | Premium Dog Supplements | Coming Soon</title>
 
-  <!-- SEO basics -->
-  <meta name="description" content="pawIQ is coming soon. Smart habits for healthier pets." />
+  <meta name="description" content="pawIQ is coming soon. Smart, simple dog supplements built around daily routine. Launching on Amazon in the US and Canada." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://www.pawiqpets.com/" />
 
-  <!-- FIX 1: Removed incorrect <link rel="alternate"> tags for JSON-LD.
-       Inline <script type="application/ld+json"> blocks below handle structured data correctly. -->
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.pawiqpets.com/" />
+  <meta property="og:site_name" content="pawIQ" />
+  <meta property="og:title" content="pawIQ | Premium Dog Supplements | Coming Soon" />
+  <meta property="og:description" content="Smart, simple dog supplements built around daily routine. Launching on Amazon in the US and Canada." />
+  <meta property="og:image" content="https://www.pawiqpets.com/assets/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_US" />
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "pawIQ Premium Dog Supplement",
-  "brand": {
-    "@type": "Brand",
-    "name": "pawIQ"
-  },
-  "description": "pawIQ Premium Dog Supplement is a veterinarian-formulated pet supplement designed to support overall health, digestive health, allergy support, and collagen production for dogs in the United States and Canada. Launching soon on Amazon.",
-  "category": "Pet Supplements",
-  "audience": {
-    "@type": "PeopleAudience",
-    "suggestedGender": "unisex",
-    "suggestedAge": "Adult dogs"
-  },
-  "areaServed": [
-    {
-      "@type": "Country",
-      "name": "United States"
-    },
-    {
-      "@type": "Country",
-      "name": "Canada"
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="pawIQ | Premium Dog Supplements | Coming Soon" />
+  <meta name="twitter:description" content="Smart, simple dog supplements built around daily routine. Launching on Amazon in the US and Canada." />
+  <meta name="twitter:image" content="https://www.pawiqpets.com/assets/og-image.jpg" />
+
+  <!-- Preload critical assets -->
+  <link rel="preload" href="./assets/comingsoon-poster.jpg" as="image" />
+  <link rel="preload" href="./assets/fonts/Thunder-LC.ttf" as="font" type="font/truetype" crossorigin="anonymous" />
+  <link rel="preload" href="./assets/fonts/Satoshi-Variable.ttf" as="font" type="font/truetype" crossorigin="anonymous" />
+
+  <!-- Schema: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "pawIQ",
+    "url": "https://www.pawiqpets.com/",
+    "description": "Smart, simple dog supplements built around daily routine. Launching on Amazon in the US and Canada.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.pawiqpets.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
     }
-  ],
-  "offers": {
-    "@type": "Offer",
-    "availability": "https://schema.org/PreOrder",
-    "priceCurrency": "USD"
   }
-}
-</script>
+  </script>
 
-<!-- FIX 2: Added FAQ schema block to replace the missing /faq.jsonld reference -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is pawIQ?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "pawIQ is a premium dog supplement brand launching soon on Amazon. Our products are veterinarian-formulated to support digestive health, allergy relief, and collagen production in dogs."
-      }
+  <!-- Schema: Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "pawIQ",
+    "url": "https://www.pawiqpets.com/",
+    "logo": "https://www.pawiqpets.com/assets/logo-white.png",
+    "foundingDate": "2025",
+    "description": "Premium dog supplement brand launching on Amazon in the United States and Canada.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "email": "hello@pawiqpets.com",
+      "availableLanguage": ["English"]
     },
-    {
-      "@type": "Question",
-      "name": "Where can I buy pawIQ supplements?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "pawIQ will be available on Amazon.com in the United States. Sign up for updates to be notified at launch."
-      }
+    "sameAs": [
+      "https://www.instagram.com/pawiqpets/"
+    ]
+  }
+  </script>
+
+  <!-- Schema: Product -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "pawIQ Premium Dog Supplement",
+    "url": "https://www.pawiqpets.com/",
+    "image": "https://www.pawiqpets.com/assets/logo-white.png",
+    "brand": {
+      "@type": "Brand",
+      "name": "pawIQ"
     },
-    {
-      "@type": "Question",
-      "name": "When does pawIQ launch?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "pawIQ is coming soon. Join our email list for launch updates and early access."
-      }
+    "description": "pawIQ Premium Dog Supplement is a veterinarian-formulated pet supplement designed to support overall health, digestive health, allergy support, and collagen production for dogs in the United States and Canada. Launching soon on Amazon.",
+    "category": "Pet Supplements",
+    "audience": {
+      "@type": "PeopleAudience",
+      "suggestedGender": "unisex",
+      "suggestedAge": "Adult dogs"
+    },
+    "areaServed": [
+      { "@type": "Country", "name": "United States" },
+      { "@type": "Country", "name": "Canada" }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/PreOrder",
+      "priceCurrency": "USD"
     }
-  ]
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "pawIQ",
-  "url": "https://www.pawiqpets.com/",
-  "logo": "https://www.pawiqpets.com/assets/logo-white.png",
-  "sameAs": [
-    "https://www.instagram.com/pawiqpets/"
-  ]
-}
-</script>
-
-<!-- Domain redirects -->
-<script>
-  const redirects = [
-    "pawiqpets.ca",
-    "www.pawiqpets.ca",
-    "pawiq.ca",
-    "www.pawiq.ca",
-    "pawzbest.com",
-    "www.pawzbest.com"
-  ];
-
-  const host = location.hostname.toLowerCase();
-
-  if (redirects.includes(host)) {
-    location.replace("https://www.pawiqpets.com" + location.pathname + location.search);
   }
-</script>
+  </script>
 
-  <!-- Self-hosted fonts -->
+  <!-- Schema: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is pawIQ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "pawIQ is a premium dog supplement brand launching soon on Amazon. Our products are veterinarian-formulated to support digestive health, allergy relief, and collagen production in dogs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where can I buy pawIQ supplements?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "pawIQ will be available on Amazon.com in the United States. Sign up for updates to be notified at launch."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When does pawIQ launch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "pawIQ is coming soon. Join our email list for launch updates and early access."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Domain redirects -->
+  <script>
+    const redirects = [
+      "pawiqpets.ca", "www.pawiqpets.ca",
+      "pawiq.ca", "www.pawiq.ca",
+      "pawzbest.com", "www.pawzbest.com"
+    ];
+    const host = location.hostname.toLowerCase();
+    if (redirects.includes(host)) {
+      location.replace("https://www.pawiqpets.com" + location.pathname + location.search);
+    }
+  </script>
+
   <style>
     @font-face {
       font-family: 'Thunder';
@@ -126,9 +161,7 @@
       font-weight: 300 400 500;
       font-display: swap;
     }
-  </style>
 
-  <style>
     html, body { height: 100%; }
 
 body {
@@ -138,7 +171,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Background video layer */
 .bg-video {
   position: fixed;
   inset: 0;
@@ -148,14 +180,11 @@ body {
   z-index: 0;
 }
 
-/* Soft restart: brief blur to hide the cut */
 .bg-video.soft-restart {
   opacity: 0.85;
   filter: blur(2px);
   transition: opacity 180ms ease, filter 180ms ease;
 }
-
-/* FIX 5: Removed unused .seo-text class */
 
 .seo-h1 {
   position: absolute;
@@ -239,13 +268,12 @@ body {
   display: none;
 }
 
-/* FIX 6: Thinner weight on signup title + added bottom margin for spacing */
 .signup-title {
   font-size: 16px;
   font-weight: 300;
   letter-spacing: 0.2px;
   opacity: 0.95;
-  margin-bottom: 10px; /* matches space between email and consent below */
+  margin-bottom: 10px;
 }
 
 .email {
@@ -380,8 +408,8 @@ body {
    ============================================================ */
 #pawTrigger {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 28px;
+  right: 28px;
   z-index: 500;
   width: 44px;
   height: 44px;
@@ -393,15 +421,15 @@ body {
   background: none;
   padding: 0;
   touch-action: manipulation;
-  font-size: 32px;
+  font-size: 30px;
   line-height: 1;
   animation: pawFloat 2.2s ease-in-out infinite;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
-  transition: transform 150ms ease;
+  filter: brightness(0) invert(1) drop-shadow(0 3px 8px rgba(0,0,0,0.6));
+  transition: filter 150ms ease;
 }
 
 #pawTrigger:hover {
-  transform: scale(1.15);
+  filter: brightness(0) invert(1) drop-shadow(0 3px 14px rgba(255,255,255,0.5));
 }
 
 #pawTrigger.hidden {
@@ -411,6 +439,13 @@ body {
 @keyframes pawFloat {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
+}
+
+@media (max-width: 768px) {
+  #pawTrigger {
+    bottom: calc(env(safe-area-inset-bottom) + 20px);
+    right: 20px;
+  }
 }
 
 /* ============================================================
@@ -879,7 +914,6 @@ body {
   poster="./assets/comingsoon-poster.jpg"
   disablepictureinpicture
 >
-  <!-- FIX 4: Changed preload="none" to preload="metadata" for faster video start -->
   <source src="./assets/comingsoon.mp4?v=2" type="video/mp4" />
 </video>
 
@@ -975,7 +1009,7 @@ body {
     </div>
     <div class="hud-item">
       <span class="hud-label">Lives</span>
-      <span id="heartsDisplay">&#9829;&#9829;&#9829;</span>
+      <span id="heartsDisplay">&#9829;&#9829;&#9829;&#9829;&#9829;</span>
     </div>
   </div>
 
@@ -1007,7 +1041,7 @@ body {
   <div id="introScreen" class="game-screen">
     <img src="./assets/logo-white.png" alt="pawIQ" class="intro-logo" onerror="this.style.display='none'" />
     <div class="intro-headline">Catch the <span>Good Stuff.</span></div>
-    <p class="intro-desc">Help your pup catch the supplements. Dodge the tennis balls. Simple, right? (It's a metaphor.)</p>
+    <p class="intro-desc">Help your pup catch the supplements. Dodge the chocolate. Simple, right? (It's a metaphor.)</p>
     <div class="legend">
       <div class="legend-item">
         <canvas class="legend-canvas" id="legendChew" width="60" height="36"></canvas>
@@ -1015,7 +1049,7 @@ body {
       </div>
       <div class="legend-item">
         <canvas class="legend-canvas" id="legendBall" width="48" height="36"></canvas>
-        <div class="legend-label">Dodge<br>Tennis Balls</div>
+        <div class="legend-label">Dodge<br>Chocolate</div>
       </div>
     </div>
     <button class="game-cta-btn" id="startGameBtn">Let's Go</button>
@@ -1027,6 +1061,21 @@ body {
     <div class="end-headline" id="endHeadline">You crushed it.</div>
     <div class="end-score" id="endScore">0</div>
     <p class="end-sub" id="endSub">Your pup's routine is officially sorted.</p>
+
+    <!-- Name capture + leaderboard (lose state only) -->
+    <div id="leaderboardSection" style="display:none; width:100%; max-width:320px; margin-bottom:16px;">
+      <div id="nameCapture" style="margin-bottom:14px;">
+        <input id="playerNameInput" type="text" maxlength="20" placeholder="Enter your name for the board" autocomplete="off"
+          style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.20);color:#fff;padding:11px 14px;border-radius:10px;outline:none;font-size:16px;font-family:'Satoshi',system-ui,sans-serif;margin-bottom:8px;" />
+        <div id="nameError" style="color:#FF6B8A;font-size:12px;font-family:'Satoshi',system-ui,sans-serif;min-height:16px;margin-bottom:4px;"></div>
+        <button id="submitNameBtn" style="width:100%;font-family:'Thunder',sans-serif;font-weight:800;font-size:15px;background:#2FEAA0;color:#0A1628;border:none;border-radius:10px;padding:12px;cursor:pointer;letter-spacing:0.3px;">Add to Leaderboard</button>
+      </div>
+      <div id="leaderboardDisplay" style="display:none;">
+        <div style="font-family:'Satoshi',system-ui,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#4EC9F0;margin-bottom:10px;">Top 3</div>
+        <div id="leaderboardRows"></div>
+      </div>
+    </div>
+
     <button class="game-cta-btn" id="playAgainBtn">Play Again</button>
   </div>
 </div>
@@ -1036,8 +1085,6 @@ body {
   const ua = document.getElementById("uaField");
   if (ua) ua.value = navigator.userAgent;
 
-  // FIX 3: Dedicated endpoint variable so feedback submissions don't rely on
-  // a stale reference to signupForm.action if the endpoint ever changes.
   const FORM_ENDPOINT = "https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec";
 
   const form = document.getElementById("signupForm");
@@ -1170,7 +1217,6 @@ body {
         if (postQForm) postQForm.classList.add("is-gone");
       }, 320);
 
-      // FIX 3: Using FORM_ENDPOINT instead of form.action
       const payload = new URLSearchParams();
       payload.set("email", lastEmail);
       payload.set("consent", "yes");
@@ -1178,7 +1224,7 @@ body {
       payload.set("user_agent", navigator.userAgent);
       payload.set("feedback", answer);
       payload.set("prompt_id", postQPromptId ? postQPromptId.value : "");
-    payload.set("row_id", lastRowId);
+      payload.set("row_id", lastRowId);
 
       fetch(FORM_ENDPOINT, {
         method: "POST",
@@ -1362,19 +1408,15 @@ body {
       c.translate(cx, cy);
 
       const bw = 18; // half bone length
-      const br = 7;  // knob radius
-      const sh = 4;  // shaft half-height
+      const br = 9;  // knob radius (was 7)
+      const sh = 6;  // shaft half-height (was 4)
 
       // Shadow offset
       c.save();
       c.translate(1, 2);
       c.fillStyle = '#5C2A08';
-
-      // Left knob shadow
       c.beginPath(); c.arc(-bw, 0, br, 0, Math.PI*2); c.fill();
-      // Right knob shadow
       c.beginPath(); c.arc(bw, 0, br, 0, Math.PI*2); c.fill();
-      // Shaft shadow
       c.fillRect(-bw, -sh, bw*2, sh*2);
       c.restore();
 
@@ -1388,8 +1430,8 @@ body {
 
       // Highlight on knobs
       c.fillStyle = '#A0522D';
-      c.beginPath(); c.arc(-bw - 1, -2, br * 0.6, 0, Math.PI*2); c.fill();
-      c.beginPath(); c.arc(bw - 1, -2, br * 0.6, 0, Math.PI*2); c.fill();
+      c.beginPath(); c.arc(-bw - 1, -2, br * 0.58, 0, Math.PI*2); c.fill();
+      c.beginPath(); c.arc(bw - 1, -2, br * 0.58, 0, Math.PI*2); c.fill();
       // Shaft highlight
       c.fillStyle = '#9B4B18';
       c.fillRect(-bw, -sh, bw*2, sh);
@@ -1403,41 +1445,13 @@ body {
     }
 
     function drawTennisBall(cx, cy, x_ctx) {
+      // Chocolate bar emoji
       const c = x_ctx || ctx;
-      const r = 14;
       c.save();
-      c.translate(cx, cy);
-
-      // Shadow
-      c.fillStyle = '#B8D422';
-      c.beginPath();
-      c.arc(1, 2, r, 0, Math.PI*2);
-      c.fill();
-
-      // Main ball
-      c.fillStyle = '#C8E632';
-      c.beginPath();
-      c.arc(0, 0, r, 0, Math.PI*2);
-      c.fill();
-
-      // Seam lines
-      c.strokeStyle = 'rgba(255,255,255,0.70)';
-      c.lineWidth = 1.5;
-      c.beginPath();
-      c.moveTo(-r*0.6, -r*0.5);
-      c.quadraticCurveTo(0, -r*0.1, r*0.6, -r*0.5);
-      c.stroke();
-      c.beginPath();
-      c.moveTo(-r*0.6, r*0.5);
-      c.quadraticCurveTo(0, r*0.1, r*0.6, r*0.5);
-      c.stroke();
-
-      // Shine
-      c.fillStyle = 'rgba(255,255,255,0.25)';
-      c.beginPath();
-      c.arc(-4, -5, 4, 0, Math.PI*2);
-      c.fill();
-
+      c.font = '28px serif';
+      c.textAlign = 'center';
+      c.textBaseline = 'middle';
+      c.fillText('🍫', cx, cy);
       c.restore();
     }
 
@@ -1599,7 +1613,7 @@ body {
 
     function startGame() {
       score = 0;
-      lives = 3;
+      lives = 5;
       items = [];
       particles = [];
       lastSpawn = 0;
@@ -1623,7 +1637,7 @@ body {
 
     function updateHUD() {
       scoreDisplay.textContent = score;
-      const hearts = '♥'.repeat(lives) + '♡'.repeat(Math.max(0, 3 - lives));
+      const hearts = '♥'.repeat(lives) + '♡'.repeat(Math.max(0, 5 - lives));
       heartsDisplay.textContent = hearts;
     }
 
@@ -1818,7 +1832,7 @@ body {
       const payload = new URLSearchParams();
       payload.set('email', email);
       payload.set('consent', 'yes');
-      payload.set('page', 'https://www.pawiqpets.com/');
+      payload.set('page', 'game capture');
       payload.set('user_agent', navigator.userAgent);
       payload.set('source', 'game-gate');
 
@@ -1840,18 +1854,124 @@ body {
       resumeAfterGate();
     });
 
+    // Leaderboard (localStorage, top 3)
+    function getLeaderboard() {
+      try {
+        return JSON.parse(localStorage.getItem('pawiq_lb') || '[]');
+      } catch(e) { return []; }
+    }
+
+    function saveLeaderboard(lb) {
+      try { localStorage.setItem('pawiq_lb', JSON.stringify(lb)); } catch(e) {}
+    }
+
+    function addToLeaderboard(name, s) {
+      let lb = getLeaderboard();
+      lb.push({ name, score: s });
+      lb.sort((a, b) => b.score - a.score);
+      lb = lb.slice(0, 3);
+      saveLeaderboard(lb);
+      return lb;
+    }
+
+    function renderLeaderboard(lb) {
+      const el = document.getElementById('leaderboardRows');
+      if (!el) return;
+      const medals = ['🥇','🥈','🥉'];
+      el.innerHTML = lb.map((e, i) => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.06);border-radius:8px;margin-bottom:6px;">
+          <span style="font-size:18px;margin-right:10px;">${medals[i]}</span>
+          <span style="font-family:'Satoshi',system-ui,sans-serif;font-size:14px;color:#fff;flex:1;text-align:left;">${e.name}</span>
+          <span style="font-family:'Thunder',sans-serif;font-weight:800;font-size:18px;color:#2FEAA0;">${e.score}</span>
+        </div>
+      `).join('');
+    }
+
+    // Profanity filter — blocks exact matches and common leetspeak variants
+    const blocklist = [
+      'fuck','shit','ass','bitch','cunt','dick','cock','pussy','penis','vagina','nigger','nigga',
+      'faggot','fag','whore','slut','bastard','asshole','motherfucker','retard','twat','wank',
+      'prick','cum','jizz','tit','boob','anus','anal',
+      // leetspeak variants
+      'f4ck','fvck','fu*k','sh1t','p3nis','d1ck','c0ck','a55','b1tch','p*ssy','c*nt','n1gger',
+      'n1gga','4ss','@ss','peni5','penls'
+    ];
+
+    function containsProfanity(str) {
+      const normalized = str.toLowerCase()
+        .replace(/0/g,'o').replace(/1/g,'i').replace(/3/g,'e')
+        .replace(/4/g,'a').replace(/5/g,'s').replace(/\$/g,'s')
+        .replace(/[@]/g,'a').replace(/\*/g,'').replace(/\s+/g,'');
+      return blocklist.some(w => normalized.includes(w));
+    }
+
+    const loseCopy = [
+      { headline: "Chocolate happens.", sub: "Your pup still believes in you. Supplements next round." },
+      { headline: "Too much chocolate, not enough chews.", sub: "The vet's not mad, just disappointed. Try again?" },
+      { headline: "Pup: 0, Chocolate: 1.", sub: "Some days the treats win. But the supplements are still out there." },
+      { headline: "Distracted by chocolate?", sub: "Same. The good stuff's worth chasing. Go again." },
+      { headline: "Missed your chews.", sub: "Even golden retrievers have off days. Hit retry." }
+    ];
+
     // End screen
     function showEndScreen(win) {
       gameHUD.classList.add('hidden');
       endScreen.classList.remove('hidden');
+      const leaderboardSection = document.getElementById('leaderboardSection');
+      const nameCapture = document.getElementById('nameCapture');
+      const leaderboardDisplay = document.getElementById('leaderboardDisplay');
+      const playerNameInput = document.getElementById('playerNameInput');
+      const submitNameBtn = document.getElementById('submitNameBtn');
+      const nameError = document.getElementById('nameError');
+
       if (win) {
         endIcon.textContent = '🏆';
         endHeadline.textContent = 'You crushed it.';
         endSub.textContent = "Your pup's routine is officially sorted.";
+        if (leaderboardSection) leaderboardSection.style.display = 'none';
       } else {
-        endIcon.textContent = '💔';
-        endHeadline.textContent = 'Oops. Too much junk.';
-        endSub.textContent = 'Even the best pups miss a few. Try again?';
+        const pick = loseCopy[Math.floor(Math.random() * loseCopy.length)];
+        endIcon.textContent = '🍫';
+        endHeadline.textContent = pick.headline;
+        endSub.textContent = pick.sub;
+
+        if (leaderboardSection) {
+          leaderboardSection.style.display = 'block';
+          nameCapture.style.display = 'block';
+          leaderboardDisplay.style.display = 'none';
+          if (playerNameInput) playerNameInput.value = '';
+          if (nameError) nameError.textContent = '';
+
+          // Show existing leaderboard below name input
+          const currentLb = getLeaderboard();
+          if (currentLb.length > 0) {
+            leaderboardDisplay.style.display = 'block';
+            renderLeaderboard(currentLb);
+          }
+
+          if (submitNameBtn) {
+            submitNameBtn.onclick = () => {
+              const raw = (playerNameInput.value || '').trim();
+              if (!raw) {
+                nameError.textContent = 'Enter a name to get on the board.';
+                return;
+              }
+              if (raw.length < 2) {
+                nameError.textContent = 'At least 2 characters.';
+                return;
+              }
+              if (containsProfanity(raw)) {
+                nameError.textContent = 'Keep it clean. Your pup is watching.';
+                return;
+              }
+              nameError.textContent = '';
+              const updated = addToLeaderboard(raw, score);
+              nameCapture.style.display = 'none';
+              leaderboardDisplay.style.display = 'block';
+              renderLeaderboard(updated);
+            };
+          }
+        }
       }
       endScore.textContent = 'Score: ' + score;
     }
