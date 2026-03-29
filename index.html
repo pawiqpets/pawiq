@@ -1994,12 +1994,16 @@ body {
               nameError.textContent = '';
               submitNameBtn.textContent = 'Saving...';
               submitNameBtn.disabled = true;
+              // Show immediately with current score while fetch runs
+              nameCapture.style.display = 'none';
+              leaderboardDisplay.style.display = 'block';
+              renderLeaderboard([{ name: raw, score: score }]);
               submitScore(raw, score, function(updated) {
                 submitNameBtn.textContent = 'Add to Leaderboard';
                 submitNameBtn.disabled = false;
-                nameCapture.style.display = 'none';
-                leaderboardDisplay.style.display = 'block';
-                renderLeaderboard(updated);
+                if (updated && updated.length > 0) {
+                  renderLeaderboard(updated);
+                }
               });
             };
           }
