@@ -112,6 +112,22 @@
   }
 </script>
 
+  <!-- Self-hosted fonts -->
+  <style>
+    @font-face {
+      font-family: 'Thunder';
+      src: url('./assets/fonts/Thunder-LC.ttf') format('truetype');
+      font-weight: 700 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Satoshi';
+      src: url('./assets/fonts/Satoshi-Variable.ttf') format('truetype');
+      font-weight: 300 400 500;
+      font-display: swap;
+    }
+  </style>
+
   <style>
     html, body { height: 100%; }
 
@@ -359,6 +375,496 @@ body {
   }
 }
 
+/* ============================================================
+   PAW TRIGGER
+   ============================================================ */
+#pawTrigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 500;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  touch-action: manipulation;
+  font-size: 32px;
+  line-height: 1;
+  animation: pawFloat 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.45));
+  transition: transform 150ms ease;
+}
+
+#pawTrigger:hover {
+  transform: scale(1.15);
+}
+
+#pawTrigger.hidden {
+  display: none;
+}
+
+@keyframes pawFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ============================================================
+   GAME OVERLAY
+   ============================================================ */
+#gameOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: #0A1628;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#gameOverlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Thunder + Satoshi */
+.thunder {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+}
+
+.satoshi {
+  font-family: 'Satoshi', system-ui, sans-serif;
+}
+
+/* Close button */
+#gameClose {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 410;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background: rgba(255,255,255,0.10);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  transition: background 150ms ease;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+#gameClose:hover {
+  background: rgba(255,255,255,0.20);
+}
+
+/* Ambient bg canvas */
+#ambientCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Game canvas */
+#gameCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+}
+
+/* HUD */
+#gameHUD {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 18px 20px 14px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#gameHUD .hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+#gameHUD .hud-label {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.50);
+}
+
+#scoreDisplay {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: #2FEAA0;
+  line-height: 1;
+}
+
+#heartsDisplay {
+  font-size: 20px;
+  line-height: 1;
+  color: #FF6B8A;
+  letter-spacing: 2px;
+}
+
+/* Screens inside overlay */
+.game-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+  transition: opacity 0.4s ease;
+  pointer-events: all;
+}
+
+.game-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Intro screen */
+#introScreen .intro-logo {
+  width: min(120px, 40vw);
+  margin-bottom: 16px;
+}
+
+#introScreen .intro-eyebrow {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #4EC9F0;
+  margin-bottom: 12px;
+}
+
+#introScreen .intro-headline {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: clamp(32px, 6vw, 56px);
+  color: #fff;
+  line-height: 1.05;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#introScreen .intro-headline span {
+  color: #2FEAA0;
+}
+
+#introScreen .intro-desc {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.80);
+  text-align: center;
+  max-width: 380px;
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+#introScreen .legend {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 28px;
+  align-items: center;
+}
+
+#introScreen .legend-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+#introScreen .legend-canvas {
+  width: 48px;
+  height: 36px;
+}
+
+#introScreen .legend-label {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 11px;
+  color: rgba(255,255,255,0.70);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.game-cta-btn {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  background: #2FEAA0;
+  color: #0A1628;
+  border: none;
+  border-radius: 999px;
+  padding: 16px 48px;
+  cursor: pointer;
+  transition: transform 150ms ease, background 150ms ease;
+  letter-spacing: 0.3px;
+}
+
+.game-cta-btn:hover {
+  background: #25d48e;
+  transform: scale(1.04);
+}
+
+/* End screen */
+#endScreen .end-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+}
+
+#endScreen .end-headline {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 5vw, 44px);
+  color: #fff;
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+#endScreen .end-score {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: 32px;
+  color: #2FEAA0;
+  margin-bottom: 8px;
+}
+
+#endScreen .end-sub {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.80);
+  text-align: center;
+  max-width: 320px;
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+/* Slo-mo text overlay */
+#slomoText {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#slomoText.visible {
+  opacity: 1;
+}
+
+#slomoText .slomo-line1 {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: clamp(24px, 4vw, 36px);
+  color: #fff;
+  text-align: center;
+}
+
+#slomoText .slomo-line2 {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 15px;
+  color: rgba(255,255,255,0.80);
+  font-style: italic;
+  text-align: center;
+}
+
+/* Email gate */
+#emailGate {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  background: rgba(10,22,40,0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+#emailGate.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#emailGateCard {
+  background: #0F2040;
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 24px;
+  padding: 36px 28px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+@keyframes pawBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+#emailGateCard .gate-paw {
+  font-size: 52px;
+  display: block;
+  margin-bottom: 16px;
+  animation: pawBob 1.6s ease-in-out infinite;
+}
+
+#emailGateCard .gate-eyebrow {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #4EC9F0;
+  margin-bottom: 10px;
+}
+
+#emailGateCard .gate-headline {
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 4vw, 28px);
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+#emailGateCard .gate-headline span {
+  color: #F5C842;
+}
+
+#emailGateCard .gate-body {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 14px;
+  color: rgba(255,255,255,0.80);
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+
+#gateEmailInput {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.20);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  outline: none;
+  font-size: 16px;
+  font-family: 'Satoshi', system-ui, sans-serif;
+  margin-bottom: 12px;
+  transition: border-color 200ms ease;
+}
+
+#gateEmailInput:focus {
+  border-color: #2FEAA0;
+}
+
+#gateEmailInput::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+
+#emailGateCard .gate-consent {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+#emailGateCard .gate-consent input {
+  margin-top: 2px;
+  accent-color: #2FEAA0;
+  flex-shrink: 0;
+}
+
+#emailGateCard .gate-consent label {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.70);
+  line-height: 1.4;
+}
+
+#gateSubmitBtn {
+  width: 100%;
+  font-family: 'Thunder', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  background: #2FEAA0;
+  color: #0A1628;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+
+#gateSubmitBtn:hover {
+  background: #25d48e;
+  transform: scale(1.02);
+}
+
+#gateSkipLink {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.50);
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  display: block;
+  margin: 0 auto;
+}
+
+#gateSkipLink:hover {
+  color: rgba(255,255,255,0.80);
+}
+
   </style>
 </head>
 
@@ -448,6 +954,80 @@ body {
       <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
     </div>
 
+  </div>
+</div>
+
+<!-- PAW TRIGGER BUTTON -->
+<button id="pawTrigger" aria-label="Play Treat Catcher game">🐾</button>
+
+<!-- GAME OVERLAY -->
+<div id="gameOverlay" role="dialog" aria-modal="true" aria-label="Treat Catcher Game">
+  <canvas id="ambientCanvas"></canvas>
+  <canvas id="gameCanvas"></canvas>
+
+  <button id="gameClose" aria-label="Close game">&times;</button>
+
+  <!-- HUD -->
+  <div id="gameHUD" class="hidden">
+    <div class="hud-item">
+      <span class="hud-label">Score</span>
+      <span id="scoreDisplay">0</span>
+    </div>
+    <div class="hud-item">
+      <span class="hud-label">Lives</span>
+      <span id="heartsDisplay">&#9829;&#9829;&#9829;</span>
+    </div>
+  </div>
+
+  <!-- Slo-mo text -->
+  <div id="slomoText">
+    <div class="slomo-line1">This one's the good stuff.</div>
+    <div class="slomo-line2">So is our newsletter.</div>
+  </div>
+
+  <!-- Email gate -->
+  <div id="emailGate">
+    <div id="emailGateCard">
+      <span class="gate-paw">🐾</span>
+      <div class="gate-eyebrow">One sec</div>
+      <div class="gate-headline">Your pup's waiting.<br><span>So are we.</span></div>
+      <p class="gate-body">Drop your email and we'll let you know the moment pawIQ launches.</p>
+      <input type="text" name="company" style="display:none" id="gateHoneypot" />
+      <input type="email" id="gateEmailInput" placeholder="your@email.com" inputmode="email" autocomplete="email" />
+      <div class="gate-consent">
+        <input type="checkbox" id="gateConsentCheck" />
+        <label for="gateConsentCheck">I agree to receive email updates from pawIQ. No spam, ever.</label>
+      </div>
+      <button id="gateSubmitBtn">Get Early Access</button>
+      <button id="gateSkipLink">Skip for now</button>
+    </div>
+  </div>
+
+  <!-- Intro screen -->
+  <div id="introScreen" class="game-screen">
+    <img src="./assets/logo-white.png" alt="pawIQ" class="intro-logo" onerror="this.style.display='none'" />
+    <div class="intro-headline">Catch the <span>Good Stuff.</span></div>
+    <p class="intro-desc">Help your pup catch the supplements. Dodge the tennis balls. Simple, right? (It's a metaphor.)</p>
+    <div class="legend">
+      <div class="legend-item">
+        <canvas class="legend-canvas" id="legendChew" width="60" height="36"></canvas>
+        <div class="legend-label">Catch<br>Supplements</div>
+      </div>
+      <div class="legend-item">
+        <canvas class="legend-canvas" id="legendBall" width="48" height="36"></canvas>
+        <div class="legend-label">Dodge<br>Tennis Balls</div>
+      </div>
+    </div>
+    <button class="game-cta-btn" id="startGameBtn">Let's Go</button>
+  </div>
+
+  <!-- End screen -->
+  <div id="endScreen" class="game-screen hidden">
+    <div class="end-icon" id="endIcon">&#127942;</div>
+    <div class="end-headline" id="endHeadline">You crushed it.</div>
+    <div class="end-score" id="endScore">0</div>
+    <p class="end-sub" id="endSub">Your pup's routine is officially sorted.</p>
+    <button class="game-cta-btn" id="playAgainBtn">Play Again</button>
   </div>
 </div>
 
@@ -658,6 +1238,627 @@ body {
       if (IS_MOBILE) return;
 
       if (video.ended) scheduleRestart();
+    });
+
+  })();
+
+  /* ============================================================
+     PAW TRIGGER + GAME ENGINE
+     ============================================================ */
+  (function() {
+    'use strict';
+
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec";
+
+    // Elements
+    const pawTrigger = document.getElementById('pawTrigger');
+    const gameOverlay = document.getElementById('gameOverlay');
+    const gameClose = document.getElementById('gameClose');
+    const gameCanvas = document.getElementById('gameCanvas');
+    const ambientCanvas = document.getElementById('ambientCanvas');
+    const gameHUD = document.getElementById('gameHUD');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const heartsDisplay = document.getElementById('heartsDisplay');
+    const introScreen = document.getElementById('introScreen');
+    const endScreen = document.getElementById('endScreen');
+    const endIcon = document.getElementById('endIcon');
+    const endHeadline = document.getElementById('endHeadline');
+    const endScore = document.getElementById('endScore');
+    const endSub = document.getElementById('endSub');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const playAgainBtn = document.getElementById('playAgainBtn');
+    const slomoText = document.getElementById('slomoText');
+    const emailGate = document.getElementById('emailGate');
+    const gateEmailInput = document.getElementById('gateEmailInput');
+    const gateConsentCheck = document.getElementById('gateConsentCheck');
+    const gateSubmitBtn = document.getElementById('gateSubmitBtn');
+    const gateSkipLink = document.getElementById('gateSkipLink');
+
+    const ctx = gameCanvas.getContext('2d');
+    const actx = ambientCanvas.getContext('2d');
+
+    // State
+    let gameState = 'idle'; // idle, playing, slomoGate, gated, over
+    let score = 0;
+    let lives = 3;
+    let items = [];
+    let particles = [];
+    let ambientDots = [];
+    let dogX = 0;
+    let dogTargetX = 0;
+    let lastSpawn = 0;
+    let spawnInterval = 900;
+    let animId = null;
+    let gateShown = false;
+    let slomoActive = false;
+    let slomoFactor = 1;
+    let winScore = 20;
+
+    // Dog shape
+    let dogY = 0;
+    const DOG_W = 70;
+    const DOG_H = 60;
+
+    // No wave interval needed - trigger floats via CSS animation
+
+    // Open/close game
+    function openGame() {
+      gameOverlay.classList.add('active');
+      pawTrigger.classList.add('hidden');
+      resizeCanvases();
+      startAmbient();
+      showIntro();
+    }
+
+    function closeGame() {
+      stopGame();
+      gameOverlay.classList.remove('active');
+      pawTrigger.classList.remove('hidden');
+      gameHUD.classList.add('hidden');
+      endScreen.classList.add('hidden');
+      emailGate.classList.remove('visible');
+      slomoText.classList.remove('visible');
+    }
+
+    pawTrigger.addEventListener('click', openGame);
+    gameClose.addEventListener('click', closeGame);
+
+    // Resize canvases
+    function resizeCanvases() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      gameCanvas.width = w;
+      gameCanvas.height = h;
+      ambientCanvas.width = w;
+      ambientCanvas.height = h;
+      dogY = h - DOG_H - 20;
+      if (dogX === 0) { dogX = w / 2; dogTargetX = w / 2; }
+      initAmbientDots();
+    }
+
+    window.addEventListener('resize', () => {
+      if (gameOverlay.classList.contains('active')) resizeCanvases();
+    });
+
+    // Mouse/touch tracking
+    gameCanvas.addEventListener('mousemove', (e) => {
+      dogTargetX = e.clientX;
+    });
+
+    gameCanvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      dogTargetX = e.touches[0].clientX;
+    }, { passive: false });
+
+    gameCanvas.addEventListener('touchstart', (e) => {
+      dogTargetX = e.touches[0].clientX;
+    }, { passive: true });
+
+    // ---- DRAWING FUNCTIONS ----
+
+    function drawChew(cx, cy, x_ctx) {
+      const c = x_ctx || ctx;
+      c.save();
+      c.translate(cx, cy);
+
+      const bw = 18; // half bone length
+      const br = 7;  // knob radius
+      const sh = 4;  // shaft half-height
+
+      // Shadow offset
+      c.save();
+      c.translate(1, 2);
+      c.fillStyle = '#5C2A08';
+
+      // Left knob shadow
+      c.beginPath(); c.arc(-bw, 0, br, 0, Math.PI*2); c.fill();
+      // Right knob shadow
+      c.beginPath(); c.arc(bw, 0, br, 0, Math.PI*2); c.fill();
+      // Shaft shadow
+      c.fillRect(-bw, -sh, bw*2, sh*2);
+      c.restore();
+
+      // Left knob
+      c.fillStyle = '#8B4513';
+      c.beginPath(); c.arc(-bw, 0, br, 0, Math.PI*2); c.fill();
+      // Right knob
+      c.beginPath(); c.arc(bw, 0, br, 0, Math.PI*2); c.fill();
+      // Shaft
+      c.fillRect(-bw, -sh, bw*2, sh*2);
+
+      // Highlight on knobs
+      c.fillStyle = '#A0522D';
+      c.beginPath(); c.arc(-bw - 1, -2, br * 0.6, 0, Math.PI*2); c.fill();
+      c.beginPath(); c.arc(bw - 1, -2, br * 0.6, 0, Math.PI*2); c.fill();
+      // Shaft highlight
+      c.fillStyle = '#9B4B18';
+      c.fillRect(-bw, -sh, bw*2, sh);
+
+      // Shine dots
+      c.fillStyle = 'rgba(255,255,255,0.38)';
+      c.beginPath(); c.arc(-bw - 2, -3, 2.5, 0, Math.PI*2); c.fill();
+      c.beginPath(); c.arc(bw - 2, -3, 2.5, 0, Math.PI*2); c.fill();
+
+      c.restore();
+    }
+
+    function drawTennisBall(cx, cy, x_ctx) {
+      const c = x_ctx || ctx;
+      const r = 14;
+      c.save();
+      c.translate(cx, cy);
+
+      // Shadow
+      c.fillStyle = '#B8D422';
+      c.beginPath();
+      c.arc(1, 2, r, 0, Math.PI*2);
+      c.fill();
+
+      // Main ball
+      c.fillStyle = '#C8E632';
+      c.beginPath();
+      c.arc(0, 0, r, 0, Math.PI*2);
+      c.fill();
+
+      // Seam lines
+      c.strokeStyle = 'rgba(255,255,255,0.70)';
+      c.lineWidth = 1.5;
+      c.beginPath();
+      c.moveTo(-r*0.6, -r*0.5);
+      c.quadraticCurveTo(0, -r*0.1, r*0.6, -r*0.5);
+      c.stroke();
+      c.beginPath();
+      c.moveTo(-r*0.6, r*0.5);
+      c.quadraticCurveTo(0, r*0.1, r*0.6, r*0.5);
+      c.stroke();
+
+      // Shine
+      c.fillStyle = 'rgba(255,255,255,0.25)';
+      c.beginPath();
+      c.arc(-4, -5, 4, 0, Math.PI*2);
+      c.fill();
+
+      c.restore();
+    }
+
+    function drawDog(x, y, frame) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      const bodyColor = '#C4873A';
+      const darkColor = '#8B5E1A';
+      const lightColor = '#E8A85C';
+
+      // Wagging tail
+      const tailWag = Math.sin(frame * 0.25) * 18;
+      ctx.save();
+      ctx.strokeStyle = bodyColor;
+      ctx.lineWidth = 7;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(28, -18);
+      ctx.quadraticCurveTo(46, -28 + tailWag * 0.5, 50 + tailWag * 0.3, -38 + tailWag);
+      ctx.stroke();
+      ctx.restore();
+
+      // Body
+      ctx.fillStyle = bodyColor;
+      ctx.beginPath();
+      ctx.ellipse(0, -18, 28, 20, 0, 0, Math.PI*2);
+      ctx.fill();
+
+      // Front legs
+      ctx.fillStyle = bodyColor;
+      ctx.beginPath();
+      ctx.roundRect(-18, -4, 10, 22, 4);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.roundRect(8, -4, 10, 22, 4);
+      ctx.fill();
+
+      // Paws
+      ctx.fillStyle = lightColor;
+      ctx.beginPath();
+      ctx.ellipse(-13, 18, 8, 5, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(13, 18, 8, 5, 0, 0, Math.PI*2);
+      ctx.fill();
+
+      // Head
+      ctx.fillStyle = bodyColor;
+      ctx.beginPath();
+      ctx.arc(-2, -36, 20, 0, Math.PI*2);
+      ctx.fill();
+
+      // Ears
+      ctx.fillStyle = darkColor;
+      ctx.beginPath();
+      ctx.ellipse(-18, -44, 10, 14, -0.4, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(14, -44, 10, 14, 0.4, 0, Math.PI*2);
+      ctx.fill();
+
+      // Snout
+      ctx.fillStyle = lightColor;
+      ctx.beginPath();
+      ctx.ellipse(-2, -28, 12, 9, 0, 0, Math.PI*2);
+      ctx.fill();
+
+      // Nose
+      ctx.fillStyle = '#2A1500';
+      ctx.beginPath();
+      ctx.ellipse(-2, -32, 5, 4, 0, 0, Math.PI*2);
+      ctx.fill();
+
+      // Eyes
+      ctx.fillStyle = '#1A0800';
+      ctx.beginPath();
+      ctx.arc(-11, -40, 4, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(7, -40, 4, 0, Math.PI*2);
+      ctx.fill();
+
+      // Eye shine
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.beginPath();
+      ctx.arc(-9, -42, 1.5, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(9, -42, 1.5, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    // Ambient dots
+    function initAmbientDots() {
+      ambientDots = [];
+      for (let i = 0; i < 40; i++) {
+        ambientDots.push({
+          x: Math.random() * ambientCanvas.width,
+          y: Math.random() * ambientCanvas.height,
+          r: 0.5 + Math.random() * 2,
+          speed: 0.2 + Math.random() * 0.6,
+          opacity: 0.05 + Math.random() * 0.30
+        });
+      }
+    }
+
+    function startAmbient() {
+      function animateAmbient() {
+        actx.clearRect(0, 0, ambientCanvas.width, ambientCanvas.height);
+        ambientDots.forEach(d => {
+          d.y -= d.speed;
+          if (d.y < -5) { d.y = ambientCanvas.height + 5; d.x = Math.random() * ambientCanvas.width; }
+          actx.fillStyle = `rgba(78,201,240,${d.opacity})`;
+          actx.beginPath();
+          actx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+          actx.fill();
+        });
+        if (gameOverlay.classList.contains('active')) requestAnimationFrame(animateAmbient);
+      }
+      requestAnimationFrame(animateAmbient);
+    }
+
+    // ---- INTRO SCREEN ----
+    function showIntro() {
+      introScreen.classList.remove('hidden');
+      endScreen.classList.add('hidden');
+      gameHUD.classList.add('hidden');
+
+      // Draw legend items
+      const chewCanvas = document.getElementById('legendChew');
+      const ballCanvas = document.getElementById('legendBall');
+      if (chewCanvas) {
+        const cc = chewCanvas.getContext('2d');
+        cc.clearRect(0, 0, 60, 36);
+        drawChew(30, 18, cc);
+      }
+      if (ballCanvas) {
+        const bc = ballCanvas.getContext('2d');
+        bc.clearRect(0, 0, 48, 36);
+        drawTennisBall(24, 18, bc);
+      }
+    }
+
+    startGameBtn.addEventListener('click', () => {
+      introScreen.classList.add('hidden');
+      startGame();
+    });
+
+    playAgainBtn.addEventListener('click', () => {
+      endScreen.classList.add('hidden');
+      startGame();
+    });
+
+    // ---- GAME LOGIC ----
+    let frame = 0;
+
+    function startGame() {
+      score = 0;
+      lives = 3;
+      items = [];
+      particles = [];
+      lastSpawn = 0;
+      slomoActive = false;
+      slomoFactor = 1;
+      gameState = 'playing';
+      dogX = gameCanvas.width / 2;
+      dogTargetX = gameCanvas.width / 2;
+      updateHUD();
+      gameHUD.classList.remove('hidden');
+      frame = 0;
+      if (animId) cancelAnimationFrame(animId);
+      gameLoop(0);
+    }
+
+    function stopGame() {
+      gameState = 'idle';
+      if (animId) cancelAnimationFrame(animId);
+      animId = null;
+    }
+
+    function updateHUD() {
+      scoreDisplay.textContent = score;
+      const hearts = '♥'.repeat(lives) + '♡'.repeat(Math.max(0, 3 - lives));
+      heartsDisplay.textContent = hearts;
+    }
+
+    function spawnItem(now) {
+      if (now - lastSpawn < spawnInterval / slomoFactor) return;
+      lastSpawn = now;
+
+      const isChew = Math.random() < 0.40;
+      const w = gameCanvas.width;
+      const x = 20 + Math.random() * (w - 40);
+      const baseSpeed = 2.8 + score * 0.03 + Math.random() * 1.8;
+
+      items.push({
+        type: isChew ? 'chew' : 'ball',
+        x,
+        y: -20,
+        speed: baseSpeed,
+        active: true
+      });
+    }
+
+    function spawnParticles(x, y, color) {
+      for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI * 2 / 8) * i + (Math.random() - 0.5) * 0.5;
+        const speed = 2 + Math.random() * 3;
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1,
+          decay: 0.04 + Math.random() * 0.04,
+          r: 3 + Math.random() * 4,
+          color
+        });
+      }
+    }
+
+    function gameLoop(now) {
+      if (gameState !== 'playing' && gameState !== 'slomoGate') {
+        return;
+      }
+
+      frame++;
+      ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+      // Lerp dog
+      dogX += (dogTargetX - dogX) * 0.12;
+
+      // Spawn items
+      if (gameState === 'playing') spawnItem(now);
+
+      // Move + draw items
+      items.forEach(item => {
+        if (!item.active) return;
+
+        const effectiveSpeed = item.speed * (slomoActive ? slomoFactor : 1);
+        item.y += effectiveSpeed;
+
+        // Draw
+        if (item.type === 'chew') {
+          drawChew(item.x, item.y);
+        } else {
+          drawTennisBall(item.x, item.y);
+        }
+
+        // Check catch (dog hitbox)
+        const dogLeft = dogX - 30;
+        const dogRight = dogX + 30;
+        const catchY = dogY - 10;
+
+        if (item.y > catchY && item.y < catchY + 30 &&
+            item.x > dogLeft && item.x < dogRight) {
+          item.active = false;
+
+          if (item.type === 'chew') {
+            score++;
+            updateHUD();
+            spawnParticles(item.x, item.y, '#2FEAA0');
+
+            // Check win
+            if (score >= winScore) {
+              setTimeout(() => showEndScreen(true), 100);
+              gameState = 'over';
+              return;
+            }
+
+            // Email gate trigger
+            if (score === 3 && !gateShown) {
+              triggerSlomoGate();
+            }
+
+          } else {
+            // Caught bad item
+            lives--;
+            updateHUD();
+            spawnParticles(item.x, item.y, '#FF6B8A');
+            if (lives <= 0) {
+              setTimeout(() => showEndScreen(false), 100);
+              gameState = 'over';
+              return;
+            }
+          }
+        }
+
+        // Missed item (fell below screen)
+        if (item.y > gameCanvas.height + 30) {
+          item.active = false;
+          if (item.type === 'chew') {
+            lives--;
+            updateHUD();
+            spawnParticles(item.x, gameCanvas.height - 10, '#FF6B8A');
+            if (lives <= 0) {
+              setTimeout(() => showEndScreen(false), 100);
+              gameState = 'over';
+              return;
+            }
+          }
+        }
+      });
+
+      // Clean inactive items
+      items = items.filter(i => i.active && i.y < gameCanvas.height + 50);
+
+      // Draw particles
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= p.decay;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      });
+      particles = particles.filter(p => p.life > 0);
+
+      // Draw dog
+      drawDog(dogX, dogY, frame);
+
+      animId = requestAnimationFrame(gameLoop);
+    }
+
+    function triggerSlomoGate() {
+      slomoActive = true;
+      slomoFactor = 0.12;
+      gameState = 'slomoGate';
+
+      // Show text after 300ms
+      setTimeout(() => {
+        slomoText.classList.add('visible');
+
+        // Hide text, show gate after 1800ms more
+        setTimeout(() => {
+          slomoText.classList.remove('visible');
+          setTimeout(() => {
+            emailGate.classList.add('visible');
+            gameState = 'gated';
+          }, 400);
+        }, 1800);
+      }, 300);
+
+      animId = requestAnimationFrame(gameLoop);
+    }
+
+    function resumeAfterGate() {
+      gateShown = true;
+      emailGate.classList.remove('visible');
+      slomoActive = false;
+      slomoFactor = 1;
+      gameState = 'playing';
+      animId = requestAnimationFrame(gameLoop);
+    }
+
+    // Gate submit
+    gateSubmitBtn.addEventListener('click', () => {
+      const email = gateEmailInput.value.trim();
+      const consent = gateConsentCheck.checked;
+      const honeypot = document.getElementById('gateHoneypot');
+      if (honeypot && honeypot.value) { resumeAfterGate(); return; }
+
+      if (!email || !consent) {
+        gateEmailInput.style.borderColor = '#FF6B8A';
+        setTimeout(() => { gateEmailInput.style.borderColor = ''; }, 1500);
+        return;
+      }
+
+      gateSubmitBtn.textContent = "You're in. 🐾";
+      gateSubmitBtn.disabled = true;
+
+      const payload = new URLSearchParams();
+      payload.set('email', email);
+      payload.set('consent', 'yes');
+      payload.set('page', 'https://www.pawiqpets.com/');
+      payload.set('user_agent', navigator.userAgent);
+      payload.set('source', 'game-gate');
+
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: payload.toString()
+      }).catch(() => {});
+
+      setTimeout(() => {
+        gateSubmitBtn.textContent = 'Get Early Access';
+        gateSubmitBtn.disabled = false;
+        resumeAfterGate();
+      }, 1200);
+    });
+
+    gateSkipLink.addEventListener('click', () => {
+      gateShown = true;
+      resumeAfterGate();
+    });
+
+    // End screen
+    function showEndScreen(win) {
+      gameHUD.classList.add('hidden');
+      endScreen.classList.remove('hidden');
+      if (win) {
+        endIcon.textContent = '🏆';
+        endHeadline.textContent = 'You crushed it.';
+        endSub.textContent = "Your pup's routine is officially sorted.";
+      } else {
+        endIcon.textContent = '💔';
+        endHeadline.textContent = 'Oops. Too much junk.';
+        endSub.textContent = 'Even the best pups miss a few. Try again?';
+      }
+      endScore.textContent = 'Score: ' + score;
+    }
+
+    // Allow clicking canvas to set dog position (helps mobile users who don't drag)
+    gameCanvas.addEventListener('click', (e) => {
+      dogTargetX = e.clientX;
     });
 
   })();
