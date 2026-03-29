@@ -458,8 +458,8 @@ body {
   background: #0A1628;
   opacity: 0;
   pointer-events: none;
+  display: none;
   transition: opacity 0.4s ease;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -467,6 +467,7 @@ body {
 }
 
 #gameOverlay.active {
+  display: flex;
   opacity: 1;
   pointer-events: all;
 }
@@ -1354,7 +1355,12 @@ body {
 
     // Open/close game
     function openGame() {
-      gameOverlay.classList.add('active');
+      gameOverlay.style.display = 'flex';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          gameOverlay.classList.add('active');
+        });
+      });
       pawTrigger.classList.add('hidden');
       resizeCanvases();
       startAmbient();
@@ -1364,6 +1370,7 @@ body {
     function closeGame() {
       stopGame();
       gameOverlay.classList.remove('active');
+      setTimeout(() => { gameOverlay.style.display = 'none'; }, 400);
       pawTrigger.classList.remove('hidden');
       gameHUD.classList.add('hidden');
       endScreen.classList.add('hidden');
