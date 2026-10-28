@@ -86,7 +86,7 @@ def faq_items(body):
     sec = re.search(r'<section class="learn-faq">(.*?)</section>', body, re.S)
     if not sec:
         return []
-    clean = lambda t: html.unescape(re.sub(r"<[^>]+>", "", t)).strip()
+    clean = lambda t: html.unescape(re.sub(r"<[^>]+>", "", re.sub(r"<sup>.*?</sup>", "", t, flags=re.S))).strip()
     return [(clean(q), clean(a)) for q, a in re.findall(r"<h3>(.*?)</h3>\s*<p>(.*?)</p>", sec.group(1), re.S)]
 
 
@@ -177,12 +177,13 @@ def render_index(posts):
 def update_sitemap(posts):
     path = os.path.join(ROOT, "sitemap.xml")
     s = open(path, encoding="utf-8").read()
-    s = re.sub(r"\n  <!-- LEARN START -->.*?<!-- LEARN END -->\n", "\n", s, flags=re.S)
+    s = re.sub(r"\s*<!-- LEARN START -->.*?<!-- LEARN END -->\s*", "\n", s, flags=re.S)
+    s = re.sub(r"\n{3,}", "\n\n", s)
     latest = max([d for _, d in posts], default=None)
     entries = [f"  <url>\n    <loc>{SITE}/blogs/learn</loc>\n" + (f"    <lastmod>{latest}</lastmod>\n" if latest else "") + "  </url>"]
     entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
-    s = s.replace("\n</urlset>", block + "\n</urlset>")
+    s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"
     open(path, "w", encoding="utf-8").write(s)
 
 
