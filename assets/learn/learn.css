@@ -31,7 +31,7 @@ main.wrap.wide h1{margin-top:32px}
 .post ul,.post ol{margin:0 0 20px;padding-left:22px}
 .post li{margin-bottom:8px}
 .table-wrap{overflow-x:auto;margin:8px 0 24px;border:1px solid var(--line);border-radius:var(--r);background:#fff}
-.post table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;line-height:1.45}
+.post table{border-collapse:collapse;width:100%;min-width:480px;font-size:15px;line-height:1.45}
 .post th,.post td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
 .post thead th{background:var(--ink);color:var(--cream);font-weight:600}
 .post tbody th{font-weight:600;width:22%}
