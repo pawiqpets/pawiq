@@ -99,7 +99,7 @@ def render_post(p, date, review_html=""):
         "@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"],
         "description": p["mdesc"], "image": [p["hero_img"]],
         "author": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"},
-        "publisher": {"@type": "Organization", "name": "pawIQ", "logo": {"@type": "ImageObject", "url": SITE + "/assets/logo-white.png"}},
+        "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/", "logo": {"@type": "ImageObject", "url": SITE + "/assets/logo-white.png"}},
         "mainEntityOfPage": p["url"], "url": p["url"], "inLanguage": "en-US",
         "isPartOf": {"@type": "Blog", "@id": SITE + "/blogs/learn", "name": "pawIQ Learn"},
         "wordCount": len(re.sub(r"<[^>]+>", " ", p["body"]).split()),
@@ -118,7 +118,7 @@ def render_post(p, date, review_html=""):
     lds.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
         {"@type": "ListItem", "position": 2, "name": "Learn", "item": SITE + "/blogs/learn"},
-        {"@type": "ListItem", "position": 3, "name": p["title"], "item": p["url"]}]})
+        {"@type": "ListItem", "position": 3, "name": p["mtitle"].replace(" | pawIQ", ""), "item": p["url"]}]})
     extra = "".join('<script type="application/ld+json">%s</script>\n' % json.dumps(x, ensure_ascii=False) for x in lds)
     body = p["body"].replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
     body = re.sub(r"<p>pawIQ ", '<p class="closing">pawIQ ', body, count=1)
