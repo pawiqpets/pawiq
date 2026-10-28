@@ -96,12 +96,17 @@ def fmt_date(d):
 
 def render_post(p, date, review_html=""):
     article_ld = {
-        "@context": "https://schema.org", "@type": "Article", "headline": p["title"],
+        "@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"],
         "description": p["mdesc"], "image": [p["hero_img"]],
         "author": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"},
         "publisher": {"@type": "Organization", "name": "pawIQ", "logo": {"@type": "ImageObject", "url": SITE + "/assets/logo-white.png"}},
-        "mainEntityOfPage": p["url"], "inLanguage": "en-US",
+        "mainEntityOfPage": p["url"], "url": p["url"], "inLanguage": "en-US",
+        "isPartOf": {"@type": "Blog", "@id": SITE + "/blogs/learn", "name": "pawIQ Learn"},
+        "wordCount": len(re.sub(r"<[^>]+>", " ", p["body"]).split()),
     }
+    cites = re.findall(r'<li id="src-\d+">.*?<a href="([^"]+)"[^>]*>(.*?)</a>', p["body"], re.S)
+    if cites:
+        article_ld["citation"] = [{"@type": "CreativeWork", "name": n.strip(), "url": u} for u, n in cites]
     if date:
         article_ld["datePublished"] = date
         article_ld["dateModified"] = date
@@ -111,8 +116,9 @@ def render_post(p, date, review_html=""):
         lds.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faqs]})
     lds.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
-        {"@type": "ListItem", "position": 1, "name": "Learn", "item": SITE + "/blogs/learn"},
-        {"@type": "ListItem", "position": 2, "name": p["title"], "item": p["url"]}]})
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+        {"@type": "ListItem", "position": 2, "name": "Learn", "item": SITE + "/blogs/learn"},
+        {"@type": "ListItem", "position": 3, "name": p["title"], "item": p["url"]}]})
     extra = "".join('<script type="application/ld+json">%s</script>\n' % json.dumps(x, ensure_ascii=False) for x in lds)
     body = p["body"].replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
     body = re.sub(r"<p>pawIQ ", '<p class="closing">pawIQ ', body, count=1)
@@ -121,10 +127,10 @@ def render_post(p, date, review_html=""):
     date_label = fmt_date(date) if date else "Draft, not published"
     return head(p["mtitle"], p["mdesc"], p["url"], "article", p["hero_img"], extra) + f"""<main>
 <div class="wrap">
-<p class="crumb"><a href="/blogs/learn">Learn</a></p>
+<p class="crumb"><a href="/">Home</a> / <a href="/blogs/learn">Learn</a></p>
 <h1>{e(p["title"])}</h1>
 <p class="standfirst">{e(p["standfirst"])}</p>
-<p class="meta">{date_label} · {p["mins"]} min read</p>
+<p class="meta">Written by the pawIQ team · {("Last reviewed <time datetime=\"%s\">%s</time>" % (date, date_label)) if date else date_label} · {p["mins"]} min read</p>
 </div>
 <figure class="hero"><img src="{e(p["hero_img"])}" alt="{e(p["alt"])}" width="1600" height="1067" fetchpriority="high"><figcaption>{credit}</figcaption></figure>
 <article class="wrap post">
