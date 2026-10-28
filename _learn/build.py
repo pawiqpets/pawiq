@@ -18,7 +18,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=1"
+CSS_HREF = "/assets/learn/learn.css?v=2"
 e = html.escape
 
 
@@ -38,7 +38,7 @@ def load(handle):
         "standfirst": meta(src, "STANDFIRST (excerpt)"),
         "mtitle": meta(src, "META TITLE"),
         "mdesc": meta(src, "META DESCRIPTION"),
-        "hero_img": meta(src, "HERO IMG"),
+        "hero_img": (SITE + "/assets/learn/img/%s.jpg" % handle) if os.path.exists(os.path.join(ROOT, "assets", "learn", "img", handle + ".jpg")) else meta(src, "HERO IMG"),
         "hero_page": hero_page,
         "credit": credit.replace("Credit: ", ""),
         "alt": alt.replace("ALT: ", ""),
@@ -67,8 +67,8 @@ def head(title, desc, url, og_type, og_image, extra=""):
 <meta property="og:image" content="{e(og_image)}">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preload" href="/assets/fonts/Thunder-LC.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="preload" href="/assets/fonts/Satoshi-Variable.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{CSS_HREF}">
 {extra}</head>
 <body>
@@ -94,12 +94,12 @@ def fmt_date(d):
     return datetime.date.fromisoformat(d).strftime("%B %-d, %Y")
 
 
-def render_post(p, date, review_html=""):
+def render_post(p, date, review_html="", others=()):
     article_ld = {
         "@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"],
         "description": p["mdesc"], "image": [p["hero_img"]],
         "author": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"},
-        "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/", "logo": {"@type": "ImageObject", "url": SITE + "/assets/logo-white.png"}},
+        "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/", "logo": {"@type": "ImageObject", "url": SITE + "/assets/learn/logo-charcoal.png"}},
         "mainEntityOfPage": p["url"], "url": p["url"], "inLanguage": "en-US",
         "isPartOf": {"@type": "Blog", "@id": SITE + "/blogs/learn", "name": "pawIQ Learn"},
         "wordCount": len(re.sub(r"<[^>]+>", " ", p["body"]).split()),
@@ -136,8 +136,18 @@ def render_post(p, date, review_html=""):
 <article class="wrap post">
 {body}
 </article>
-</main>
+{more_block(others)}</main>
 {review_html}""" + FOOT
+
+
+def more_block(others):
+    picks = list(others)[:3]
+    if not picks:
+        return '<section class="wrap more"><h2>More from Learn.</h2><p><a href="/blogs/learn">Browse all Learn articles</a></p></section>\n'
+    cards = "\n".join(f"""<li class="card"><a href="/blogs/learn/{p["handle"]}">
+<img src="{e(p["hero_img"])}" alt="{e(p["alt"])}" width="800" height="533" loading="lazy">
+<span class="card-title">{e(p["title"])}</span></a></li>""" for p, _ in picks)
+    return f'<section class="wrap wide more"><h2>More from Learn.</h2><ul class="cards">\n{cards}\n</ul><p><a href="/blogs/learn">Browse all Learn articles</a></p></section>\n'
 
 
 def render_index(posts):
@@ -182,7 +192,7 @@ def main():
     posts = [(load(r["handle"]), r["date"]) for r in reg]
     os.makedirs(os.path.join(ROOT, "blogs", "learn"), exist_ok=True)
     for p, d in posts:
-        open(os.path.join(ROOT, "blogs", "learn", p["handle"] + ".html"), "w", encoding="utf-8").write(render_post(p, d))
+        open(os.path.join(ROOT, "blogs", "learn", p["handle"] + ".html"), "w", encoding="utf-8").write(render_post(p, d, others=[x for x in posts if x[0]["handle"] != p["handle"]]))
     open(os.path.join(ROOT, "blogs", "learn.html"), "w", encoding="utf-8").write(render_index(posts))
     update_sitemap(posts)
     print("built", len(posts), "posts")

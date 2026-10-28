@@ -1,8 +1,9 @@
-# pawIQ — canonical facts
+# pawIQ: canonical facts
 
 Canonical homepage: https://www.pawiqpets.com/
 Primary category: Pet Supplements (Dogs)
-Core benefits: digestive support; allergy support; collagen support
+Products: 3-in-1 Gut Health (Probiotic + Prebiotic + Postbiotic soft chews for dogs); Skin & Immune (soft chews for dogs)
+Coming soon: Calming Chew; Hip & Joint Chew
 Primary markets: United States; Canada
 Launch sequence: Amazon first; DTC shortly after
 
@@ -11,5 +12,9 @@ Canonical structured data:
 - FAQs (JSON-LD): https://www.pawiqpets.com/faq.jsonld
 - Sitemap: https://www.pawiqpets.com/sitemap.xml
 
+## Learn (educational articles)
+- Index: https://www.pawiqpets.com/blogs/learn
+- Prebiotics vs probiotics vs postbiotics for dogs: https://www.pawiqpets.com/blogs/learn/prebiotics-probiotics-postbiotics-dogs (scientific definitions of each term, with ISAPP sources)
+
 One-sentence summary:
-pawIQ is a pet wellness brand launching a premium dog supplement focused on digestive support, allergy support, and collagen support, debuting on Amazon in the United States and Canada before expanding to direct-to-consumer sales.
+pawIQ is a pet wellness brand launching daily soft chews for dogs, starting with 3-in-1 Gut Health and Skin & Immune, debuting on Amazon in the United States and Canada before expanding to direct-to-consumer sales.

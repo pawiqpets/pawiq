@@ -1,12 +1,12 @@
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "pawIQ Premium Dog Supplement (Coming Soon)",
+  "name": "pawIQ Daily Soft Chews for Dogs (Coming Soon)",
   "brand": {
     "@type": "Brand",
     "name": "pawIQ"
   },
-  "description": "pawIQ is developing a premium dog supplement focused on digestive support, allergy support, and collagen support for dogs in the United States and Canada. Launching soon on Amazon, with direct-to-consumer availability shortly after.",
+  "description": "pawIQ is launching daily soft chews for dogs: 3-in-1 Gut Health and Skin & Immune, with Calming Chew and Hip & Joint Chew coming soon, for dogs in the United States and Canada. Launching soon on Amazon, with direct-to-consumer availability shortly after.",
   "category": "Pet Supplements",
   "url": "https://www.pawiqpets.com/",
   "audience": {
@@ -14,8 +14,14 @@
     "suggestedGender": "unisex"
   },
   "areaServed": [
-    { "@type": "Country", "name": "United States" },
-    { "@type": "Country", "name": "Canada" }
+    {
+      "@type": "Country",
+      "name": "United States"
+    },
+    {
+      "@type": "Country",
+      "name": "Canada"
+    }
   ],
   "offers": {
     "@type": "Offer",
