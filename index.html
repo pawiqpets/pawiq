@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0A1628" />
-  <title>pawIQ | Daily soft chews for your dog's gut, skin and immune health</title>
+  <title>pawIQ | Daily soft chews for healthy digestion and seasonal skin comfort</title>
 
   <meta name="description" content="pawIQ is coming soon. Smart, simple dog supplements built around daily routine. Launching on Amazon in the US and Canada." />
   <meta name="robots" content="index, follow" />
@@ -14,7 +14,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.pawiqpets.com/" />
   <meta property="og:site_name" content="pawIQ" />
-  <meta property="og:title" content="pawIQ | Daily soft chews for your dog&#39;s gut, skin and immune health" />
+  <meta property="og:title" content="pawIQ | Daily soft chews for healthy digestion and seasonal skin comfort" />
   <meta property="og:description" content="Smart, simple dog supplements built around daily routine. Launching on Amazon in the US and Canada." />
   <meta property="og:image" content="https://www.pawiqpets.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -24,7 +24,7 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="pawIQ | Daily soft chews for your dog&#39;s gut, skin and immune health" />
+  <meta name="twitter:title" content="pawIQ | Daily soft chews for healthy digestion and seasonal skin comfort" />
   <meta name="twitter:description" content="Smart, simple dog supplements built around daily routine. Launching on Amazon in the US and Canada." />
   <meta name="twitter:image" content="https://www.pawiqpets.com/assets/og-image.png" />
 
@@ -286,9 +286,12 @@ body {
 }
 
 .learn-link:hover, .learn-link:focus-visible { color: #fff; }
-.foot-links { display: flex; justify-content: center; gap: 18px; margin-top: 14px; }
-.foot-links .learn-link { margin: 0; }
 .consent-link { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.consent-text { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.consent-line { white-space: nowrap; }
+.consent-policy { margin-top: 3px; }
+@media (max-width: 360px) { .consent { font-size: 12px; gap: 8px; } }
+#emailGateCard .gate-consent { justify-content: center; }
 
 .btn {
   width: auto;
@@ -919,7 +922,7 @@ body {
     </a>
 
     <h1 class="seo-h1">
-    pawIQ | Daily soft chews for your dog's gut, skin and immune health
+    pawIQ | Daily soft chews for healthy digestion and seasonal skin comfort
     </h1>
 
     <div class="sub">Smart Habits. Coming Soon.</div>
@@ -948,7 +951,7 @@ body {
 
       <label class="consent">
         <input type="checkbox" name="consent" value="yes" required />
-        <span>I agree to receive email updates from pawIQ. See our <a class="consent-link" href="/policies/privacy-policy">privacy policy</a>.</span>
+        <span class="consent-text"><span class="consent-line">I agree to receive email updates from pawIQ.</span><a class="consent-link consent-policy" href="/policies/privacy-policy">Privacy Policy</a></span>
       </label>
 
       <button class="btn" type="submit" aria-label="Notify me.">
@@ -983,7 +986,7 @@ body {
       <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
     </div>
 
-    <div class="foot-links"><a class="learn-link" href="/blogs/learn">Learn</a><a class="learn-link" href="/policies/privacy-policy">Privacy policy</a></div>
+    <a class="learn-link" href="/blogs/learn">Learn</a>
 
   </div>
 </div>
@@ -1027,7 +1030,7 @@ body {
       <input type="email" id="gateEmailInput" placeholder="your@email.com" inputmode="email" autocomplete="email" />
       <div class="gate-consent">
         <input type="checkbox" id="gateConsentCheck" />
-        <label for="gateConsentCheck">I agree to receive email updates from pawIQ. No spam, ever. See our <a class="consent-link" href="/policies/privacy-policy">privacy policy</a>.</label>
+        <label for="gateConsentCheck" class="consent-text"><span class="consent-line">I agree to receive email updates from pawIQ.</span><a class="consent-link consent-policy" href="/policies/privacy-policy">Privacy Policy</a></label>
       </div>
       <button id="gateSubmitBtn">Get Early Access</button>
       <button id="gateSkipLink">Skip for now</button>

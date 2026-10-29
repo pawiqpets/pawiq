@@ -18,7 +18,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=2"
+CSS_HREF = "/assets/learn/learn.css?v=3"
 e = html.escape
 
 
@@ -177,18 +177,18 @@ def render_index(posts):
 
 
 PAGES = [
-    # (source file, output path, url path, title, description, h1)
+    # (source file, output path, url path, title, description, h1, article class)
     ("privacy-policy.html", "policies/privacy-policy.html", "/policies/privacy-policy", "Privacy policy | pawIQ",
-     "How pawIQ (Pawz Best Group Inc.) collects, uses and protects your personal information.", "Privacy policy."),
+     "How pawIQ (Pawz Best Group Inc.) collects, uses and protects your personal information.", "Privacy policy.", ""),
     ("editorial-policy.html", "pages/editorial-policy.html", "/pages/editorial-policy", "How we write Learn | pawIQ",
-     "Where pawIQ Learn gets its facts, how we use AI, and how we keep guides current.", "How we write Learn."),
+     "Where pawIQ Learn gets its facts, how we use AI, and how we keep guides current.", "How we write Learn.", "quiet"),
 ]
 
 
-def render_page(src, url_path, title, desc, h1):
+def render_page(src, url_path, title, desc, h1, cls=""):
     body = open(os.path.join(ROOT, "_learn", "pages", src), encoding="utf-8").read()
     return head(title, desc, SITE + url_path, "website", SITE + "/assets/og-image.png") + f"""<main>
-<article class="wrap post">
+<article class="wrap post{(" " + cls) if cls else ""}">
 <h1>{e(h1)}</h1>
 {body}
 </article>
@@ -223,10 +223,10 @@ def main():
         open(os.path.join(ROOT, "blogs", "learn", p["handle"] + ".html"), "w", encoding="utf-8").write(render_post(p, d, others=[x for x in posts if x[0]["handle"] != p["handle"]]))
     open(os.path.join(ROOT, "blogs", "learn.html"), "w", encoding="utf-8").write(render_index(posts))
     update_sitemap(posts)
-    for src, out, url_path, title, desc, h1 in PAGES:
+    for src, out, url_path, title, desc, h1, cls in PAGES:
         path = os.path.join(ROOT, out)
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        open(path, "w", encoding="utf-8").write(render_page(src, url_path, title, desc, h1))
+        open(path, "w", encoding="utf-8").write(render_page(src, url_path, title, desc, h1, cls))
     print("built", len(posts), "posts and", len(PAGES), "pages")
 
 
