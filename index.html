@@ -287,11 +287,14 @@ body {
 
 .learn-link:hover, .learn-link:focus-visible { color: #fff; }
 .consent-link { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-.consent-text { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .consent-line { white-space: nowrap; }
-.consent-policy { margin-top: 3px; }
+.foot-links { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 14px; }
+.foot-links .learn-link { margin: 0; }
+.consent { width: fit-content; max-width: 100%; align-items: center; }
+.consent input { margin-top: 0; flex-shrink: 0; }
 @media (max-width: 360px) { .consent { font-size: 12px; gap: 8px; } }
 #emailGateCard .gate-consent { justify-content: center; }
+.gate-consent-text { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 
 .btn {
   width: auto;
@@ -951,7 +954,7 @@ body {
 
       <label class="consent">
         <input type="checkbox" name="consent" value="yes" required />
-        <span class="consent-text"><span class="consent-line">I agree to receive email updates from pawIQ.</span><a class="consent-link consent-policy" href="/policies/privacy-policy">Privacy Policy</a></span>
+        <span class="consent-line">I agree to receive email updates from pawIQ.</span>
       </label>
 
       <button class="btn" type="submit" aria-label="Notify me.">
@@ -986,7 +989,7 @@ body {
       <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
     </div>
 
-    <a class="learn-link" href="/blogs/learn">Learn</a>
+    <div class="foot-links"><a class="learn-link" href="/blogs/learn">Learn</a><a class="learn-link" href="/policies/privacy-policy">Privacy Policy</a></div>
 
   </div>
 </div>
@@ -1030,7 +1033,7 @@ body {
       <input type="email" id="gateEmailInput" placeholder="your@email.com" inputmode="email" autocomplete="email" />
       <div class="gate-consent">
         <input type="checkbox" id="gateConsentCheck" />
-        <label for="gateConsentCheck" class="consent-text"><span class="consent-line">I agree to receive email updates from pawIQ.</span><a class="consent-link consent-policy" href="/policies/privacy-policy">Privacy Policy</a></label>
+        <label for="gateConsentCheck" class="gate-consent-text"><span class="consent-line">I agree to receive email updates from pawIQ.</span><a class="consent-link" href="/policies/privacy-policy">Privacy Policy</a></label>
       </div>
       <button id="gateSubmitBtn">Get Early Access</button>
       <button id="gateSkipLink">Skip for now</button>
