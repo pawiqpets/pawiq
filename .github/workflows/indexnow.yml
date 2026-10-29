@@ -1,0 +1,19 @@
+name: IndexNow ping
+on:
+  push:
+    branches: [main]
+    paths: ["blogs/**", "sitemap.xml"]
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for GitHub Pages to deploy
+        run: sleep 90
+      - name: Send sitemap URLs to IndexNow (Bing, Yandex, Naver, Seznam, Yep)
+        run: |
+          KEY=$(ls | grep -E '^[0-9a-f]{32}\.txt$' | head -1 | sed 's/\.txt$//')
+          URLS=$(grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' | python3 -c "import sys,json;print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))")
+          curl -sS -o /dev/null -w "IndexNow HTTP %{http_code}\n" -X POST https://api.indexnow.org/indexnow \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "{\"host\":\"www.pawiqpets.com\",\"key\":\"$KEY\",\"keyLocation\":\"https://www.pawiqpets.com/$KEY.txt\",\"urlList\":$URLS}"
