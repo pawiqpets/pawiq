@@ -2,7 +2,7 @@
 
 Only APPROVED posts live in this repo (the repo is public). Drafts stay on the review page.
 Source posts: _learn/posts/<handle>.html (house template body + header comments)
-Registry:     _learn/posts.json  [{"handle": "...", "date": "YYYY-MM-DD"}]
+Registry:     _learn/posts.json  [{"handle": "...", "date": "YYYY-MM-DD", "updated": "YYYY-MM-DD" (optional, only after a real content refresh)}]
 Outputs:      blogs/learn.html                 -> https://www.pawiqpets.com/blogs/learn
               blogs/learn/<handle>.html        -> https://www.pawiqpets.com/blogs/learn/<handle>
               sitemap.xml (Learn URLs inside the LEARN markers only; other entries untouched)
@@ -109,7 +109,7 @@ def render_post(p, date, review_html="", others=()):
         article_ld["citation"] = [{"@type": "CreativeWork", "name": n.strip(), "url": u} for u, n in cites]
     if date:
         article_ld["datePublished"] = date
-        article_ld["dateModified"] = date
+        article_ld["dateModified"] = p.get("updated") or date
     lds = [article_ld]
     faqs = faq_items(p["body"])
     if faqs:
@@ -124,13 +124,14 @@ def render_post(p, date, review_html="", others=()):
     body = re.sub(r"<p>pawIQ ", '<p class="closing">pawIQ ', body, count=1)
     credit = re.sub(r"Photo by (.*?) on Unsplash",
                     r'Photo by \1 on <a href="%s" rel="noopener" target="_blank">Unsplash</a>' % e(p["hero_page"]), e(p["credit"]))
-    date_label = fmt_date(date) if date else "Draft, not published"
+    reviewed = p.get("updated") or date
+    date_label = fmt_date(reviewed) if reviewed else "Draft, not published"
     return head(p["mtitle"], p["mdesc"], p["url"], "article", p["hero_img"], extra) + f"""<main>
 <div class="wrap">
 <p class="crumb"><a href="/">Home</a> / <a href="/blogs/learn">Learn</a></p>
 <h1>{e(p["title"])}</h1>
 <p class="standfirst">{e(p["standfirst"])}</p>
-<p class="meta">Written by the pawIQ team · {("Last reviewed <time datetime=\"%s\">%s</time>" % (date, date_label)) if date else date_label} · {p["mins"]} min read</p>
+<p class="meta">Written by the pawIQ team · {("Last reviewed <time datetime=\"%s\">%s</time>" % (reviewed, date_label)) if reviewed else date_label} · {p["mins"]} min read</p>
 </div>
 <figure class="hero"><img src="{e(p["hero_img"])}" alt="{e(p["alt"])}" width="1600" height="1067" fetchpriority="high"><figcaption>{credit}</figcaption></figure>
 <article class="wrap post">
@@ -181,7 +182,7 @@ def update_sitemap(posts):
     s = re.sub(r"\n{3,}", "\n\n", s)
     latest = max([d for _, d in posts], default=None)
     entries = [f"  <url>\n    <loc>{SITE}/blogs/learn</loc>\n" + (f"    <lastmod>{latest}</lastmod>\n" if latest else "") + "  </url>"]
-    entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{d}</lastmod>\n  </url>" for p, d in posts]
+    entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{p.get('updated') or d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
     s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"
     open(path, "w", encoding="utf-8").write(s)
@@ -190,7 +191,12 @@ def update_sitemap(posts):
 def main():
     reg = json.load(open(os.path.join(ROOT, "_learn", "posts.json"), encoding="utf-8"))
     reg = sorted(reg, key=lambda r: r["date"], reverse=True)
-    posts = [(load(r["handle"]), r["date"]) for r in reg]
+    posts = []
+    for r in reg:
+        p = load(r["handle"])
+        if r.get("updated"):
+            p["updated"] = r["updated"]
+        posts.append((p, r["date"]))
     os.makedirs(os.path.join(ROOT, "blogs", "learn"), exist_ok=True)
     for p, d in posts:
         open(os.path.join(ROOT, "blogs", "learn", p["handle"] + ".html"), "w", encoding="utf-8").write(render_post(p, d, others=[x for x in posts if x[0]["handle"] != p["handle"]]))
