@@ -18,7 +18,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=5"
+CSS_HREF = "/assets/learn/learn.css?v=6"
 e = html.escape
 
 
