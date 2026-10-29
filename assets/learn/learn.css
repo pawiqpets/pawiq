@@ -33,7 +33,9 @@ main.wrap.wide h1{margin-top:32px}
 .table-wrap{overflow-x:auto;margin:16px 0 28px}
 .post table{border-collapse:collapse;width:100%;min-width:480px;font-size:15px;line-height:1.45;background:#fff;border:1px solid var(--line)}
 .post th,.post td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
-.post thead th{background:var(--ink);color:var(--cream);font-weight:600}
+.post thead th{background:var(--ink);color:rgba(246,246,241,.78);font-size:14px;font-weight:600;padding-top:10px;border-top:1px solid #2a3135}
+.post thead th:first-child{border-left:1px solid var(--ink)}
+.post thead th:last-child{border-right:1px solid var(--ink)}
 .post tbody th{font-weight:600;width:22%}
 .post tbody tr:last-child th,.post tbody tr:last-child td{border-bottom:0}
 .learn-vet-note{border-left:4px solid var(--blue);background:#fff;border-radius:var(--r);padding:18px 20px;margin:32px 0}
@@ -66,6 +68,8 @@ main.wrap.wide h1{margin-top:32px}
 .post.quiet h2{font-family:Satoshi,system-ui,sans-serif;font-weight:700;font-size:17px;line-height:1.4;letter-spacing:0;margin:28px 0 6px}
 .post h2,.post h3{text-wrap:pretty}
 .post sup{font-size:.6em;line-height:0;vertical-align:super;margin-left:1px}
-.post table caption{caption-side:top;text-align:left;padding:0 0 10px;font-weight:700;font-size:17px;line-height:1.35;color:var(--ink);text-wrap:balance}
-.post table caption sup{font-weight:400}
+.post table caption{caption-side:top;text-align:left;background:var(--ink);color:var(--cream);padding:18px 14px 10px;font-family:Thunder,Impact,sans-serif;font-weight:800;font-size:clamp(23px,6vw,26px);line-height:1.05;letter-spacing:.4px;text-wrap:balance;border-radius:var(--r) var(--r) 0 0}
+.post table caption sup{font-family:Satoshi,system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:0;margin-left:2px}
+.post table caption sup a{color:var(--cream)}
+@media (max-width:511px){.post table caption{padding-right:calc(480px - 100vw + 46px)}}
 .post tbody th[scope=row]{width:38%}
