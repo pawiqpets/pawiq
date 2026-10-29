@@ -2,7 +2,8 @@ name: IndexNow ping
 on:
   push:
     branches: [main]
-    paths: ["blogs/**", "sitemap.xml"]
+    paths: ["blogs/**", "sitemap.xml", ".github/workflows/indexnow.yml"]
+  workflow_dispatch:
 jobs:
   ping:
     runs-on: ubuntu-latest
