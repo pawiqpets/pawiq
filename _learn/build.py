@@ -76,7 +76,7 @@ def head(title, desc, url, og_type, og_image, extra=""):
 """
 
 
-FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a></footer>
+FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
 </body>
 </html>
 """
@@ -171,6 +171,27 @@ def render_index(posts):
 {empty}<ul class="cards">
 {cards}
 </ul>
+<p class="edit-note"><a href="/pages/editorial-policy">How we write Learn</a></p>
+</main>
+""" + FOOT
+
+
+PAGES = [
+    # (source file, output path, url path, title, description, h1)
+    ("privacy-policy.html", "policies/privacy-policy.html", "/policies/privacy-policy", "Privacy policy | pawIQ",
+     "How pawIQ (Pawz Best Group Inc.) collects, uses and protects your personal information.", "Privacy policy."),
+    ("editorial-policy.html", "pages/editorial-policy.html", "/pages/editorial-policy", "How we write Learn | pawIQ",
+     "Where pawIQ Learn gets its facts, how we use AI, and how we keep guides current.", "How we write Learn."),
+]
+
+
+def render_page(src, url_path, title, desc, h1):
+    body = open(os.path.join(ROOT, "_learn", "pages", src), encoding="utf-8").read()
+    return head(title, desc, SITE + url_path, "website", SITE + "/assets/og-image.png") + f"""<main>
+<article class="wrap post">
+<h1>{e(h1)}</h1>
+{body}
+</article>
 </main>
 """ + FOOT
 
@@ -202,7 +223,11 @@ def main():
         open(os.path.join(ROOT, "blogs", "learn", p["handle"] + ".html"), "w", encoding="utf-8").write(render_post(p, d, others=[x for x in posts if x[0]["handle"] != p["handle"]]))
     open(os.path.join(ROOT, "blogs", "learn.html"), "w", encoding="utf-8").write(render_index(posts))
     update_sitemap(posts)
-    print("built", len(posts), "posts")
+    for src, out, url_path, title, desc, h1 in PAGES:
+        path = os.path.join(ROOT, out)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        open(path, "w", encoding="utf-8").write(render_page(src, url_path, title, desc, h1))
+    print("built", len(posts), "posts and", len(PAGES), "pages")
 
 
 if __name__ == "__main__":
