@@ -23,8 +23,8 @@ import build  # noqa: E402  (the GitHub Pages builder: same parsing, so both sit
 BLOG_ID = "gid://shopify/Blog/122597278066"
 SITE = build.SITE
 PRELAUNCH_LINK = 'href="https://www.pawiqpets.com/#signupBlock"'
-# Post-launch closing line: needs Roger's OK before cutover (see MIGRATION.md, decision D2).
-LAUNCH_CLOSING = '<p class="closing">pawIQ makes daily soft chews for dogs. <a href="/collections/all">See the formulas</a>.</p>'
+# Post-launch closing line: board session Nov 2, 2026, Roger picked it the same day (MIGRATION.md, D2).
+LAUNCH_CLOSING = '<p class="closing">pawIQ makes soft chew supplements for dogs. <a href="/collections/all">See what each formula is for</a>.</p>'
 
 
 def body_for_shopify(p, launch):

@@ -22,11 +22,12 @@ This kit delivers the Website Launch Checklist items LB-2, LB-3, LB-4, LB-7, LB-
 
 Tested Nov 2, 2026: all 6 live posts export cleanly; the template renders all 6 (via liquidjs) with 3 valid JSON-LD blocks each, the same citation and FAQ counts as live, related posts by hub, no horizontal scroll at 375 px. Baseline snapshot saved (baseline.json). Not yet tested inside Shopify itself (needs decision D1).
 
-## Decisions for Roger
-- D1. Test inside Shopify now: upload the 4 theme files to a COPY of the v116 theme and import 1 post as a hidden article, then preview it with you. Nothing goes public (store is paused and password protected). Shopify write: needs your OK.
-- D2. Launch closing line (replaces "launching soon, Get launch updates" in every post at cutover): proposed `pawIQ makes daily soft chews for dogs. See the formulas.` linking to /collections/all.
-- D3. llms.txt: Shopify cannot serve root files. Proposed: drop it at cutover (Ahrefs, Jun 2026: 97% of llms.txt files get no requests). IndexNow key file goes too; Bing gets the sitemap instead.
+## Decisions (Roger, Nov 2, 2026)
+- D1. Test inside Shopify: DONE. Theme copy "pawIQ v116 + Learn test" (gid://shopify/OnlineStoreTheme/195505914226) holds the 4 kit files; "What's the difference between prebiotics, probiotics and postbiotics for dogs?" imported as an article (behind the store password). Checked in the preview: Learn template renders, H1, standfirst, byline, hero with credit, related post, JSON-LD BlogPosting + FAQPage + the theme's BreadcrumbList, no horizontal scroll at 414 px. To fix before cutover: a thin white band shows between the header and the crumb (give .plx a top padding or the main a cream background).
+- D2. Launch closing line: "pawIQ makes soft chew supplements for dogs. See what each formula is for." linking to /collections/all (board session Nov 2, 2026; Roger picked it). Already in export.py. Add a click event once analytics exists.
+- D3. llms.txt, product.jsonld, faq.jsonld and the IndexNow key file are dropped at cutover. Bing gets the sitemap instead.
 - D4. Editorial policy: recreate as a Shopify page with handle editorial-policy (same URL /pages/editorial-policy). Privacy policy moves into Shopify's own policy (same URL /policies/privacy-policy).
+- Theme head at cutover: layout/theme.liquid hardcodes the homepage title "pawIQ | Premium Supplements for Dogs" and a description with "daily" and "exact amount"; replace both with the board's Nov 2 wording. Its Organization and WebSite JSON-LD use the bare domain https://pawiqpets.com and a search box; switch to https://www.pawiqpets.com (LB-1) and add "@id": "https://www.pawiqpets.com/#organization". Add {% render 'pawiq-learn-head' %} before {{ content_for_header }}.
 
 ## Cutover runbook
 Two weeks before (T-14)
