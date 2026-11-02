@@ -2,7 +2,8 @@
 
 Only APPROVED posts live in this repo (the repo is public). Drafts stay on the review page.
 Source posts: _learn/posts/<handle>.html (house template body + header comments)
-Registry:     _learn/posts.json  [{"handle": "...", "date": "YYYY-MM-DD", "updated": "YYYY-MM-DD" (optional, only after a real content refresh)}]
+Registry:     _learn/posts.json  [{"handle": "...", "date": "YYYY-MM-DD", "hub": "Gut health", "updated": "YYYY-MM-DD" (optional, only after a real body-text change)}]
+              hub can also come from a <!-- HUB: ... --> header comment in the post file.
 Outputs:      blogs/learn.html                 -> https://www.pawiqpets.com/blogs/learn
               blogs/learn/<handle>.html        -> https://www.pawiqpets.com/blogs/learn/<handle>
               sitemap.xml (Learn URLs inside the LEARN markers only; other entries untouched)
@@ -18,7 +19,22 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=7"
+CSS_HREF = "/assets/learn/learn.css?v=8"
+ORG_ID = SITE + "/#organization"
+HUBS = ["Gut health", "Skin and coat", "Joints and mobility", "Calm and behavior", "Senior and life stages",
+        "Food and safety", "Labels and ingredients", "Daily routines", "Seasonal care"]
+NEIGHBOURS = {
+    "Gut health": ["Food and safety", "Labels and ingredients"],
+    "Skin and coat": ["Labels and ingredients", "Daily routines"],
+    "Joints and mobility": ["Senior and life stages", "Daily routines"],
+    "Calm and behavior": ["Daily routines", "Senior and life stages"],
+    "Senior and life stages": ["Joints and mobility", "Food and safety"],
+    "Food and safety": ["Gut health", "Labels and ingredients"],
+    "Labels and ingredients": ["Gut health", "Skin and coat"],
+    "Daily routines": ["Calm and behavior", "Skin and coat"],
+    "Seasonal care": ["Food and safety", "Daily routines"],
+}
+SIZES = (480, 800, 1200)
 e = html.escape
 
 
@@ -45,7 +61,53 @@ def load(handle):
         "body": body,
         "mins": max(1, round(words / 230)),
         "url": f"{SITE}/blogs/learn/{handle}",
+        "hub": meta(src, "HUB"),
+        "local_img": os.path.exists(os.path.join(ROOT, "assets", "learn", "img", handle + ".jpg")),
     }
+
+
+def make_sizes(handle):
+    """Write 480/800/1200 px copies of the hero next to the 1600 px original (needs Pillow; skipped without it)."""
+    src = os.path.join(ROOT, "assets", "learn", "img", handle + ".jpg")
+    if not os.path.exists(src):
+        return
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+    im = None
+    for w in SIZES:
+        out = os.path.join(ROOT, "assets", "learn", "img", "%s-%d.jpg" % (handle, w))
+        if os.path.exists(out) and os.path.getmtime(out) >= os.path.getmtime(src):
+            continue
+        im = im or Image.open(src).convert("RGB")
+        h = round(im.height * w / im.width)
+        im.resize((w, h), Image.LANCZOS).save(out, "JPEG", quality=72, optimize=True, progressive=True)
+
+
+def srcset(p):
+    """srcset for a local hero, empty for a hotlinked one."""
+    if not p.get("local_img"):
+        return ""
+    parts = []
+    for w in SIZES:
+        if os.path.exists(os.path.join(ROOT, "assets", "learn", "img", "%s-%d.jpg" % (p["handle"], w))):
+            parts.append("%s/assets/learn/img/%s-%d.jpg %dw" % (SITE, p["handle"], w, w))
+    if not parts:
+        return ""
+    parts.append("%s %dw" % (p["hero_img"], 1600))
+    return ' srcset="%s"' % ", ".join(parts)
+
+
+def card_img(p):
+    """Card image: the 800 px copy when it exists, else the original."""
+    if p.get("local_img") and os.path.exists(os.path.join(ROOT, "assets", "learn", "img", "%s-800.jpg" % p["handle"])):
+        return "%s/assets/learn/img/%s-800.jpg" % (SITE, p["handle"])
+    return p["hero_img"]
+
+
+def signup_href(handle):
+    return "https://www.pawiqpets.com/?src=learn-%s#signupBlock" % handle
 
 
 def head(title, desc, url, og_type, og_image, extra=""):
@@ -98,8 +160,8 @@ def render_post(p, date, review_html="", others=()):
     article_ld = {
         "@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"],
         "description": p["mdesc"], "image": [p["hero_img"]],
-        "author": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"},
-        "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/", "logo": {"@type": "ImageObject", "url": SITE + "/assets/learn/logo-charcoal.png"}},
+        "author": {"@type": "Organization", "@id": ORG_ID, "name": "pawIQ", "url": SITE + "/"},
+        "publisher": {"@type": "Organization", "@id": ORG_ID, "name": "pawIQ", "url": SITE + "/", "logo": {"@type": "ImageObject", "url": SITE + "/assets/learn/logo-charcoal.png"}},
         "mainEntityOfPage": p["url"], "url": p["url"], "inLanguage": "en-US",
         "isPartOf": {"@type": "Blog", "@id": SITE + "/blogs/learn", "name": "pawIQ Learn"},
         "wordCount": len(re.sub(r"<[^>]+>", " ", p["body"]).split()),
@@ -122,6 +184,8 @@ def render_post(p, date, review_html="", others=()):
     extra = "".join('<script type="application/ld+json">%s</script>\n' % json.dumps(x, ensure_ascii=False) for x in lds)
     body = p["body"].replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
     body = re.sub(r"<p>pawIQ ", '<p class="closing">pawIQ ', body, count=1)
+    # Tag the launch-list link with the post it came from, so signups can be traced to Learn.
+    body = body.replace('href="https://www.pawiqpets.com/#signupBlock"', 'href="%s"' % signup_href(p["handle"]))
     credit = re.sub(r"Photo by (.*?) on Unsplash",
                     r'Photo by \1 on <a href="%s" rel="noopener" target="_blank">Unsplash</a>' % e(p["hero_page"]), e(p["credit"]))
     reviewed = p.get("updated") or date
@@ -133,12 +197,24 @@ def render_post(p, date, review_html="", others=()):
 <p class="standfirst">{e(p["standfirst"])}</p>
 <p class="meta">Written by the pawIQ team · {("Last reviewed <time datetime=\"%s\">%s</time>" % (reviewed, date_label)) if reviewed else date_label} · {p["mins"]} min read</p>
 </div>
-<figure class="hero"><img src="{e(p["hero_img"])}" alt="{e(p["alt"])}" width="1600" height="1067" fetchpriority="high"><figcaption>{credit}</figcaption></figure>
+<figure class="hero"><img src="{e(p["hero_img"])}"{srcset(p)} sizes="(max-width: 1100px) 100vw, 1100px" alt="{e(p["alt"])}" width="1600" height="1067" fetchpriority="high"><figcaption>{credit}</figcaption></figure>
 <article class="wrap post">
 {body}
 </article>
-{more_block(others)}</main>
+{more_block(related(p, others))}</main>
 {review_html}""" + FOOT
+
+
+def related(p, others):
+    """Up to 3 related posts: same hub, then neighbouring hubs, then newest. Evergreen posts never show seasonal ones."""
+    pool = [x for x in others if not (p.get("hub") != "Seasonal care" and x[0].get("hub") == "Seasonal care")]
+    hub = p.get("hub")
+    order = [hub] + NEIGHBOURS.get(hub, []) if hub else []
+    picks = []
+    for h in order:
+        picks += [x for x in pool if x[0].get("hub") == h and x not in picks]
+    picks += [x for x in pool if x not in picks]
+    return picks[:3]
 
 
 def more_block(others):
@@ -146,34 +222,66 @@ def more_block(others):
     if not picks:
         return '<section class="wrap more"><h2>More from Learn.</h2><p><a href="/blogs/learn">Browse all Learn articles</a></p></section>\n'
     cards = "\n".join(f"""<li class="card"><a href="/blogs/learn/{p["handle"]}">
-<img src="{e(p["hero_img"])}" alt="{e(p["alt"])}" width="800" height="533" loading="lazy">
+<img src="{e(card_img(p))}" alt="{e(p["alt"])}" width="800" height="533" loading="lazy">
 <span class="card-title">{e(p["title"])}</span></a></li>""" for p, _ in picks)
     return f'<section class="wrap wide more"><h2>More from Learn.</h2><ul class="cards">\n{cards}\n</ul><p><a href="/blogs/learn">Browse all Learn articles</a></p></section>\n'
 
 
-def render_index(posts):
-    url = SITE + "/blogs/learn"
-    title = "Learn | pawIQ"
-    desc = "Plain answers to the questions dog owners ask about digestion, skin and coat, nutrition and daily care, with every fact linked to its source."
-    ld = {"@context": "https://schema.org", "@type": "Blog", "name": "pawIQ Learn", "url": url, "description": desc,
-          "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"},
-          "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": p["url"], "datePublished": d} for p, d in posts]}
-    cards = "\n".join(f"""<li class="card"><a href="/blogs/learn/{p["handle"]}">
-<img src="{e(p["hero_img"])}" alt="{e(p["alt"])}" width="800" height="533" loading="lazy">
+def card(p, d):
+    return f"""<li class="card"><a href="/blogs/learn/{p["handle"]}">
+<img src="{e(card_img(p))}" alt="{e(p["alt"])}" width="800" height="533" loading="lazy">
 <span class="card-meta">{fmt_date(d)} · {p["mins"]} min read</span>
 <span class="card-title">{e(p["title"])}</span>
-<span class="card-sf">{e(p["standfirst"])}</span></a></li>""" for p, d in posts)
+<span class="card-sf">{e(p["standfirst"])}</span></a></li>"""
+
+
+def render_index(posts):
+    url = SITE + "/blogs/learn"
+    title = "Dog health and care guides | pawIQ Learn"
+    desc = "Plain answers to the questions dog owners ask about digestion, skin and coat, nutrition and daily care, with every fact linked to its source."
+    ld = {"@context": "https://schema.org", "@type": "Blog", "name": "pawIQ Learn", "url": url, "description": desc,
+          "publisher": {"@type": "Organization", "@id": ORG_ID, "name": "pawIQ", "url": SITE + "/"},
+          "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": p["url"], "datePublished": d} for p, d in posts]}
+    # Group by hub only once a hub has 3+ posts (single-card rows look empty); the rest go under "More guides".
+    big = [h for h in HUBS if sum(1 for p, _ in posts if p.get("hub") == h) >= 3]
+    groups = [(h, [(p, d) for p, d in posts if p.get("hub") == h]) for h in big]
+    rest = [(p, d) for p, d in posts if p.get("hub") not in big]
+    if rest:
+        groups.append(("More guides", rest))
+    if big:
+        sections = "\n".join(f"""<section class="hub"><h2>{e(h)}.</h2><ul class="cards">
+{chr(10).join(card(p, d) for p, d in items)}
+</ul></section>""" for h, items in groups)
+    else:
+        sections = '<ul class="cards">\n' + "\n".join(card(p, d) for p, d in posts) + "\n</ul>"
     empty = '<p class="standfirst">New posts are on the way.</p>' if not posts else ""
     return head(title, desc, url, "website", posts[0][0]["hero_img"] if posts else SITE + "/assets/og-image.png",
                 '<script type="application/ld+json">%s</script>\n' % json.dumps(ld, ensure_ascii=False)) + f"""<main class="wrap wide">
 <h1>Learn.</h1>
 <p class="standfirst">Plain answers to the questions dog owners ask, with every fact linked to its source.</p>
-{empty}<ul class="cards">
-{cards}
-</ul>
+{empty}{sections}
 <p class="edit-note"><a href="/pages/editorial-policy">How we write Learn</a></p>
 </main>
 """ + FOOT
+
+
+def link_report(posts):
+    """Warn about posts with fewer than 2 in-body links from other posts, and evergreen posts linking to seasonal ones."""
+    hub = {p["handle"]: p.get("hub") for p, _ in posts}
+    inbound = {h: 0 for h in hub}
+    for p, _ in posts:
+        targets = set(re.findall(r'href="(?:https://www\.pawiqpets\.com)?/blogs/learn/([a-z0-9-]+)"', p["body"]))
+        for t in targets - {p["handle"]}:
+            if t in inbound:
+                inbound[t] += 1
+            if hub.get(p["handle"]) != "Seasonal care" and hub.get(t) == "Seasonal care":
+                print("WARN evergreen links to seasonal:", p["handle"], "->", t)
+    for h, n in inbound.items():
+        if n < 2 and len(posts) > 2:
+            print("WARN fewer than 2 inbound links:", h, "(%d)" % n)
+    for h, v in hub.items():
+        if not v:
+            print("WARN no hub set:", h)
 
 
 PAGES = [
@@ -202,7 +310,8 @@ def update_sitemap(posts):
     s = re.sub(r"\s*<!-- LEARN START -->.*?<!-- LEARN END -->\s*", "\n", s, flags=re.S)
     s = re.sub(r"\n{3,}", "\n\n", s)
     latest = max([d for _, d in posts], default=None)
-    entries = [f"  <url>\n    <loc>{SITE}/blogs/learn</loc>\n" + (f"    <lastmod>{latest}</lastmod>\n" if latest else "") + "  </url>"]
+    entries = [f"  <url>\n    <loc>{SITE}/blogs/learn</loc>\n" + (f"    <lastmod>{latest}</lastmod>\n" if latest else "") + "  </url>",
+               f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n  </url>"]
     entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{p.get('updated') or d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
     s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"
@@ -217,12 +326,16 @@ def main():
         p = load(r["handle"])
         if r.get("updated"):
             p["updated"] = r["updated"]
+        if r.get("hub"):
+            p["hub"] = r["hub"]
+        make_sizes(r["handle"])
         posts.append((p, r["date"]))
     os.makedirs(os.path.join(ROOT, "blogs", "learn"), exist_ok=True)
     for p, d in posts:
         open(os.path.join(ROOT, "blogs", "learn", p["handle"] + ".html"), "w", encoding="utf-8").write(render_post(p, d, others=[x for x in posts if x[0]["handle"] != p["handle"]]))
     open(os.path.join(ROOT, "blogs", "learn.html"), "w", encoding="utf-8").write(render_index(posts))
     update_sitemap(posts)
+    link_report(posts)
     for src, out, url_path, title, desc, h1, cls in PAGES:
         path = os.path.join(ROOT, out)
         os.makedirs(os.path.dirname(path), exist_ok=True)
