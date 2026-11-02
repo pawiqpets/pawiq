@@ -2,6 +2,8 @@
 
 Owner: Roger. Prepared Nov 2, 2026. Goal: every Learn post keeps its URL, structured data, sources, dates, byline and look when pawiqpets.com moves to Shopify at launch (planned Jan to early Feb 2027), and the scheduled runs keep publishing without a gap.
 
+This kit delivers the Website Launch Checklist items LB-2, LB-3, LB-4, LB-7, LB-8, LB-13, LB-14, LB-15 and LB-17 (claude/pawIQ_Website_Launch_Checklist.md). LB-16: Shopify's default robots.txt already allows every crawler (User-agent: *), so no robots.txt.liquid is needed unless the theme adds blocks.
+
 ## What lives where today
 - Live site: GitHub Pages (repo pawiqpets/pawiq), built by `_learn/build.py`.
 - Shopify: store s7fghk-ij (pawiq-3.myshopify.com), Paused plan, password on. Blog "learn" (gid://shopify/Blog/122597278066) already exists at /blogs/learn, so URLs match.
