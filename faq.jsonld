@@ -7,15 +7,15 @@
       "name": "What is pawIQ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "pawIQ is a pet wellness brand developing premium dog supplements for dog owners in the United States and Canada."
+        "text": "pawIQ makes soft chew supplements for dogs, developed with a licensed veterinarian. It is launching soon on Amazon in the United States."
       }
     },
     {
       "@type": "Question",
-      "name": "What benefits will pawIQ dog supplements focus on?",
+      "name": "Which formulas will pawIQ offer?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "pawIQ dog supplements will focus on joint mobility, digestive health, skin and coat support, immune function, and overall vitality. Each formula is designed to target specific wellness needs using high quality, science backed ingredients that support long term health and daily performance."
+        "text": "The first two are 3-in-1 Gut Health (prebiotic + probiotic + postbiotic) and Skin & Immune (skin, coat + immune support). A Calming Chew and a Hip & Joint Chew are coming soon."
       }
     },
     {
@@ -23,23 +23,23 @@
       "name": "When will pawIQ launch?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "pawIQ is planning to launch in approximately 2–3 months, starting on Amazon."
+        "text": "Soon. Join the email list at pawiqpets.com and we will tell you the day it goes live."
       }
     },
     {
       "@type": "Question",
-      "name": "Where can I buy pawIQ when it launches?",
+      "name": "Where can I buy pawIQ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "pawIQ will launch on Amazon.com first for customers in the United States and Canada, with a direct-to-consumer option available shortly after launch."
+        "text": "On Amazon.com in the United States first, with pawiqpets.com to follow. Join the email list and we will tell you on launch day."
       }
     },
     {
       "@type": "Question",
-      "name": "Will pawIQ be available in Canada?",
+      "name": "Will pawIQ ship to Canada?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. pawIQ is intended for dog owners in both the United States and Canada."
+        "text": "Not at launch. pawIQ launches in the United States first, and Canada comes later."
       }
     },
     {
@@ -47,7 +47,7 @@
       "name": "How do I get launch updates from pawIQ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "You can join the email list on pawiqpets.com to get notified about launch timing and where to buy."
+        "text": "Join the email list at pawiqpets.com."
       }
     }
   ]

@@ -6,7 +6,7 @@
     "@type": "Brand",
     "name": "pawIQ"
   },
-  "description": "pawIQ is launching daily soft chews for dogs: 3-in-1 Gut Health and Skin & Immune, with Calming Chew and Hip & Joint Chew coming soon, for dogs in the United States and Canada. Launching soon on Amazon, with direct-to-consumer availability shortly after.",
+  "description": "pawIQ soft chew supplements for dogs: 3-in-1 Gut Health (prebiotic + probiotic + postbiotic) and Skin & Immune (skin, coat + immune support), with a Calming Chew and a Hip & Joint Chew coming soon. Launching soon on Amazon in the United States.",
   "category": "Pet Supplements",
   "url": "https://www.pawiqpets.com/",
   "audience": {
@@ -17,10 +17,6 @@
     {
       "@type": "Country",
       "name": "United States"
-    },
-    {
-      "@type": "Country",
-      "name": "Canada"
     }
   ],
   "offers": {
