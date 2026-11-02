@@ -1,0 +1,116 @@
+{%- comment -%}
+  pawIQ LEARN ARTICLE (Shopify port of _learn/build.py, Nov 2026)
+
+  Renders a Learn post exactly like the pre-launch GitHub Pages build:
+  crumb, H1, standfirst, byline, hero with Unsplash credit, body, related posts, and the
+  same structured data (BlogPosting with citations, FAQPage, BreadcrumbList).
+
+  Data comes from the article itself plus metafields written by _learn/shopify/export.py:
+    learn.hero_credit   single_line_text_field  "Photo by <name> on Unsplash"
+    learn.hero_page     url                     Unsplash photo page
+    learn.reviewed      date                    last real body-text change (defaults to published_at)
+    learn.citations     json                    [{"@type":"CreativeWork","name":...,"url":...}]
+    learn.faq           json                    [{"q":...,"a":...}]
+    global.title_tag / global.description_tag   SEO title and description
+  Hub comes from a tag "hub:<Hub name>".
+
+  This section deliberately does NOT output {{ article | structured_data }}: the theme's default
+  Article schema would duplicate ours and set the author to a staff account.
+{%- endcomment -%}
+
+{{ 'pawiq-learn.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign lx_site = 'https://www.pawiqpets.com'
+  assign lx_org = lx_site | append: '/#organization'
+  assign lx_reviewed = article.metafields.learn.reviewed.value | default: article.published_at
+  assign lx_words = article.content | strip_html | split: ' ' | size
+  assign lx_mins = lx_words | divided_by: 230.0 | round | at_least: 1
+  assign lx_hub = ''
+  for t in article.tags
+    if t contains 'hub:'
+      assign lx_hub = t | remove_first: 'hub:'
+    endif
+  endfor
+  assign lx_url = lx_site | append: article.url
+  assign lx_crumb = article.metafields.global.title_tag.value | default: article.title | remove: ' | pawIQ'
+  assign lx_desc = article.metafields.global.description_tag.value | default: article.excerpt | strip_html
+-%}
+
+<div class="plx">
+  <div class="wrap">
+    <p class="crumb"><a href="/">Home</a> / <a href="{{ blog.url }}">Learn</a></p>
+    <h1>{{ article.title | escape }}</h1>
+    {%- if article.excerpt != blank -%}<p class="standfirst">{{ article.excerpt | strip_html }}</p>{%- endif -%}
+    <p class="meta">Written by the pawIQ team · Last reviewed <time datetime="{{ lx_reviewed | date: '%Y-%m-%d' }}">{{ lx_reviewed | date: '%B %-d, %Y' }}</time> · {{ lx_mins }} min read</p>
+  </div>
+
+  {%- if article.image -%}
+    <figure class="hero">
+      <img
+        src="{{ article.image | image_url: width: 1600 }}"
+        srcset="{{ article.image | image_url: width: 480 }} 480w, {{ article.image | image_url: width: 800 }} 800w, {{ article.image | image_url: width: 1200 }} 1200w, {{ article.image | image_url: width: 1600 }} 1600w"
+        sizes="(max-width: 1100px) 100vw, 1100px"
+        alt="{{ article.image.alt | escape }}" width="1600" height="1067" fetchpriority="high">
+      {%- assign lx_credit = article.metafields.learn.hero_credit.value -%}
+      {%- if lx_credit != blank -%}
+        {%- assign lx_page = article.metafields.learn.hero_page.value -%}
+        <figcaption>{% if lx_page != blank %}{{ lx_credit | escape | replace: 'on Unsplash', '' | strip }} on <a href="{{ lx_page }}" rel="noopener" target="_blank">Unsplash</a>{% else %}{{ lx_credit | escape }}{% endif %}</figcaption>
+      {%- endif -%}
+    </figure>
+  {%- endif -%}
+
+  <article class="wrap post">
+    {{ article.content }}
+  </article>
+
+  {%- comment -%} Related: same hub, then any other post; evergreen posts never show seasonal ones. {%- endcomment -%}
+  {%- liquid
+    assign lx_picked = ''
+    assign lx_count = 0
+  -%}
+  {%- capture lx_cards -%}
+    {%- for pass in (1..2) -%}
+      {%- for a in blog.articles limit: 50 -%}
+        {%- if lx_count >= 3 -%}{%- break -%}{%- endif -%}
+        {%- if a.id == article.id -%}{%- continue -%}{%- endif -%}
+        {%- assign a_key = '|' | append: a.id | append: '|' -%}
+        {%- if lx_picked contains a_key -%}{%- continue -%}{%- endif -%}
+        {%- assign a_hub = '' -%}
+        {%- for t in a.tags -%}{%- if t contains 'hub:' -%}{%- assign a_hub = t | remove_first: 'hub:' -%}{%- endif -%}{%- endfor -%}
+        {%- if lx_hub != 'Seasonal care' and a_hub == 'Seasonal care' -%}{%- continue -%}{%- endif -%}
+        {%- if pass == 1 and a_hub != lx_hub -%}{%- continue -%}{%- endif -%}
+        {%- assign lx_picked = lx_picked | append: a_key -%}
+        {%- assign lx_count = lx_count | plus: 1 -%}
+        <li class="card"><a href="{{ a.url }}">
+          {%- if a.image -%}<img src="{{ a.image | image_url: width: 800 }}" alt="{{ a.image.alt | escape }}" width="800" height="533" loading="lazy">{%- endif -%}
+          <span class="card-title">{{ a.title | escape }}</span></a></li>
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  <section class="wrap wide more">
+    <h2>More from Learn.</h2>
+    {%- if lx_count > 0 -%}<ul class="cards">{{ lx_cards }}</ul>{%- endif -%}
+    <p><a href="{{ blog.url }}">Browse all Learn articles</a></p>
+  </section>
+</div>
+
+{%- capture lx_article_ld -%}
+{"@context":"https://schema.org","@type":"BlogPosting","headline":{{ article.title | json }},"description":{{ lx_desc | json }}{% if article.image %},"image":[{{ article.image | image_url: width: 1600 | prepend: 'https:' | json }}]{% endif %},"author":{"@type":"Organization","@id":{{ lx_org | json }},"name":"pawIQ","url":"https://www.pawiqpets.com/"},"publisher":{"@type":"Organization","@id":{{ lx_org | json }},"name":"pawIQ","url":"https://www.pawiqpets.com/","logo":{"@type":"ImageObject","url":"https://www.pawiqpets.com/assets/learn/logo-charcoal.png"}},"mainEntityOfPage":{{ lx_url | json }},"url":{{ lx_url | json }},"inLanguage":"en-US","isPartOf":{"@type":"Blog","@id":"https://www.pawiqpets.com/blogs/learn","name":"pawIQ Learn"},"wordCount":{{ lx_words }}{% if article.metafields.learn.citations.value != blank %},"citation":{{ article.metafields.learn.citations.value | json }}{% endif %},"datePublished":{{ article.published_at | date: '%Y-%m-%d' | json }},"dateModified":{{ lx_reviewed | date: '%Y-%m-%d' | json }}}
+{%- endcapture -%}
+<script type="application/ld+json">{{ lx_article_ld }}</script>
+
+{%- assign lx_faq = article.metafields.learn.faq.value -%}
+{%- if lx_faq != blank and lx_faq.size > 0 -%}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{%- for f in lx_faq -%}{"@type":"Question","name":{{ f.q | json }},"acceptedAnswer":{"@type":"Answer","text":{{ f.a | json }}}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]}</script>
+{%- endif -%}
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.pawiqpets.com/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://www.pawiqpets.com/blogs/learn"},{"@type":"ListItem","position":3,"name":{{ lx_crumb | json }},"item":{{ lx_url | json }}}]}</script>
+
+{% schema %}
+{
+  "name": "pawIQ Learn article",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

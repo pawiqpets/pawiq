@@ -1,0 +1,12 @@
+{%- comment -%}
+  pawIQ Learn head additions. Render from layout/theme.liquid inside <head>:
+    {% render 'pawiq-learn-head' %}
+  1. Tag pages (/blogs/learn/tagged/...) are thin duplicates of the index: noindex, follow.
+  2. Bing Webmaster verification as a meta tag (the root BingSiteAuth.xml file does not exist on Shopify).
+{%- endcomment -%}
+{%- if request.page_type == 'blog' and current_tags -%}
+  <meta name="robots" content="noindex, follow">
+{%- endif -%}
+{%- if request.page_type == 'index' -%}
+  <meta name="msvalidate.01" content="61FA5611A864917D8DF9DB6F173CCC0A">
+{%- endif -%}

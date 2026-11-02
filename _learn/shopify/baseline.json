@@ -1,0 +1,157 @@
+{
+ "does-daylight-saving-time-affect-dogs": {
+  "title": "Does daylight saving time affect dogs? | pawIQ",
+  "description": "Daylight saving time can affect dogs through their routine. What a 2025 study of pet and sled dogs found, and how to move meals and walks.",
+  "canonical": "https://www.pawiqpets.com/blogs/learn/does-daylight-saving-time-affect-dogs",
+  "robots": "index, follow, max-image-preview:large",
+  "h1": "Does daylight saving time affect dogs?",
+  "ld_types": [
+   "BlogPosting",
+   "BreadcrumbList",
+   "FAQPage"
+  ],
+  "citations": 3,
+  "faq": 5,
+  "datePublished": "2026-11-01",
+  "author": "pawIQ",
+  "words": 1300,
+  "sources": 3,
+  "sups": 23,
+  "learn_links": [
+   "how-cold-is-too-cold-for-dogs",
+   "how-to-read-a-dog-supplement-label",
+   "thanksgiving-foods-dogs"
+  ],
+  "hero": true,
+  "dashes": 0,
+  "status": 200
+ },
+ "how-cold-is-too-cold-for-dogs": {
+  "title": "How cold is too cold for dogs? | pawIQ",
+  "description": "Vet schools: bring pets in or shelter them below 32°F (0°C), puppies and short-haired pets below 40°F (4°C). Signs a dog is too cold, plus paw tips.",
+  "canonical": "https://www.pawiqpets.com/blogs/learn/how-cold-is-too-cold-for-dogs",
+  "robots": "index, follow, max-image-preview:large",
+  "h1": "How cold is too cold for dogs?",
+  "ld_types": [
+   "BlogPosting",
+   "BreadcrumbList",
+   "FAQPage"
+  ],
+  "citations": 5,
+  "faq": 5,
+  "datePublished": "2026-10-28",
+  "author": "pawIQ",
+  "words": 1339,
+  "sources": 5,
+  "sups": 36,
+  "learn_links": [
+   "thanksgiving-foods-dogs",
+   "why-do-dogs-eat-grass"
+  ],
+  "hero": true,
+  "dashes": 0,
+  "status": 200
+ },
+ "how-to-read-a-dog-supplement-label": {
+  "title": "How to read a dog supplement label | pawIQ",
+  "description": "How to read a dog supplement label, part by part: purpose statement, guaranteed analysis, ingredients, directions, company and lot code.",
+  "canonical": "https://www.pawiqpets.com/blogs/learn/how-to-read-a-dog-supplement-label",
+  "robots": "index, follow, max-image-preview:large",
+  "h1": "How do you read a dog supplement label?",
+  "ld_types": [
+   "BlogPosting",
+   "BreadcrumbList",
+   "FAQPage"
+  ],
+  "citations": 5,
+  "faq": 5,
+  "datePublished": "2026-10-28",
+  "author": "pawIQ",
+  "words": 1486,
+  "sources": 5,
+  "sups": 45,
+  "learn_links": [
+   "prebiotics-probiotics-postbiotics-dogs"
+  ],
+  "hero": true,
+  "dashes": 0,
+  "status": 200
+ },
+ "prebiotics-probiotics-postbiotics-dogs": {
+  "title": "Prebiotics vs probiotics vs postbiotics for dogs | pawIQ",
+  "description": "For dogs: probiotics are live microbes, prebiotics are used by a dog's own microbes, postbiotics are inactivated microbes. Compared, with sources.",
+  "canonical": "https://www.pawiqpets.com/blogs/learn/prebiotics-probiotics-postbiotics-dogs",
+  "robots": "index, follow, max-image-preview:large",
+  "h1": "What's the difference between prebiotics, probiotics and postbiotics for dogs?",
+  "ld_types": [
+   "BlogPosting",
+   "BreadcrumbList",
+   "FAQPage"
+  ],
+  "citations": 3,
+  "faq": 5,
+  "datePublished": "2026-10-28",
+  "author": "pawIQ",
+  "words": 876,
+  "sources": 3,
+  "sups": 17,
+  "learn_links": [
+   "how-to-read-a-dog-supplement-label"
+  ],
+  "hero": true,
+  "dashes": 0,
+  "status": 200
+ },
+ "thanksgiving-foods-dogs": {
+  "title": "What Thanksgiving foods can dogs eat? | pawIQ",
+  "description": "Plain, boneless, skinless turkey is generally safe for dogs in small portions. Skip the stuffing, gravy, bones and pumpkin pie. Here is why.",
+  "canonical": "https://www.pawiqpets.com/blogs/learn/thanksgiving-foods-dogs",
+  "robots": "index, follow, max-image-preview:large",
+  "h1": "What Thanksgiving foods can dogs eat?",
+  "ld_types": [
+   "BlogPosting",
+   "BreadcrumbList",
+   "FAQPage"
+  ],
+  "citations": 7,
+  "faq": 5,
+  "datePublished": "2026-10-28",
+  "author": "pawIQ",
+  "words": 1327,
+  "sources": 7,
+  "sups": 44,
+  "learn_links": [
+   "how-cold-is-too-cold-for-dogs",
+   "why-do-dogs-eat-grass"
+  ],
+  "hero": true,
+  "dashes": 0,
+  "status": 200
+ },
+ "why-do-dogs-eat-grass": {
+  "title": "Why do dogs eat grass? What research says | pawIQ",
+  "description": "Grass eating is common in dogs and is usually seen as normal behavior. What research shows, when to call your vet, and lawn and plant safety tips.",
+  "canonical": "https://www.pawiqpets.com/blogs/learn/why-do-dogs-eat-grass",
+  "robots": "index, follow, max-image-preview:large",
+  "h1": "Why do dogs eat grass?",
+  "ld_types": [
+   "BlogPosting",
+   "BreadcrumbList",
+   "FAQPage"
+  ],
+  "citations": 5,
+  "faq": 4,
+  "datePublished": "2026-10-28",
+  "author": "pawIQ",
+  "words": 1235,
+  "sources": 5,
+  "sups": 30,
+  "learn_links": [
+   "how-cold-is-too-cold-for-dogs",
+   "thanksgiving-foods-dogs"
+  ],
+  "hero": true,
+  "dashes": 0,
+  "status": 200
+ }
+}

@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "pawiq-learn-article", "settings": {} }
+  },
+  "order": ["main"]
+}
