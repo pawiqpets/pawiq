@@ -64,3 +64,7 @@ c. Load mcp__Shopify__graphql_query and mcp__Shopify__graphql_mutation with Tool
 d. Wait about 1 minute, confirm https://www.pawiqpets.com/blogs/learn/<handle> returns the post with 1 BlogPosting, 1 FAQPage and 1 BreadcrumbList JSON-LD block and the right canonical, then update the review page as before.
 Edits to a live post (refresh, search tuning, rules updates): same path, articleUpdate only.
 ```
+
+## Google Analytics (added Nov 2, 2026)
+- GA4 property stream "pawIQ site", Measurement ID G-8HJWP2B6DD. On GitHub Pages it is hardcoded in index.html and _learn/build.py.
+- At Shopify cutover: connect GA through the Google & YouTube app (Online Store > Preferences) instead of pasting the tag, so it is not loaded twice. Re-add the sign_up (signup_source from ?src=) and learn_signup_click events in the theme.

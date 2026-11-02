@@ -110,10 +110,16 @@ def signup_href(handle):
     return "https://www.pawiqpets.com/?src=learn-%s#signupBlock" % handle
 
 
+GA_ID = "G-8HJWP2B6DD"  # Google Analytics 4, stream "pawIQ site" (Roger, Nov 2, 2026)
+
+
 def head(title, desc, url, og_type, og_image, extra=""):
     return f"""<!doctype html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{GA_ID}');
+document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.target.closest('a[href*="#signupBlock"]');if(a)gtag('event','learn_signup_click',{{link_url:a.href,page_path:location.pathname}});}});</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)}</title>
