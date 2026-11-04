@@ -7,12 +7,16 @@
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#5EC6FF">
 <title>pawIQ Taste Test</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
 @font-face{font-family:Thunder;src:url(assets/thunder-bold.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:Caveat;src:url(assets/caveat.woff2) format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:Satoshi;src:url(assets/satoshi-400.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:Satoshi;src:url(assets/satoshi-500.woff2) format("woff2");font-weight:500;font-display:swap}
 @font-face{font-family:Satoshi;src:url(assets/satoshi-700.woff2) format("woff2");font-weight:700;font-display:swap}
-:root{--ink:#00080B;--paper:#F6F6F1;--blue:#5EC6FF;--yellow:#F5D87A;--green:#4FD6A5;--grey:#3D4245;--line:#C9CCCF}
+:root{--ink:#00080B;--paper:#F6F6F1;--blue:#5EC6FF;--green:#4FD6A5;--grey:#3D4245;--line:#C9CCCF}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Satoshi,"Open Sans",system-ui,sans-serif;-webkit-text-size-adjust:100%}
 body{min-height:100vh}
@@ -39,7 +43,8 @@ button{font-family:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight
 .opt.left{text-align:left}
 .opt.pill{border-radius:999px;min-height:48px;font-size:15px}
 .opt[aria-pressed=true]{background:var(--ink);color:#fff}
-.tile{height:150px;border:2px solid var(--ink);border-radius:20px;background:#fff;font-family:Thunder,Satoshi,sans-serif;font-weight:700;font-size:120px;line-height:1;padding:0}
+.tl{display:block;font-family:Satoshi,sans-serif;font-weight:700;font-size:16px;letter-spacing:.14em;text-transform:uppercase;line-height:1;margin-top:6px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;height:170px;border:2px solid var(--ink);border-radius:20px;background:#fff;font-family:Thunder,Satoshi,sans-serif;font-weight:700;font-size:104px;line-height:.95;padding:0}
 .tile[aria-pressed=true]{background:var(--ink);color:#fff}
 .dash{border-style:dashed;background:transparent}
 .cta{display:flex;justify-content:center;align-items:center;min-height:60px;border-radius:999px;background:var(--ink);color:#fff;font-size:17px;font-weight:700;text-decoration:none;border:0;width:100%}
@@ -70,7 +75,14 @@ input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);ou
 table{border-collapse:collapse;width:100%}
 td{padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
 .spin{padding:80px 24px;text-align:center;font-weight:700}
-@media (max-width:360px){h1{font-size:54px}h1.xl{font-size:64px}h2{font-size:34px}.tile{height:130px;font-size:100px}}
+.dogchip{align-self:flex-start;background:var(--ink);color:#fff;border-radius:999px;padding:6px 16px;font-size:17px;margin-top:4px}
+.sh{display:inline-block;transform:rotate(-2.5deg);font-family:Caveat,"Segoe Print","Bradley Hand",cursive;font-weight:600;font-size:30px;line-height:1.1;margin:0;color:var(--ink);white-space:nowrap}
+.doodle{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+.doodle text{font-family:Caveat,"Segoe Print","Bradley Hand",cursive;font-weight:600;fill:var(--ink)}
+.note{transform:rotate(-1.5deg);display:inline-block;font-family:Caveat,"Segoe Print","Bradley Hand",cursive;font-weight:600;font-size:28px;line-height:1.1;color:var(--ink);padding:0 4px;margin:0;text-align:center}
+.noteWrap{padding:0 24px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.onblue{margin-top:auto;padding:0 0 4px}
+@media (max-width:360px){h1{font-size:54px}h1.xl{font-size:64px}h2{font-size:34px}.tile{height:150px;font-size:88px}}
 </style>
 </head>
 <body>
@@ -86,7 +98,7 @@ var CONFIG = {
 /* =================================================================== */
 
 var TZ = 'America/Vancouver';
-var COLORS = { Yellow: '#F5D87A', Green: '#4FD6A5' };
+var COLORS = { Blue: '#5EC6FF', Green: '#4FD6A5' };
 var Q = new URLSearchParams(location.search);
 // Preview shortcuts use plain #names (e.g. #day-3) so they also work where query strings are dropped.
 var HASHES = { picked: 'k=demo&nostart=1', notpicked: 'k=demo&picked=0', survey: 'k=demo&day=11' };
@@ -108,12 +120,34 @@ function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s
 function store(key, val) { try { if (val === undefined) return JSON.parse(localStorage.getItem('pq_' + key)); localStorage.setItem('pq_' + key, JSON.stringify(val)); } catch (e) { return null; } }
 function myLink() { return location.origin + location.pathname + '?k=' + encodeURIComponent(S.k); }
 function logo() { return '<img class="logo" src="assets/logo.svg" alt="pawIQ">'; }
-function btn(group, val, label, cls) {
+function btn(group, val, label, cls, sub) {
   var on = S.ans[group] === val;
-  return '<button type="button" class="' + (cls || 'opt') + '" aria-pressed="' + on + '" data-g="' + group + '" data-v="' + esc(val) + '">' + esc(label) + '</button>';
+  return '<button type="button" class="' + (cls || 'opt') + '" aria-pressed="' + on + '" data-g="' + group + '" data-v="' + esc(val) + '">' + esc(label) + (sub ? '<span class="tl">' + esc(sub) + '</span>' : '') + '</button>';
 }
 function errBox() { return S.err ? '<div class="err" role="alert">' + esc(S.err) + '</div>' : ''; }
-function paint(html) { app.innerHTML = demoBar() + html; window.scrollTo(0, 0); var f = app.querySelector('[autofocus]'); if (f) f.focus(); }
+function paint(html, noSwitch) { if (!noSwitch && S.k && S.hh && S.hh.length > 1) html += '<div class="foot" style="padding-top:0"><button class="link" data-go="picker">Back to both dogs</button></div>'; app.innerHTML = demoBar() + html; window.scrollTo(0, 0); var f = app.querySelector('[autofocus]'); if (f) f.focus(); }
+
+/* ---------- hand-drawn touches ---------- */
+function bowl(note1, note2) {
+  return '<div class="onblue"><svg class="doodle" viewBox="0 12 340 193" role="img" aria-label="Hand-drawn dog bowl with two chews, A and B">' +
+    '<g transform="translate(0 16)"><ellipse cx="170" cy="172" rx="96" ry="7" fill="#00080B" opacity=".12"/>' +
+    '<g stroke="#00080B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M62 108 C64 148 102 166 170 166 C238 166 276 148 278 108 Z" fill="#F6F6F1"/>' +
+    '<path d="M120 166 C122 172 218 172 220 166" fill="#F6F6F1"/>' +
+    '<ellipse cx="170" cy="108" rx="108" ry="32" fill="#F6F6F1"/>' +
+    '<ellipse cx="170" cy="110" rx="93" ry="24" fill="#D8D2C4"/>' +
+    '<g transform="translate(138 122)"><path d="M-20 -30 V0 A20 7 0 0 0 20 0 V-30 Z" fill="#8A5A2E"/><ellipse cx="0" cy="-30" rx="20" ry="7" fill="#B07A44"/><g fill="#5E3A1B" stroke="none"><circle cx="-12" cy="-20" r="1.7"/><circle cx="12" cy="-12" r="1.7"/><circle cx="-12" cy="-4" r="1.7"/></g></g>' +
+    '<g transform="translate(204 126)"><path d="M-20 -30 V0 A20 7 0 0 0 20 0 V-30 Z" fill="#8A5A2E"/><ellipse cx="0" cy="-30" rx="20" ry="7" fill="#B07A44"/><g fill="#5E3A1B" stroke="none"><circle cx="13" cy="-20" r="1.7"/><circle cx="-12" cy="-13" r="1.7"/><circle cx="12" cy="-4" r="1.7"/></g></g>' +
+    '</g>' +
+    '<text x="138" y="118" font-size="24" text-anchor="middle" style="fill:#F6F6F1">A</text><text x="204" y="122" font-size="24" text-anchor="middle" style="fill:#F6F6F1">B</text></g>' +
+    '<g fill="none" stroke="#5EC6FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="stroke:#00080B">' +
+    '<path d="M250 52 C292 50 306 76 288 100"/><path d="M282 88 L289 101 L299 91"/></g>' +
+    '<g transform="rotate(-2.5 12 40)"><text x="12" y="40" font-size="30">' + esc(note1) + '</text>' + (note2 ? '<text x="12" y="68" font-size="30">' + esc(note2) + '</text>' : '') + '</g></svg></div>';
+}
+function handNote(t) { return '<div class="noteWrap"><p class="note">' + esc(t) + '</p></div>'; }
+function arrowDown() { return '<svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true" style="display:block;margin:-2px auto 0"><g fill="none" stroke="#00080B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 C24 8 32 16 30 30"/><path d="M21 24 L30 33 L38 22"/></g></svg>'; }
+/* he/she, with a neutral fallback for entries that have no gender yet */
+function pr(he, she, they) { var g = (S.data && S.data.dog.gender) || S.reg.gender; return g === 'Boy' ? he : g === 'Girl' ? she : (they || he); }
 
 /* ---------- backend ---------- */
 var demoDb = {
@@ -122,15 +156,16 @@ var demoDb = {
     var db = store('demo_' + day) || { logged: [], finalDone: false, emailDone: false };
     var picked = Q.get('picked') !== '0';
     var start = Q.get('nostart') === '1' ? '' : addDays(todayPT(), 1 - day);
-    return { ok: true, dog: { name: 'Bubbles', picked: picked, start: start, finalDone: db.finalDone, emailDone: db.emailDone },
-      test: { daysPerRound: 5, r1Sticker: 'Yellow', r1Formula: 'Skin & Immune', r2Sticker: 'Green', r2Formula: 'Gut Health', rogerPhone: '6045550101', edPhone: '6045550102' },
-      logged: db.logged };
+    return { ok: true, dog: { name: S.k === 'demoSibKey000001' ? 'Juno' : 'Bubbles', gender: Q.get('g') === 'boy' ? 'Boy' : 'Girl', picked: picked, start: start, finalDone: db.finalDone, emailDone: db.emailDone },
+      test: { daysPerRound: 5, r1Sticker: 'Blue', r1Formula: 'Skin & Immune', r2Sticker: 'Green', r2Formula: 'Gut Health', rogerPhone: '6045550101', edPhone: '6045550102' },
+      logged: db.logged, siblings: Q.get('sib') === '1' ? [{ key: S.k === 'demoSibKey000001' ? 'demoKey123456789' : 'demoSibKey000001', name: S.k === 'demoSibKey000001' ? 'Bubbles' : 'Juno', picked: true, start: start, finalDone: false, logged: [] }] : [] };
   },
   post: function (p) {
     var day = Number(Q.get('day') || 3), db = store('demo_' + day) || { logged: [], finalDone: false, emailDone: false };
     if (p.action === 'log' && db.logged.indexOf(p.day) < 0) db.logged.push(p.day);
     if (p.action === 'final') db.finalDone = true;
     if (p.action === 'email') db.emailDone = !!p.consent;
+    if (p.action === 'register') { var fl = String(p.flags || ''); return { ok: true, key: 'demoNew' + Math.random().toString(36).slice(2, 12), status: /chicken/.test(fl) ? 'Excluded' : (fl.replace(/Nope, none of these|Sensitive stomach/g, '').replace(/[; ]/g, '') ? 'Needs review' : 'OK') }; }
     store('demo_' + day, db);
     return { ok: true, row: 2 };
   }
@@ -161,7 +196,7 @@ function demoBar() {
   if (!DEMO) return '';
   function l(h, t) { return '<a href="#' + h + '">' + t + '</a>'; }
   return '<div class="demo"><span>Preview, nothing is saved:</span>' + l('signup', 'Sign-up') + l('picked', 'Picked') +
-    l('day-1', 'Day 1') + l('day-3', 'Day 3') + l('day-6', 'Day 6') + l('day-7', 'Day 7') +
+    l('day-1', 'Day 1') + l('day-2', 'Day 2') + l('day-3', 'Day 3') + l('day-4', 'Day 4') + l('day-5', 'Day 5') + l('day-6', 'Day 6') + l('day-7', 'Day 7') +
     l('survey', 'Survey') + l('notpicked', 'Not picked') + '</div>';
 }
 
@@ -173,13 +208,13 @@ function welcome() {
     '<h1 class="xl">Thank you. Seriously.</h1>' +
     '<p class="lead">You and your dog are helping us pick our final recipe. Your dog does the hard part: eating.</p>' +
     '<button class="cta" data-go="join">Sign up your dog</button>' +
-    '<p style="font-size:14px;font-weight:500;text-align:center">Takes 2 minutes.</p></section>' +
+    '<div style="display:flex;flex-direction:column;align-items:center;margin-top:-6px"><svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true" style="display:block;transform:scaleY(-1);margin-bottom:-4px"><g fill="none" stroke="#00080B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 C24 8 32 16 30 30"/><path d="M21 24 L30 33 L38 22"/></g></svg><p class="sh">start here. takes 2 minutes.</p></div></section>' +
     '<section class="sec" style="padding-top:36px;gap:20px"><p class="eyebrow">How it works</p>' +
-    '<div class="step"><span class="n">1</span><p style="font-size:17px"><strong>Sign up your dog.</strong> If we get more dogs than chews, we\'ll pick a mix of sizes and ages.</p></div>' +
+    '<div class="step"><span class="n">1</span><p style="font-size:17px"><strong>Sign up your dog.</strong> Two dogs? Sign each one up, you\'ll get one link for both. If we get more dogs than chews, we\'ll pick a mix of sizes and ages.</p></div>' +
     '<div class="step"><span class="n">2</span><p style="font-size:17px"><strong>We drop off a kit.</strong> 2 flavours, labelled A and B. Nobody can play favourites.</p></div>' +
     '<div class="step"><span class="n">3</span><p style="font-size:17px"><strong>10 days, 1 minute a day.</strong> Put both down, tap which one your dog ate first.</p></div>' +
     '<div class="grid2" style="margin-top:6px">' +
-    '<div class="card" style="background:var(--yellow)"><span class="eyebrow" style="font-size:11px">Days 1 to 5 · Yellow sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span></div>' +
+    '<div class="card" style="background:var(--blue)"><span class="eyebrow" style="font-size:11px">Days 1 to 5 · Blue sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span></div>' +
     '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Days 6 to 10 · Green sticker</span><span class="display" style="font-size:30px">Gut Health</span></div></div></section>' +
     '<div class="foot" style="flex-direction:row;flex-wrap:wrap;gap:6px;font-size:14px"><span>Questions?</span><a href="mailto:' + CONFIG.contactEmail + '"><strong>' + CONFIG.contactEmail + '</strong></a><span>·</span><a href="#" data-go="ingredients"><strong>What\'s in the chews</strong></a></div>'
   );
@@ -190,8 +225,10 @@ function formTop(n, title) {
     '<h1 style="margin-top:12px">' + title + '</h1>' + errBox() + '</div>';
 }
 function join() {
-  paint(formTop(1, "First, who's the good dog?") +
+  S.ans.gender = S.reg.gender;
+  paint(formTop(1, "Who's a good dog?") +
     '<div class="sec"><label class="f">Dog\'s name<input type="text" id="dog" maxlength="40" autocomplete="off" placeholder="Enter your dog\'s name" value="' + esc(S.reg.dog || '') + '" autofocus></label></div>' +
+    '<div class="sec"><h3>Boy or girl?</h3><div class="grid2" style="grid-template-columns:repeat(3,1fr)">' + btn('gender', 'Boy', 'Boy') + btn('gender', 'Girl', 'Girl') + btn('gender', 'Not sure', 'Not sure') + '</div></div>' +
     '<div class="foot"><button class="cta" id="next" data-next="about">Next</button></div>');
 }
 function about() {
@@ -201,44 +238,98 @@ function about() {
     '<div class="sec"><label class="f">Breed (or best guess)<input type="text" id="breed" maxlength="60" value="' + esc(S.reg.breed || '') + '"></label>' +
     '<div class="grid2"><label class="f">Age (years)<input type="number" id="age" inputmode="decimal" min="0" max="25" step="0.5" value="' + esc(S.reg.age || '') + '"></label>' +
     '<label class="f">Weight (lb)<input type="number" id="weight" inputmode="decimal" min="1" max="250" value="' + esc(S.reg.weight || '') + '"></label></div></div>' +
-    '<div class="sec"><h3>How fussy is ' + d + '?</h3><div class="stack">' +
+    '<div class="sec"><h3>How picky is ' + d + ' about food and treats?</h3><div class="stack">' +
     btn('fussy', 'Eats anything', 'Eats anything', 'opt left') + btn('fussy', 'A little picky', 'A little picky', 'opt left') + btn('fussy', 'Very picky', 'Very picky', 'opt left') +
     '</div></div><div class="foot"><button class="cta" data-next="checks">Next</button></div>');
 }
-var CHECKS = ['Under 1 year old', 'Pregnant or nursing', 'On medication or a special vet diet', 'Allergic to chicken', 'Sensitive stomach'];
+function checkList() { return ['Allergic to chicken', 'Allergic to fish', 'Allergic to dairy or beef', 'Under 1 year old'].concat(S.reg.gender !== 'Boy' ? ['Pregnant or nursing'] : [], ['Diabetes', 'Pancreatitis, liver or gallbladder problems', 'Heart, kidney or blood pressure problems', 'Takes steroids, NSAIDs, blood thinners or immune meds', 'On other medication or a special vet diet', 'Sensitive stomach']); }
 function checks() {
   var f = S.reg.flags;
+  S.ans.usualtime = S.reg.usualtime; S.ans.sidebyside = S.reg.sidebyside;
   function c(label, i) { return '<label class="tick"><input type="checkbox" data-flag="' + esc(label) + '"' + (f.indexOf(label) >= 0 ? ' checked' : '') + '>' + esc(label) + '</label>'; }
   paint(formTop(3, 'Any of these sound like ' + esc(S.reg.dog) + '?') +
-    '<div class="sec"><div class="stack">' + CHECKS.map(c).join('') + c('Nope, none of these') + '</div></div>' +
-    '<div class="sec"><label class="f">Takes any supplements? (optional)<input type="text" id="supps" maxlength="200" placeholder="e.g. fish oil, joint chew" value="' + esc(S.reg.supplements || '') + '"></label></div>' +
+    '<div class="sec"><div class="stack">' + checkList().map(c).join('') + c('Nope, none of these') + '</div></div>' +
+    '<div class="sec"><h3>When will you usually give the chews?</h3><div class="wrap">' + ['Morning', 'Midday', 'Evening', 'Varies'].map(function (x) { return btn('usualtime', x, x, 'opt pill'); }).join('') + '</div>' +
+    (S.reg.hh ? '<h3 style="margin-top:14px">Do both dogs get their chews at the same time, side by side?</h3><div class="wrap">' + btn('sidebyside', 'Yes', 'Yes', 'opt pill') + btn('sidebyside', 'No', 'No', 'opt pill') + '</div>' : '') + '</div>' +
+    '<div class="sec"><label class="f">Takes any supplements? (optional)<input type="text" id="supps" maxlength="200" placeholder="e.g. fish oil, joint chew" value="' + esc(S.reg.supplements || '') + '"></label>' +
+    '<label class="f">Anything else we should know about ' + esc(S.reg.dog) + '? (optional)<textarea id="other" maxlength="500" placeholder="Health, allergies, medications, how ' + pr('he', 'she', 'they') + ' acts around food">' + esc(S.reg.other || '') + '</textarea></label></div>' +
     '<div class="foot"><button class="cta" data-next="you">Next</button></div>');
+}
+function chickenModal() {
+  var r = S.reg, d = esc(r.dog || 'your dog');
+  var m = document.createElement('div');
+  m.id = 'chickenModal'; m.setAttribute('role', 'alertdialog'); m.setAttribute('aria-modal', 'true');
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,8,11,.6);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50';
+  m.innerHTML = '<div style="background:#fff;border:2px solid var(--ink);border-radius:24px;padding:26px 22px;max-width:360px;display:flex;flex-direction:column;gap:14px">' +
+    '<h2 style="margin:0">We\'re so sorry.</h2>' +
+    '<p style="font-size:17px">Every chew in this test has chicken in it, and since ' + d + ' is allergic to chicken, ' + pr('he', 'she', 'they') + ' can\'t take part. It just wouldn\'t be safe for ' + pr('him', 'her', 'them') + '.</p>' +
+    '<p style="font-size:17px">Thank you so much for your time, and for wanting to help. We really appreciate it.</p>' +
+    '<button class="cta" id="chickenOk">OK</button><button class="link" id="chickenUndo">I ticked that by mistake</button></div>';
+  document.body.appendChild(m);
+  document.getElementById('chickenUndo').onclick = function () { m.remove(); };
+  document.getElementById('chickenOk').onclick = function () {
+    var f = S.reg.flags, i = f.indexOf('Nope, none of these'); if (i >= 0) f.splice(i, 1);
+    if (f.indexOf('Allergic to chicken') < 0) f.push('Allergic to chicken');
+    m.remove(); chickenStop(null);
+  };
+}
+function chickenStop(btnEl) {
+  var r = S.reg;
+  function show() {
+    paint('<section class="top" style="background:var(--blue);min-height:60vh;gap:16px">' + logo() + '<h1 class="xl" style="margin-top:28px">Sorry, ' + esc(r.dog) + '.</h1>' +
+      '<p class="lead">We\'re sorry ' + esc(r.dog) + ' can\'t take part this time. Thank you for your time and for wanting to help, it means a lot. We\'ve let Roger and Ed know.</p></section>' +
+      '<div class="foot"><p class="muted">Questions? ' + CONFIG.contactEmail + '</p></div>', true);
+  }
+  save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: '', phone: '', hh: r.hh || '', usualtime: '', sidebyside: '' }, btnEl, show);
 }
 function you() {
   paint(formTop(4, 'And you are?') +
     '<div class="sec"><label class="f">Your full name<input type="text" id="owner" maxlength="80" autocomplete="name" value="' + esc(S.reg.owner || '') + '"></label>' +
     '<label class="f">Phone<input type="tel" id="phone" maxlength="30" autocomplete="tel" value="' + esc(S.reg.phone || '') + '"></label>' +
-    '<label class="tick"><input type="checkbox" id="agree"' + (S.reg.agree ? ' checked' : '') + '>Got it: these are early samples, just for this test. If ' + esc(S.reg.dog) + ' seems off, I\'ll let Roger or Ed know.</label></div>' +
+    '<label class="tick"><input type="checkbox" id="agree"' + (S.reg.agree ? ' checked' : '') + '>Got it. These are early samples, just for this test. Some dogs get a tummy upset with new chews. If ' + esc(S.reg.dog) + ' seems off, I\'ll stop the chews and tell Roger or Ed. I can stop any time.</label></div>' +
     '<div class="foot"><button class="cta" id="submitReg">Sign ' + esc(S.reg.dog) + ' up</button></div>');
 }
 function registered() {
-  paint('<section class="top" style="background:var(--blue);min-height:60vh;justify-content:flex-end;gap:16px">' + logo() +
-    '<h1 class="xl" style="margin-top:auto">Thanks, ' + esc(S.reg.dog) + '!</h1>' +
-    '<p class="lead">You\'re signed up. We\'ll send your start date in a few days. (If we get more dogs than chews, we\'ll pick a mix of sizes and ages.)</p></section>' +
-    '<div class="foot"><button class="cta ghost" data-go="again">Sign up another dog</button></div>');
+  paint('<section class="top" style="background:var(--blue);min-height:60vh;gap:16px">' + logo() +
+    bowl("that's the easy part done.", "next up: the chews.") +
+    '<h1 class="xl" style="margin-top:8px">Thanks, ' + esc(S.reg.dog) + '!</h1>' +
+    '<p class="lead">You\'re signed up. We\'ll send your start date in a few days. (If we get more dogs than chews, we\'ll pick a mix of sizes and ages.)' + (S.reviewNote ? ' One thing: we\'ll check a detail with you before we send a kit.' : '') + '</p></section>' +
+    '<div class="foot"><button class="cta ghost" data-go="again">Two dogs? Sign up the other one</button><p style="font-size:14px;text-align:center;opacity:.8;margin-top:4px">One link will cover both dogs. You just pick who you\'re logging for.</p></div>');
 }
 function ingredients() {
   paint('<section class="top" style="background:var(--blue)"><div class="bar">' + logo() + '<button class="back" data-go="' + (S.k ? 'home' : 'welcome') + '">← Back</button></div>' +
     '<h1 style="margin-top:18px">What\'s in the chews</h1><p class="lead">A and B are the same recipe. Only the flavour is different.</p></section>' +
-    '<div class="sec"><div class="card" style="background:var(--yellow)"><span class="eyebrow" style="font-size:11px">Yellow sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span></div>' +
-    '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Green sticker</span><span class="display" style="font-size:30px">Gut Health</span></div>' +
-    '<p>The full ingredient list for each comes printed in your kit.</p></div>' +
-    '<div class="sec"><h2>The 2 flavours</h2><div class="card"><h3>Flavour 1</h3><p>Chicken meal, chicken liver, chicken fat, plus a small amount of added flavouring.</p></div>' +
-    '<div class="card"><h3>Flavour 2</h3><p>Chicken oil and chicken liver only.</p></div><p class="muted">Which one is A stays a secret until the end.</p></div>' +
-    '<div class="foot"><p class="muted">Early samples, just for this taste test. ' + CONFIG.contactEmail + '</p></div>');
+    '<div class="sec"><div class="card" style="background:var(--blue)"><span class="eyebrow" style="font-size:11px">Blue sticker · Days 1 to 5</span><span class="display" style="font-size:30px">Skin &amp; Immune</span><p style="font-size:15px;margin-top:8px"><strong>Ingredients:</strong> Chicken and its products (chicken meal, chicken liver, chicken fat), potato, brown rice, pea, flaxseed, molasses, vitamin E, rosemary extract, citric acid, silicon dioxide, sunflower lecithin, glycerinum, potassium sorbate, fish oil, Boswellia serrata extract, Curcuma longa extract, bovine colostrum powder, bromelain, vitamin C, black pepper extract, Bacillus coagulans, Bacillus subtilis, licorice extract, malt syrup.</p></div>' +
+    '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Green sticker · Days 6 to 10</span><span class="display" style="font-size:30px">Gut Health</span><p style="font-size:15px;margin-top:8px"><strong>Ingredients:</strong> Chicken and its products (chicken meal, chicken liver, chicken fat), potato, brown rice, pea, flaxseed, molasses, vitamin E, rosemary extract, citric acid, silicon dioxide, sunflower lecithin, glycerinum, potassium sorbate, inulin, pumpkin powder, FOS, Bacillus coagulans, Bacillus subtilis, Lactobacillus plantarum, Lactobacillus acidophilus, Bifidobacterium animalis subsp. lactis, Lallemand YANG postbiotic (inactivated yeast).</p></div>' +
+    '<p class="muted">Amounts per chew are printed on the sheet in your kit.</p></div>' +
+    '<div class="sec"><p class="muted">What makes A different from B stays a secret until the end, so nobody can play favourites.</p></div>' +
+    '<div class="foot"><p class="muted">Early samples, just for this taste test. No health claims. ' + CONFIG.contactEmail + '</p></div>');
 }
 
 /* ======================= DAILY FLOW (?k=) ======================= */
+function setData(r) {
+  S.data = r;
+  var me = { key: S.k, name: r.dog.name, picked: r.dog.picked, start: r.dog.start, finalDone: r.dog.finalDone, logged: r.logged };
+  S.hh = [me].concat(r.siblings || []);
+}
+function dogState(d) {
+  var T0 = S.data.test, tot = T0.daysPerRound * 2;
+  if (!d.picked) return 'Waiting for a kit';
+  if (!d.start) return 'Start date coming';
+  var day = dayDiff(todayPT(), d.start) + 1;
+  if (day < 1) return 'Starts ' + niceDate(d.start);
+  if (day > tot) return d.finalDone ? 'All done' : 'Final questions to answer';
+  return d.logged.indexOf(day) >= 0 ? 'Day ' + day + ' logged' : 'Day ' + day + ' to log';
+}
+function picker() {
+  S.err = ''; S.ans = {};
+  var due = S.hh.filter(function (d) { return /to log$/.test(dogState(d)); }).length, doneToday = S.hh.filter(function (d) { return /logged$/.test(dogState(d)); }).length;
+  var pk = due === 0 ? ['You\'re done!', 'See you tomorrow!'] : doneToday > 0 ? ['Who\'s next?', 'One more to log today.'] : ['Who\'s up first?', 'Log both dogs today. Order doesn\'t matter.'];
+  paint('<section class="top" style="background:var(--blue);gap:14px"><div class="bar">' + logo() + '</div><h1 class="xl" style="margin-top:12px">' + pk[0] + '</h1><p class="lead">' + pk[1] + '</p></section>' +
+    '<div class="sec"><div class="stack">' + S.hh.map(function (d) {
+      return '<button type="button" class="opt left" style="padding:14px 18px" data-pick="' + esc(d.key) + '"><span class="display" style="font-size:30px;display:block;line-height:1.05">' + esc(d.name) + '</span><span style="font-size:14px;font-weight:500">' + esc(dogState(d)) + '</span></button>';
+    }).join('') + '</div></div>', true);
+}
 function T() { return S.data.test; }
 function dog() { return esc(S.data.dog.name); }
 function total() { return T().daysPerRound * 2; }
@@ -284,6 +375,7 @@ function header(day) {
   var r = roundOf(day);
   return '<div class="top" style="background:' + (COLORS[r.sticker] || 'var(--blue)') + '"><div class="bar">' + logo() +
     '<span style="font-size:13px;font-weight:700">Day ' + day + ' of ' + total() + '</span></div>' +
+    '<span class="dogchip">' + (S.hh && S.hh.length > 1 ? 'Logging for ' : '') + '<strong>' + dog() + '</strong></span>' +
     '<span class="display" style="font-size:46px;margin-top:6px">' + esc(r.formula) + '</span>' +
     '<span style="font-size:16px;font-weight:700">Use the bags with the ' + esc(r.sticker.toLowerCase()) + ' sticker</span></div>';
 }
@@ -296,28 +388,31 @@ function dots(day) {
   return '<div class="dots" aria-label="' + S.data.logged.length + ' of ' + n + ' days logged">' + h + '</div>';
 }
 function lateLink(day) {
-  var y = day - 1;
-  return (y >= 1 && y <= total() && !isLogged(y)) ? '<button class="link" data-late="' + y + '">Missed yesterday? Log day ' + y + '</button>' : '';
+  var lim = Math.min(day, total() + 1);
+  for (var y = 1; y < lim; y++) if (!isLogged(y)) return '<button class="link" data-late="' + y + '">Missed day ' + y + '? Log it</button>';
+  return '';
 }
 
 function dailyLog(day, late) {
   S.logDay = day; S.late = late;
   var left = aLeft(day), a = S.ans, neither = a.first === 'Neither';
-  var side = 'Facing ' + dog() + ', put A on your ' + (left ? 'left' : 'right') + ' and B on your ' + (left ? 'right' : 'left') + '.';
+  var side = 'Put A on YOUR ' + (left ? 'left' : 'right') + ' and B on YOUR ' + (left ? 'right' : 'left') + ', as you face ' + dog() + '.';
   paint(header(day) +
-    '<div class="sec">' + (late ? '<p class="err" style="background:#fff">Logging day ' + day + ' (yesterday). <button class="link" data-go="home">Back to today</button></p>' : '') +
+    '<div class="sec">' + (late ? '<p class="err" style="background:#fff">Logging missed day ' + day + '. <button class="link" data-go="home">Back to today</button></p>' : '') +
     '<p style="font-size:18px;font-weight:700">Hi, ' + dog() + '! ' + side + '</p>' +
-    '<h2 style="margin-top:4px">Which did ' + dog() + ' eat first?</h2>' +
-    '<div class="grid2">' + (left ? btn('first', 'A', 'A', 'tile') + btn('first', 'B', 'B', 'tile') : btn('first', 'B', 'B', 'tile') + btn('first', 'A', 'A', 'tile')) + '</div>' +
-    btn('first', 'Neither', 'Neither. Sniffed both, walked off.', 'opt dash') + '</div>' +
+    '<p class="muted" style="margin:-6px 0 0">Same time each day, before a meal, no other treats first. Don\'t coach.</p>' +
+    '<h2 style="margin-top:4px">Which chew did ' + dog() + ' eat first?</h2>' +
+    '<p class="muted" style="margin:-8px 0 0">The first one ' + pr('he', 'she', 'they') + ' actually ate. Both at once? Pick the one ' + pr('he', 'she', 'they') + ' went to first.</p>' +
+    '<div class="grid2">' + (left ? btn('first', 'A', 'A', 'tile', 'left') + btn('first', 'B', 'B', 'tile', 'right') : btn('first', 'B', 'B', 'tile', 'left') + btn('first', 'A', 'A', 'tile', 'right')) + '</div>' +
+    btn('first', 'Neither', 'Neither. Sniffed both, walked off.', 'opt dash') + (neither ? '<p class="note" style="align-self:center;margin-top:4px">it happens. we still want to know.</p>' : '') + '</div>' +
     (neither ? '' :
-      '<div class="sec"><h3>Did ' + dog() + ' finish the other one?</h3><div class="grid3">' + btn('finished', 'Yep', 'Yep') + btn('finished', 'Some', 'Some') + btn('finished', 'Nope', 'Nope') + '</div></div>' +
+      '<div class="sec"><h3>Did ' + dog() + ' eat the second chew too?</h3><div class="grid3">' + btn('finished', 'Yep', 'Yep') + btn('finished', 'Some', 'Some') + btn('finished', 'Nope', 'Nope') + '</div></div>' +
       '<div class="sec"><h3>How did ' + dog() + ' eat them?</h3><div class="stack">' +
       btn('eaten', 'Straight up, like a treat', 'Straight up, like a treat', 'opt left') + btn('eaten', 'Crumbled on food', 'Crumbled on food', 'opt left') + btn('eaten', 'Hidden in something', 'Hidden in something', 'opt left') + '</div></div>') +
-    '<div class="sec"><h3>How\'s ' + dog() + ' today?</h3><div class="wrap">' +
-    ['All good', 'Threw up', 'Loose poop', 'Extra itchy', 'Something else'].map(function (x) { return btn('health', x, x, 'opt pill'); }).join('') + '</div></div>' +
-    '<div class="sec"><label class="f" for="notes">Notes on the chews (optional)</label><textarea id="notes" maxlength="1000" placeholder="Smell, texture, how ' + dog() + ' reacted, anything you noticed">' + esc(a.notes || '') + '</textarea></div>' +
-    '<div class="foot">' + errBox() + '<button class="cta" id="submitLog">Done</button>' + (late ? '' : lateLink(day)) + dots(day) + '</div>');
+    '<div class="sec"><h3>How\'s ' + dog() + ' today? <span style="font-weight:500;font-size:15px">(tap all that apply)</span></h3><div class="wrap">' +
+    ['All good', 'Threw up', 'Loose poop', 'Extra itchy', 'Something else'].map(function (x) { var on = (a.healthList || []).indexOf(x) >= 0; return '<button type="button" class="opt pill" aria-pressed="' + on + '" data-hv="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div></div>' +
+    '<div class="sec"><label class="f" for="notes">Notes on the chews (optional)</label><textarea id="notes" maxlength="1000" placeholder="Smell, texture, how ' + pr('he', 'she', 'they') + ' reacted, anything you noticed">' + esc(a.notes || '') + '</textarea></div>' +
+    '<div class="foot">' + errBox() + '<button class="cta" id="submitLog">Done</button>' + (late ? '' : lateLink(day)) + '</div>');
 }
 
 function switchScreen() {
@@ -332,30 +427,36 @@ function switchScreen() {
 
 function stopScreen(day) {
   var t = T();
-  function sms(n, ph) { return ph ? '<a class="cta" href="sms:' + esc(ph) + '">' + n + '</a>' : '<span class="cta" style="opacity:.3" aria-disabled="true">' + n + '</span>'; }
-  paint('<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Thanks for telling us.</h1>' +
-    '<p class="lead">You know ' + dog() + ' best. If this is normal for ' + dog() + ', carry on. If not, skip the chews and message Roger or Ed.</p></section>' +
+  function sms(n, ph) { return ph ? '<a class="cta" href="' + esc('sms:' + ph) + '">Text ' + n + '</a>' : '<span class="cta" style="opacity:.3" aria-disabled="true">Text ' + n + '</span>'; }
+  paint('<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Stop the chews for now.</h1>' +
+    '<p class="lead">Thanks for telling us. Please don\'t give ' + dog() + ' any more chews until Roger or Ed messages you. Tap to text us now.</p></section>' +
     '<div class="sec"><div class="grid2">' + sms('Roger', t.rogerPhone) + sms('Ed', t.edPhone) + '</div>' +
-    '' + '<p style="font-weight:700">Worried? Call your vet.</p></div>' +
+    '<p style="font-weight:700">Worried? Call your vet.</p></div>' +
     '<div class="foot"><button class="cta ghost" data-logged="' + day + '">Got it</button></div>');
 }
-
+function nextDogBtn() {
+  if (!S.hh || S.hh.length < 2) return '';
+  var o = S.hh.filter(function (d) { return d.key !== S.k && /to log$/.test(dogState(d)); })[0];
+  return o ? '<button class="cta" data-go="picker">Now log ' + esc(o.name) + '</button>' : '';
+}
 function logged(day) {
-  var last = day === total();
-  paint('<section class="top" style="background:' + (COLORS[roundOf(day).sticker] || 'var(--blue)') + ';min-height:52vh;justify-content:flex-end;gap:14px"><div class="bar">' + logo() + '</div>' +
-    '<h1 class="xl" style="margin-top:auto">Day ' + day + ', done.</h1>' +
-    '<p class="lead">' + (last ? 'That\'s all 10 days, ' + dog() + '. Last questions open tomorrow.' : 'Thanks, ' + dog() + '. Same again tomorrow.') + '</p></section>' +
-    '<div class="sec">' + dots(day) + '</div>' +
-    '<div class="foot">' + lateLink(day) + '<button class="link" data-fix="' + day + '">Oops, fix today\'s answer</button></div>');
+  var last = day === total(), nm = S.data.dog.name;
+  var LINES = [['good one, ' + nm + '.', 'see you tomorrow.'], ['noted.', nm + ' is thorough.'], ['another day,', 'another data point.'], [nm + ', the official', 'taste tester.'], ['that\'s day ' + day + '.', nm + ' is on a roll.'], ['we\'re taking notes.', nm + ' is, too.'], ['good dog.', 'good data.']];
+  var L = last ? ['that\'s all 10 days.', 'thank you, truly.'] : LINES[(day - 1) % LINES.length];
+  paint('<section class="top" style="background:' + (COLORS[roundOf(day).sticker] || 'var(--blue)') + ';min-height:52vh;gap:6px"><div class="bar">' + logo() + '</div>' +
+    (S.hh && S.hh.length > 1 ? '<span class="dogchip">' + dog() + '</span>' : '') + bowl(L[0], L[1]) + '<h1 class="xl" style="margin-top:0">Day ' + day + ', done.</h1>' +
+    '<p class="lead">' + (last ? 'That\'s all 10 days, ' + dog() + '. Last questions open tomorrow.' : 'Thanks, ' + dog() + '. Same time tomorrow.') + '</p></section>' +
+    '<div class="foot">' + nextDogBtn() + lateLink(currentDay()) + '<button class="link" data-fix="' + day + '">Oops, fix today\'s answer</button></div>');
 }
 
 function survey() {
   var t = T();
-  function q(g) { return '<div class="grid3">' + btn(g, 'A', 'A') + btn(g, 'B', 'B') + btn(g, "Couldn't tell", "Couldn't tell") + '</div>'; }
+  function q(g) { return '<div class="grid3">' + btn(g, 'A', 'A') + btn(g, 'B', 'B') + btn(g, "Couldn't tell", 'No difference') + '</div>'; }
   paint('<section class="top" style="background:var(--blue)">' + logo() + '<h1 style="margin-top:22px">Last bit, we promise.</h1><p class="lead">4 quick ones about the whole ' + total() + ' days.</p></section>' +
-    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker · ' + esc(t.r1Formula) + '</span><h3>Which one did ' + dog() + ' go for more?</h3></div>' + q('yellow') + '</div>' +
-    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r2Sticker) + ' sticker · ' + esc(t.r2Formula) + '</span><h3>Which one did ' + dog() + ' go for more?</h3></div>' + q('green') + '</div>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker · ' + esc(t.r1Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('yellow') + '</div>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r2Sticker) + ' sticker · ' + esc(t.r2Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('green') + '</div>' +
     '<div class="sec"><h3>Would you buy these for ' + dog() + '?</h3><div class="grid3">' + btn('buy', 'Yes', 'Yes') + btn('buy', 'Maybe', 'Maybe') + btn('buy', 'No', 'No') + '</div></div>' +
+    '<div class="sec"><h3>Any problems at all with ' + dog() + ' over the ' + total() + ' days?</h3><div class="grid2">' + btn('problems', 'No', 'No') + btn('problems', 'Yes', 'Yes, I\'ll say below') + '</div></div>' +
     '<div class="sec"><label class="f" for="fnotes">Anything else? (optional)</label><textarea id="fnotes" maxlength="1000">' + esc(S.ans.fnotes || '') + '</textarea></div>' +
     '<div class="foot">' + errBox() + '<button class="cta" id="submitFinal">Send</button>' + lateLink(currentDay()) + '</div>');
 }
@@ -389,6 +490,7 @@ function downloadIcs() {
 function grabReg() {
   ['dog', 'breed', 'age', 'weight', 'owner', 'phone'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
   var sp = document.getElementById('supps'); if (sp) S.reg.supplements = sp.value.trim();
+  var ot = document.getElementById('other'); if (ot) S.reg.other = ot.value.trim();
   var ag = document.getElementById('agree'); if (ag) S.reg.agree = ag.checked;
   if (S.ans.fussy) S.reg.fussy = S.ans.fussy;
 }
@@ -396,9 +498,12 @@ var REG = { welcome: welcome, join: join, about: about, checks: checks, you: you
 function validate(step) {
   var r = S.reg;
   if (step === 'about' && !r.dog) return "What's your dog's name?";
+  if (step === 'about' && !r.gender) return 'Boy, girl or not sure? Tap one.';
   if (step === 'checks' && (!r.age || !r.weight || !r.fussy)) return 'Age, weight and fussiness help us pick a good mix.';
   if (step === 'checks' && (Number(r.weight) < 1 || Number(r.weight) > 250)) return 'Weight looks off. In pounds, please.';
   if (step === 'you' && !r.flags.length) return 'Tick any that fit, or "Nope, none of these".';
+  if (step === 'you' && !r.usualtime) return 'Pick a usual time of day for the chews.';
+  if (step === 'you' && r.hh && !r.sidebyside) return 'Are the two dogs fed side by side? Tap one.';
   return '';
 }
 
@@ -407,10 +512,19 @@ app.addEventListener('click', function (e) {
   if (!el) return;
   if (el.dataset.flag) { // checkboxes on the checks screen
     var f = S.reg.flags, v = el.dataset.flag, none = 'Nope, none of these';
+    if (el.checked && v === 'Allergic to chicken') { el.checked = false; return chickenModal(); }
     if (el.checked) { if (v === none) f.length = 0; else { var i = f.indexOf(none); if (i >= 0) f.splice(i, 1); } f.push(v); }
     else f.splice(f.indexOf(v), 1);
     app.querySelectorAll('input[data-flag]').forEach(function (c) { c.checked = f.indexOf(c.dataset.flag) >= 0; });
     return;
+  }
+  if (el.dataset.hv) { // how's the dog today: tap all that apply
+    var nt = document.getElementById('notes'); if (nt) S.ans.notes = nt.value;
+    var L = (S.ans.healthList || []).slice(), v = el.dataset.hv, i = L.indexOf(v);
+    if (v === 'All good') L = i >= 0 ? [] : ['All good'];
+    else { var g = L.indexOf('All good'); if (g >= 0) L.splice(g, 1); i = L.indexOf(v); if (i >= 0) L.splice(i, 1); else L.push(v); }
+    S.ans.healthList = L; S.ans.health = L.join('; '); S.err = '';
+    return dailyLog(S.logDay, S.late);
   }
   if (el.dataset.g) { // single-choice buttons
     var notes = document.getElementById('notes'); if (notes) S.ans.notes = notes.value;
@@ -418,19 +532,29 @@ app.addEventListener('click', function (e) {
     grabReg(); S.err = '';
     S.ans[el.dataset.g] = el.dataset.v;
     if (el.dataset.g === 'fussy') S.reg.fussy = el.dataset.v;
+    if (el.dataset.g === 'gender') S.reg.gender = el.dataset.v;
+    if (el.dataset.g === 'usualtime') S.reg.usualtime = el.dataset.v;
+    if (el.dataset.g === 'sidebyside') S.reg.sidebyside = el.dataset.v;
     if (S.data && S.logDay && !S.data.dog.finalDone && document.getElementById('submitLog')) return dailyLog(S.logDay, S.late);
     return route(true);
+  }
+  if (el.dataset.pick) {
+    S.k = el.dataset.pick; S.picked = true; S.logDay = null; S.late = false;
+    paint('<div class="spin">One sec…</div>', true);
+    return apiGet().then(function (r) { if (!r || !r.ok) throw 0; setData(r); home(); }).catch(function () { paint('<div class="spin">Can\'t reach the taste test right now. Check your signal and refresh.</div>', true); });
   }
   if (el.dataset.go) {
     e.preventDefault(); S.err = ''; grabReg();
     var g = el.dataset.go;
-    if (g === 'again') { S.reg = { flags: [] }; S.ans = {}; return join(); }
+    if (g === 'again') { S.reg = { flags: [], owner: S.reg.owner, phone: S.reg.phone, hh: S.hhKey || '' }; S.ans = {}; S.view = 'join'; return join(); }
+    if (g === 'picker') return picker();
     if (g === 'home') return home();
     if (g === 'ingredients') { S.view = 'ingredients'; return ingredients(); }
     S.view = g; return REG[g]();
   }
   if (el.dataset.next) {
     grabReg();
+    if (el.dataset.next === 'you' && S.reg.flags.indexOf('Allergic to chicken') >= 0) return chickenStop(el);
     S.err = validate(el.dataset.next);
     if (S.err) return REG[S.view]();
     S.view = el.dataset.next; return REG[S.view]();
@@ -447,7 +571,7 @@ app.addEventListener('click', function (e) {
     if (!S.reg.owner || !S.reg.phone) { S.err = 'Your name and phone, please, so we can arrange drop-off.'; return you(); }
     if (!S.reg.agree) { S.err = 'Tick the box to say you got it.'; return you(); }
     var r = S.reg;
-    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, owner: r.owner, phone: r.phone }, el, function () { S.view = 'registered'; registered(); });
+    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: r.owner, phone: r.phone, hh: r.hh || '', usualtime: r.usualtime, sidebyside: r.sidebyside || '' }, el, function (res) { S.reviewNote = res.status === 'Needs review'; if (!S.hhKey && res.key) S.hhKey = res.key; S.regCount = (S.regCount || 0) + 1; S.view = 'registered'; registered(); });
   }
   if (el.id === 'submitLog') {
     var a = S.ans; a.notes = document.getElementById('notes').value;
@@ -465,8 +589,8 @@ app.addEventListener('click', function (e) {
   }
   if (el.id === 'submitFinal') {
     var s = S.ans; s.fnotes = document.getElementById('fnotes').value;
-    if (!s.yellow || !s.green || !s.buy) { S.err = 'Answer the first 3. The last one is optional.'; return survey(); }
-    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
+    if (!s.yellow || !s.green || !s.buy || !s.problems) { S.err = 'Answer the first 4. The last box is optional.'; return survey(); }
+    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
   }
   if (el.id === 'submitEmail') {
     var em = document.getElementById('email').value.trim(), ok = document.getElementById('consent').checked;
@@ -490,7 +614,10 @@ function route(keep) {
 if (!S.k) { S.view = 'welcome'; welcome(); }
 else apiGet().then(function (r) {
   if (!r || !r.ok) { paint('<section class="top" style="background:var(--blue);min-height:60vh;justify-content:flex-end;gap:14px">' + logo() + '<h1 style="margin-top:auto">Hmm, that link didn\'t work.</h1><p class="lead">Message Roger or Ed and we\'ll send it again.</p></section>'); return; }
-  S.data = r; home();
+  setData(r);
+  var ready = S.hh.filter(function (d) { return d.picked; });
+  if (S.hh.length > 1 && ready.length > 1) return picker();
+  home();
 }).catch(function () { paint('<div class="spin">Can\'t reach the taste test right now. Check your signal and refresh.</div>'); });
 </script>
 </body>
