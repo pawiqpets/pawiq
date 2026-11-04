@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#5EC6FF">
+<title>pawIQ Taste Test</title>
+<style>
+@font-face{font-family:Thunder;src:url(assets/thunder-bold.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:Satoshi;src:url(assets/satoshi-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Satoshi;src:url(assets/satoshi-500.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:Satoshi;src:url(assets/satoshi-700.woff2) format("woff2");font-weight:700;font-display:swap}
+:root{--ink:#00080B;--paper:#F6F6F1;--blue:#5EC6FF;--yellow:#F5D87A;--green:#4FD6A5;--grey:#3D4245;--line:#C9CCCF}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Satoshi,"Open Sans",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+body{min-height:100vh}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--paper)}
+a{color:var(--ink)}
+.top{padding:20px 24px 26px;display:flex;flex-direction:column;gap:10px;border-bottom:2px solid var(--ink)}
+.bar{display:flex;justify-content:space-between;align-items:center;min-height:28px}
+.logo{height:24px;width:auto;display:block}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0}
+h1,h2,.display{font-family:Thunder,Satoshi,sans-serif;font-weight:700;text-transform:uppercase;line-height:.86;margin:0}
+h1{font-size:64px}
+h1.xl{font-size:76px}
+h2{font-size:38px;line-height:.9}
+h3{font-size:18px;font-weight:700;margin:0}
+p{margin:0;line-height:1.5}
+.lead{font-size:18px;font-weight:500}
+.sec{padding:24px 24px 0;display:flex;flex-direction:column;gap:12px}
+.stack{display:flex;flex-direction:column;gap:8px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wrap{display:flex;flex-wrap:wrap;gap:8px}
+button{font-family:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opt{min-height:52px;border:2px solid var(--ink);border-radius:14px;background:#fff;font-size:16px;font-weight:700;padding:0 16px}
+.opt.left{text-align:left}
+.opt.pill{border-radius:999px;min-height:48px;font-size:15px}
+.opt[aria-pressed=true]{background:var(--ink);color:#fff}
+.tile{height:150px;border:2px solid var(--ink);border-radius:20px;background:#fff;font-family:Thunder,Satoshi,sans-serif;font-weight:700;font-size:120px;line-height:1;padding:0}
+.tile[aria-pressed=true]{background:var(--ink);color:#fff}
+.dash{border-style:dashed;background:transparent}
+.cta{display:flex;justify-content:center;align-items:center;min-height:60px;border-radius:999px;background:var(--ink);color:#fff;font-size:17px;font-weight:700;text-decoration:none;border:0;width:100%}
+.cta[disabled]{opacity:.35;cursor:not-allowed}
+.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.link{background:none;border:0;font-size:14px;font-weight:700;text-decoration:underline;min-height:44px;padding:0 4px}
+.back{background:none;border:0;font-size:15px;font-weight:700;padding:0;min-height:44px}
+label.f{font-size:16px;font-weight:700;display:flex;flex-direction:column;gap:8px}
+input[type=text],input[type=tel],input[type=email],input[type=number],textarea{font-family:inherit;font-size:17px;color:var(--ink);border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;width:100%}
+textarea{resize:vertical;min-height:96px}
+input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.tick{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;font-weight:500;border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px}
+.tick input{width:22px;height:22px;flex:none;margin:1px 0 0;accent-color:var(--ink)}
+.foot{margin-top:auto;padding:28px 24px 32px;display:flex;flex-direction:column;gap:8px}
+.err{background:#FFE1E1;border:2px solid var(--ink);border-radius:12px;padding:10px 14px;font-size:15px;font-weight:700}
+.muted{color:var(--grey);font-size:14px}
+.step{display:flex;gap:16px;align-items:flex-start;border-top:2px solid var(--ink);padding-top:14px}
+.step .n{font-family:Thunder,Satoshi,sans-serif;font-size:56px;line-height:.8;min-width:44px}
+.card{border:2px solid var(--ink);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.dots{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.dot{width:22px;height:22px;border-radius:999px;border:2px solid var(--ink);background:#fff}
+.dot.now{border-width:4px}
+.keybox{font-size:14px;font-weight:700;word-break:break-all;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:12px 14px}
+.sw{display:flex;align-items:center;gap:12px}
+.sw .chip{flex:1;border:2px solid var(--ink);border-radius:14px;padding:14px;font-weight:700;font-size:14px}
+.demo{background:var(--ink);color:#fff;font-size:12px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;position:sticky;top:0;z-index:5}
+.demo a{color:#fff;font-weight:700;background:#ffffff22;border-radius:999px;padding:4px 10px;text-decoration:none}
+table{border-collapse:collapse;width:100%}
+td{padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.spin{padding:80px 24px;text-align:center;font-weight:700}
+@media (max-width:360px){h1{font-size:54px}h1.xl{font-size:64px}h2{font-size:34px}.tile{height:130px;font-size:100px}}
+</style>
+</head>
+<body>
+<div id="app"><div class="spin">Loading…</div></div>
+<script>
+/* ============ CONFIG: the only thing to change per test ============ */
+var CONFIG = {
+  // Paste the Apps Script web app URL here (ends in /exec). Leave empty to run the page in demo mode.
+  scriptUrl: 'https://script.google.com/macros/s/AKfycbylFzksOQ4T0iZTxQ4tBfSpxeyExiIYoerQzaWdzSR8lC2zLDWW30plH1OMtOPri-qEMg/exec',
+  contactEmail: 'hello@pawiqpets.com',
+  reminderTime: '17:00'   // daily calendar reminder, local time
+};
+/* =================================================================== */
+
+var TZ = 'America/Vancouver';
+var COLORS = { Yellow: '#F5D87A', Green: '#4FD6A5' };
+var Q = new URLSearchParams(location.search);
+// Preview shortcuts use plain #names (e.g. #day-3) so they also work where query strings are dropped.
+var HASHES = { picked: 'k=demo&nostart=1', notpicked: 'k=demo&picked=0', survey: 'k=demo&day=11' };
+var hm = location.hash.slice(1);
+if (!CONFIG.scriptUrl && hm) Q = new URLSearchParams(HASHES[hm] || (/^day-\d+$/.test(hm) ? 'k=demo&day=' + hm.slice(4) : ''));
+window.addEventListener('hashchange', function () { if (!CONFIG.scriptUrl) location.reload(); });
+var DEMO = !CONFIG.scriptUrl || Q.get('demo') === '1';
+var app = document.getElementById('app');
+var S = { k: Q.get('k') || '', reg: { flags: [] }, ans: {}, data: null, err: '' };
+
+/* ---------- small helpers ---------- */
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function poss(n) { return /s$/i.test(n) ? n + "'" : n + "'s"; }
+function todayPT() { return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+function addDays(iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+function dayDiff(a, b) { return Math.round((Date.parse(a + 'T12:00:00Z') - Date.parse(b + 'T12:00:00Z')) / 864e5); }
+function niceDate(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }); }
+function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+function store(key, val) { try { if (val === undefined) return JSON.parse(localStorage.getItem('pq_' + key)); localStorage.setItem('pq_' + key, JSON.stringify(val)); } catch (e) { return null; } }
+function myLink() { return location.origin + location.pathname + '?k=' + encodeURIComponent(S.k); }
+function logo() { return '<img class="logo" src="assets/logo.svg" alt="pawIQ">'; }
+function btn(group, val, label, cls) {
+  var on = S.ans[group] === val;
+  return '<button type="button" class="' + (cls || 'opt') + '" aria-pressed="' + on + '" data-g="' + group + '" data-v="' + esc(val) + '">' + esc(label) + '</button>';
+}
+function errBox() { return S.err ? '<div class="err" role="alert">' + esc(S.err) + '</div>' : ''; }
+function paint(html) { app.innerHTML = demoBar() + html; window.scrollTo(0, 0); var f = app.querySelector('[autofocus]'); if (f) f.focus(); }
+
+/* ---------- backend ---------- */
+var demoDb = {
+  get: function () {
+    var day = Number(Q.get('day') || 3);
+    var db = store('demo_' + day) || { logged: [], finalDone: false, emailDone: false };
+    var picked = Q.get('picked') !== '0';
+    var start = Q.get('nostart') === '1' ? '' : addDays(todayPT(), 1 - day);
+    return { ok: true, dog: { name: 'Bubbles', picked: picked, start: start, finalDone: db.finalDone, emailDone: db.emailDone },
+      test: { daysPerRound: 5, r1Sticker: 'Yellow', r1Formula: 'Skin & Immune', r2Sticker: 'Green', r2Formula: 'Gut Health', rogerPhone: '6045550101', edPhone: '6045550102' },
+      logged: db.logged };
+  },
+  post: function (p) {
+    var day = Number(Q.get('day') || 3), db = store('demo_' + day) || { logged: [], finalDone: false, emailDone: false };
+    if (p.action === 'log' && db.logged.indexOf(p.day) < 0) db.logged.push(p.day);
+    if (p.action === 'final') db.finalDone = true;
+    if (p.action === 'email') db.emailDone = !!p.consent;
+    store('demo_' + day, db);
+    return { ok: true, row: 2 };
+  }
+};
+function apiGet() {
+  if (DEMO) return Promise.resolve(demoDb.get());
+  return fetch(CONFIG.scriptUrl + '?k=' + encodeURIComponent(S.k)).then(function (r) { return r.json(); });
+}
+function apiPost(p) {
+  if (DEMO) return new Promise(function (res) { setTimeout(function () { res(demoDb.post(p)); }, 350); });
+  return fetch(CONFIG.scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(p) })
+    .then(function (r) { return r.json(); });
+}
+function save(p, btnEl, then) {
+  S.err = '';
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Saving…'; }
+  apiPost(p).then(function (r) {
+    if (!r || !r.ok) throw new Error(r && r.error);
+    then(r);
+  }).catch(function () {
+    S.err = "That didn't save. Check your signal and tap again. Your answers are still here.";
+    route();
+  });
+}
+
+/* ---------- demo bar (only when no backend URL is set) ---------- */
+function demoBar() {
+  if (!DEMO) return '';
+  function l(h, t) { return '<a href="#' + h + '">' + t + '</a>'; }
+  return '<div class="demo"><span>Preview, nothing is saved:</span>' + l('signup', 'Sign-up') + l('picked', 'Picked') +
+    l('day-1', 'Day 1') + l('day-3', 'Day 3') + l('day-6', 'Day 6') + l('day-7', 'Day 7') +
+    l('survey', 'Survey') + l('notpicked', 'Not picked') + '</div>';
+}
+
+/* ======================= SIGN-UP FLOW (no key) ======================= */
+function welcome() {
+  paint(
+    '<section class="top" style="background:var(--blue);padding-bottom:40px;gap:18px">' + logo() +
+    '<p class="eyebrow" style="margin-top:24px">The pawIQ taste test</p>' +
+    '<h1 class="xl">Thank you. Seriously.</h1>' +
+    '<p class="lead">You and your dog are helping us pick our final recipe. Your dog does the hard part: eating.</p>' +
+    '<button class="cta" data-go="join">Sign up your dog</button>' +
+    '<p style="font-size:14px;font-weight:500;text-align:center">Takes 2 minutes.</p></section>' +
+    '<section class="sec" style="padding-top:36px;gap:20px"><p class="eyebrow">How it works</p>' +
+    '<div class="step"><span class="n">1</span><p style="font-size:17px"><strong>Sign up your dog.</strong> If we get more dogs than chews, we\'ll pick a mix of sizes and ages.</p></div>' +
+    '<div class="step"><span class="n">2</span><p style="font-size:17px"><strong>We drop off a kit.</strong> 2 flavours, labelled A and B. Nobody can play favourites.</p></div>' +
+    '<div class="step"><span class="n">3</span><p style="font-size:17px"><strong>10 days, 1 minute a day.</strong> Put both down, tap which one your dog ate first.</p></div>' +
+    '<div class="grid2" style="margin-top:6px">' +
+    '<div class="card" style="background:var(--yellow)"><span class="eyebrow" style="font-size:11px">Days 1 to 5 · Yellow sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span></div>' +
+    '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Days 6 to 10 · Green sticker</span><span class="display" style="font-size:30px">Gut Health</span></div></div></section>' +
+    '<div class="foot" style="flex-direction:row;flex-wrap:wrap;gap:6px;font-size:14px"><span>Questions?</span><a href="mailto:' + CONFIG.contactEmail + '"><strong>' + CONFIG.contactEmail + '</strong></a><span>·</span><a href="#" data-go="ingredients"><strong>What\'s in the chews</strong></a></div>'
+  );
+}
+
+function formTop(n, title) {
+  return '<div class="sec" style="padding-top:16px"><div class="bar"><button class="back" data-go="' + (n === 1 ? 'welcome' : ['', 'join', 'about', 'checks'][n - 1]) + '">← Back</button><span style="font-size:13px;font-weight:700">' + n + ' of 4</span></div>' +
+    '<h1 style="margin-top:12px">' + title + '</h1>' + errBox() + '</div>';
+}
+function join() {
+  paint(formTop(1, "First, who's the good dog?") +
+    '<div class="sec"><label class="f">Dog\'s name<input type="text" id="dog" maxlength="40" autocomplete="off" placeholder="Enter your dog\'s name" value="' + esc(S.reg.dog || '') + '" autofocus></label></div>' +
+    '<div class="foot"><button class="cta" id="next" data-next="about">Next</button></div>');
+}
+function about() {
+  var d = esc(S.reg.dog);
+  S.ans.fussy = S.reg.fussy;
+  paint(formTop(2, 'Tell us about ' + d + '.') +
+    '<div class="sec"><label class="f">Breed (or best guess)<input type="text" id="breed" maxlength="60" value="' + esc(S.reg.breed || '') + '"></label>' +
+    '<div class="grid2"><label class="f">Age (years)<input type="number" id="age" inputmode="decimal" min="0" max="25" step="0.5" value="' + esc(S.reg.age || '') + '"></label>' +
+    '<label class="f">Weight (lb)<input type="number" id="weight" inputmode="decimal" min="1" max="250" value="' + esc(S.reg.weight || '') + '"></label></div></div>' +
+    '<div class="sec"><h3>How fussy is ' + d + '?</h3><div class="stack">' +
+    btn('fussy', 'Eats anything', 'Eats anything', 'opt left') + btn('fussy', 'A little picky', 'A little picky', 'opt left') + btn('fussy', 'Very picky', 'Very picky', 'opt left') +
+    '</div></div><div class="foot"><button class="cta" data-next="checks">Next</button></div>');
+}
+var CHECKS = ['Under 1 year old', 'Pregnant or nursing', 'On medication or a special vet diet', 'Allergic to chicken', 'Sensitive stomach'];
+function checks() {
+  var f = S.reg.flags;
+  function c(label, i) { return '<label class="tick"><input type="checkbox" data-flag="' + esc(label) + '"' + (f.indexOf(label) >= 0 ? ' checked' : '') + '>' + esc(label) + '</label>'; }
+  paint(formTop(3, 'Any of these sound like ' + esc(S.reg.dog) + '?') +
+    '<div class="sec"><div class="stack">' + CHECKS.map(c).join('') + c('Nope, none of these') + '</div></div>' +
+    '<div class="sec"><label class="f">Takes any supplements? (optional)<input type="text" id="supps" maxlength="200" placeholder="e.g. fish oil, joint chew" value="' + esc(S.reg.supplements || '') + '"></label></div>' +
+    '<div class="foot"><button class="cta" data-next="you">Next</button></div>');
+}
+function you() {
+  paint(formTop(4, 'And you are?') +
+    '<div class="sec"><label class="f">Your full name<input type="text" id="owner" maxlength="80" autocomplete="name" value="' + esc(S.reg.owner || '') + '"></label>' +
+    '<label class="f">Phone<input type="tel" id="phone" maxlength="30" autocomplete="tel" value="' + esc(S.reg.phone || '') + '"></label>' +
+    '<label class="tick"><input type="checkbox" id="agree"' + (S.reg.agree ? ' checked' : '') + '>Got it: these are early samples, just for this test. If ' + esc(S.reg.dog) + ' seems off, I\'ll let Roger or Ed know.</label></div>' +
+    '<div class="foot"><button class="cta" id="submitReg">Sign ' + esc(S.reg.dog) + ' up</button></div>');
+}
+function registered() {
+  paint('<section class="top" style="background:var(--blue);min-height:60vh;justify-content:flex-end;gap:16px">' + logo() +
+    '<h1 class="xl" style="margin-top:auto">Thanks, ' + esc(S.reg.dog) + '!</h1>' +
+    '<p class="lead">You\'re signed up. We\'ll send your start date in a few days. (If we get more dogs than chews, we\'ll pick a mix of sizes and ages.)</p></section>' +
+    '<div class="foot"><button class="cta ghost" data-go="again">Sign up another dog</button></div>');
+}
+function ingredients() {
+  paint('<section class="top" style="background:var(--blue)"><div class="bar">' + logo() + '<button class="back" data-go="' + (S.k ? 'home' : 'welcome') + '">← Back</button></div>' +
+    '<h1 style="margin-top:18px">What\'s in the chews</h1><p class="lead">A and B are the same recipe. Only the flavour is different.</p></section>' +
+    '<div class="sec"><div class="card" style="background:var(--yellow)"><span class="eyebrow" style="font-size:11px">Yellow sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span></div>' +
+    '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Green sticker</span><span class="display" style="font-size:30px">Gut Health</span></div>' +
+    '<p>The full ingredient list for each comes printed in your kit.</p></div>' +
+    '<div class="sec"><h2>The 2 flavours</h2><div class="card"><h3>Flavour 1</h3><p>Chicken meal, chicken liver, chicken fat, plus a small amount of added flavouring.</p></div>' +
+    '<div class="card"><h3>Flavour 2</h3><p>Chicken oil and chicken liver only.</p></div><p class="muted">Which one is A stays a secret until the end.</p></div>' +
+    '<div class="foot"><p class="muted">Early samples, just for this taste test. ' + CONFIG.contactEmail + '</p></div>');
+}
+
+/* ======================= DAILY FLOW (?k=) ======================= */
+function T() { return S.data.test; }
+function dog() { return esc(S.data.dog.name); }
+function total() { return T().daysPerRound * 2; }
+function roundOf(day) { var r1 = day <= T().daysPerRound; return { sticker: r1 ? T().r1Sticker : T().r2Sticker, formula: r1 ? T().r1Formula : T().r2Formula }; }
+function currentDay() { var s = S.data.dog.start; return s ? dayDiff(todayPT(), s) + 1 : 0; }
+function isLogged(day) { return S.data.logged.indexOf(day) >= 0; }
+function aLeft(day) { return (day + hash(S.k)) % 2 === 0; }
+
+function home() {
+  S.err = ''; S.ans = {};
+  var d = S.data.dog, day = currentDay();
+  if (!d.picked) return notPicked();
+  if (!d.start || day < 1) return credential();
+  if (day <= total()) {
+    if (isLogged(day)) return logged(day);
+    if (day === T().daysPerRound + 1 && !store('switch_' + S.k)) return switchScreen();
+    return dailyLog(day, false);
+  }
+  if (!d.finalDone) return survey();
+  return thankYou();
+}
+
+function notPicked() {
+  paint('<section class="top" style="background:var(--blue);min-height:60vh;justify-content:flex-end;gap:16px">' + logo() +
+    '<h1 class="xl" style="margin-top:auto">Thanks, ' + dog() + '!</h1>' +
+    '<p class="lead">You\'re signed up. We\'ll be in touch soon.</p></section><div class="foot"></div>');
+}
+
+function credential() {
+  var d = S.data.dog;
+  var when = d.start ? 'Day 1 is ' + niceDate(d.start) + '. We\'ll drop off your kit before then.' : 'Our team will be in touch with your start date and drop-off details.';
+  paint('<section class="top" style="background:var(--blue);gap:16px">' + logo() +
+    '<h1 class="xl" style="margin-top:28px">' + dog() + ' is in!</h1><p class="lead">Thank you both. ' + when + '</p></section>' +
+    '<div class="sec"><h3>' + poss(dog()) + ' daily link</h3><div class="keybox">' + esc(myLink().replace(/^https?:\/\//, '')) + '</div>' +
+    '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p>' + errBox() + '</div>' +
+    '<div class="foot">' + (d.start
+      ? '<button class="cta" id="ics">Add daily reminders to my calendar</button><p class="muted" style="text-align:center">Each reminder has ' + poss(dog()) + ' link in it.</p>'
+      : '<p class="muted" style="text-align:center">Calendar reminders show up here once we set your start date.</p>') +
+    '<button class="cta ghost" id="copy">Copy the link</button></div>');
+}
+
+function header(day) {
+  var r = roundOf(day);
+  return '<div class="top" style="background:' + (COLORS[r.sticker] || 'var(--blue)') + '"><div class="bar">' + logo() +
+    '<span style="font-size:13px;font-weight:700">Day ' + day + ' of ' + total() + '</span></div>' +
+    '<span class="display" style="font-size:46px;margin-top:6px">' + esc(r.formula) + '</span>' +
+    '<span style="font-size:16px;font-weight:700">Use the bags with the ' + esc(r.sticker.toLowerCase()) + ' sticker</span></div>';
+}
+function dots(day) {
+  var h = '', n = total(), half = T().daysPerRound;
+  for (var i = 1; i <= n; i++) {
+    var col = isLogged(i) ? (COLORS[roundOf(i).sticker] || 'var(--blue)') : '#fff';
+    h += '<span class="dot' + (i === day ? ' now' : '') + '" style="background:' + col + '"></span>' + (i === half ? '<span style="width:10px"></span>' : '');
+  }
+  return '<div class="dots" aria-label="' + S.data.logged.length + ' of ' + n + ' days logged">' + h + '</div>';
+}
+function lateLink(day) {
+  var y = day - 1;
+  return (y >= 1 && y <= total() && !isLogged(y)) ? '<button class="link" data-late="' + y + '">Missed yesterday? Log day ' + y + '</button>' : '';
+}
+
+function dailyLog(day, late) {
+  S.logDay = day; S.late = late;
+  var left = aLeft(day), a = S.ans, neither = a.first === 'Neither';
+  var side = 'Facing ' + dog() + ', put A on your ' + (left ? 'left' : 'right') + ' and B on your ' + (left ? 'right' : 'left') + '.';
+  paint(header(day) +
+    '<div class="sec">' + (late ? '<p class="err" style="background:#fff">Logging day ' + day + ' (yesterday). <button class="link" data-go="home">Back to today</button></p>' : '') +
+    '<p style="font-size:18px;font-weight:700">Hi, ' + dog() + '! ' + side + '</p>' +
+    '<h2 style="margin-top:4px">Which did ' + dog() + ' eat first?</h2>' +
+    '<div class="grid2">' + (left ? btn('first', 'A', 'A', 'tile') + btn('first', 'B', 'B', 'tile') : btn('first', 'B', 'B', 'tile') + btn('first', 'A', 'A', 'tile')) + '</div>' +
+    btn('first', 'Neither', 'Neither. Sniffed both, walked off.', 'opt dash') + '</div>' +
+    (neither ? '' :
+      '<div class="sec"><h3>Did ' + dog() + ' finish the other one?</h3><div class="grid3">' + btn('finished', 'Yep', 'Yep') + btn('finished', 'Some', 'Some') + btn('finished', 'Nope', 'Nope') + '</div></div>' +
+      '<div class="sec"><h3>How did ' + dog() + ' eat them?</h3><div class="stack">' +
+      btn('eaten', 'Straight up, like a treat', 'Straight up, like a treat', 'opt left') + btn('eaten', 'Crumbled on food', 'Crumbled on food', 'opt left') + btn('eaten', 'Hidden in something', 'Hidden in something', 'opt left') + '</div></div>') +
+    '<div class="sec"><h3>How\'s ' + dog() + ' today?</h3><div class="wrap">' +
+    ['All good', 'Threw up', 'Loose poop', 'Extra itchy', 'Something else'].map(function (x) { return btn('health', x, x, 'opt pill'); }).join('') + '</div></div>' +
+    '<div class="sec"><label class="f" for="notes">Notes on the chews (optional)</label><textarea id="notes" maxlength="1000" placeholder="Smell, texture, how ' + dog() + ' reacted, anything you noticed">' + esc(a.notes || '') + '</textarea></div>' +
+    '<div class="foot">' + errBox() + '<button class="cta" id="submitLog">Done</button>' + (late ? '' : lateLink(day)) + dots(day) + '</div>');
+}
+
+function switchScreen() {
+  var t = T(), day = t.daysPerRound + 1;
+  paint('<section class="top" style="background:' + (COLORS[t.r2Sticker] || 'var(--blue)') + ';gap:14px"><div class="bar">' + logo() + '<span style="font-size:13px;font-weight:700">Day ' + day + ' of ' + total() + '</span></div>' +
+    '<p class="eyebrow" style="margin-top:20px">Halfway there, ' + dog() + '</p><h1>Switch to the ' + esc(t.r2Sticker.toLowerCase()) + ' stickers.</h1>' +
+    '<p class="lead">Today starts ' + esc(t.r2Formula) + '. Put the ' + esc(t.r1Sticker.toLowerCase()) + '-sticker bags away for good.</p></section>' +
+    '<div class="sec"><div class="sw"><span class="chip" style="background:' + (COLORS[t.r1Sticker] || '#fff') + ';opacity:.55"><s>' + esc(t.r1Sticker) + ' sticker · ' + esc(t.r1Formula) + '</s><br>Done</span>' +
+    '<span style="font-weight:700">→</span><span class="chip" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '">' + esc(t.r2Sticker) + ' sticker · ' + esc(t.r2Formula) + '<br>Now</span></div></div>' +
+    '<div class="foot"><button class="cta" id="gotSwitch">Got the ' + esc(t.r2Sticker.toLowerCase()) + '-sticker bags</button></div>');
+}
+
+function stopScreen(day) {
+  var t = T();
+  function sms(n, ph) { return ph ? '<a class="cta" href="sms:' + esc(ph) + '">' + n + '</a>' : '<span class="cta" style="opacity:.3" aria-disabled="true">' + n + '</span>'; }
+  paint('<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Thanks for telling us.</h1>' +
+    '<p class="lead">You know ' + dog() + ' best. If this is normal for ' + dog() + ', carry on. If not, skip the chews and message Roger or Ed.</p></section>' +
+    '<div class="sec"><div class="grid2">' + sms('Roger', t.rogerPhone) + sms('Ed', t.edPhone) + '</div>' +
+    '' + '<p style="font-weight:700">Worried? Call your vet.</p></div>' +
+    '<div class="foot"><button class="cta ghost" data-logged="' + day + '">Got it</button></div>');
+}
+
+function logged(day) {
+  var last = day === total();
+  paint('<section class="top" style="background:' + (COLORS[roundOf(day).sticker] || 'var(--blue)') + ';min-height:52vh;justify-content:flex-end;gap:14px"><div class="bar">' + logo() + '</div>' +
+    '<h1 class="xl" style="margin-top:auto">Day ' + day + ', done.</h1>' +
+    '<p class="lead">' + (last ? 'That\'s all 10 days, ' + dog() + '. Last questions open tomorrow.' : 'Thanks, ' + dog() + '. Same again tomorrow.') + '</p></section>' +
+    '<div class="sec">' + dots(day) + '</div>' +
+    '<div class="foot">' + lateLink(day) + '<button class="link" data-fix="' + day + '">Oops, fix today\'s answer</button></div>');
+}
+
+function survey() {
+  var t = T();
+  function q(g) { return '<div class="grid3">' + btn(g, 'A', 'A') + btn(g, 'B', 'B') + btn(g, "Couldn't tell", "Couldn't tell") + '</div>'; }
+  paint('<section class="top" style="background:var(--blue)">' + logo() + '<h1 style="margin-top:22px">Last bit, we promise.</h1><p class="lead">4 quick ones about the whole ' + total() + ' days.</p></section>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker · ' + esc(t.r1Formula) + '</span><h3>Which one did ' + dog() + ' go for more?</h3></div>' + q('yellow') + '</div>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r2Sticker) + ' sticker · ' + esc(t.r2Formula) + '</span><h3>Which one did ' + dog() + ' go for more?</h3></div>' + q('green') + '</div>' +
+    '<div class="sec"><h3>Would you buy these for ' + dog() + '?</h3><div class="grid3">' + btn('buy', 'Yes', 'Yes') + btn('buy', 'Maybe', 'Maybe') + btn('buy', 'No', 'No') + '</div></div>' +
+    '<div class="sec"><label class="f" for="fnotes">Anything else? (optional)</label><textarea id="fnotes" maxlength="1000">' + esc(S.ans.fnotes || '') + '</textarea></div>' +
+    '<div class="foot">' + errBox() + '<button class="cta" id="submitFinal">Send</button>' + lateLink(currentDay()) + '</div>');
+}
+
+function thankYou() {
+  var done = S.data.dog.emailDone || store('emailSkip_' + S.k);
+  paint('<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Thank you, ' + dog() + '.</h1>' +
+    '<p class="lead">' + total() + ' days, done. We couldn\'t have done this without you both. Once every dog finishes, we\'ll tell you which recipe won.</p></section>' +
+    (done ? '<div class="foot"></div>' :
+      '<div class="sec"><h2>Want launch news?</h2><p>1 email when we launch, then 1 a month at most.</p>' +
+      '<label class="f">Email<input type="email" id="email" autocomplete="email" maxlength="120"></label>' +
+      '<label class="tick"><input type="checkbox" id="consent">Yes, pawIQ can email me. Unsubscribe anytime.</label>' + errBox() + '</div>' +
+      '<div class="foot"><button class="cta" id="submitEmail">Keep me posted</button><button class="link" id="skipEmail">No thanks</button></div>'));
+}
+
+/* ---------- calendar reminders (.ics) ---------- */
+function downloadIcs() {
+  var d = S.data.dog, t = CONFIG.reminderTime.replace(':', '') + '00', start = d.start.replace(/-/g, '');
+  var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+  var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pawIQ//Taste Test//EN', 'BEGIN:VEVENT',
+    'UID:' + S.k + '@pawiqpets.com', 'DTSTAMP:' + stamp, 'DTSTART:' + start + 'T' + t, 'DURATION:PT10M',
+    'RRULE:FREQ=DAILY;COUNT=' + total(), 'SUMMARY:' + S.data.dog.name + "'s taste test (1 min)",
+    'DESCRIPTION:Put A and B down\\, then tap which went first: ' + myLink(), 'URL:' + myLink(),
+    'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Taste test time', 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  a.download = 'pawIQ-taste-test.ics'; document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ======================= EVENTS ======================= */
+function grabReg() {
+  ['dog', 'breed', 'age', 'weight', 'owner', 'phone'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
+  var sp = document.getElementById('supps'); if (sp) S.reg.supplements = sp.value.trim();
+  var ag = document.getElementById('agree'); if (ag) S.reg.agree = ag.checked;
+  if (S.ans.fussy) S.reg.fussy = S.ans.fussy;
+}
+var REG = { welcome: welcome, join: join, about: about, checks: checks, you: you };
+function validate(step) {
+  var r = S.reg;
+  if (step === 'about' && !r.dog) return "What's your dog's name?";
+  if (step === 'checks' && (!r.age || !r.weight || !r.fussy)) return 'Age, weight and fussiness help us pick a good mix.';
+  if (step === 'checks' && (Number(r.weight) < 1 || Number(r.weight) > 250)) return 'Weight looks off. In pounds, please.';
+  if (step === 'you' && !r.flags.length) return 'Tick any that fit, or "Nope, none of these".';
+  return '';
+}
+
+app.addEventListener('click', function (e) {
+  var el = e.target.closest('button, a, input[data-flag]');
+  if (!el) return;
+  if (el.dataset.flag) { // checkboxes on the checks screen
+    var f = S.reg.flags, v = el.dataset.flag, none = 'Nope, none of these';
+    if (el.checked) { if (v === none) f.length = 0; else { var i = f.indexOf(none); if (i >= 0) f.splice(i, 1); } f.push(v); }
+    else f.splice(f.indexOf(v), 1);
+    app.querySelectorAll('input[data-flag]').forEach(function (c) { c.checked = f.indexOf(c.dataset.flag) >= 0; });
+    return;
+  }
+  if (el.dataset.g) { // single-choice buttons
+    var notes = document.getElementById('notes'); if (notes) S.ans.notes = notes.value;
+    var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
+    grabReg(); S.err = '';
+    S.ans[el.dataset.g] = el.dataset.v;
+    if (el.dataset.g === 'fussy') S.reg.fussy = el.dataset.v;
+    if (S.data && S.logDay && !S.data.dog.finalDone && document.getElementById('submitLog')) return dailyLog(S.logDay, S.late);
+    return route(true);
+  }
+  if (el.dataset.go) {
+    e.preventDefault(); S.err = ''; grabReg();
+    var g = el.dataset.go;
+    if (g === 'again') { S.reg = { flags: [] }; S.ans = {}; return join(); }
+    if (g === 'home') return home();
+    if (g === 'ingredients') { S.view = 'ingredients'; return ingredients(); }
+    S.view = g; return REG[g]();
+  }
+  if (el.dataset.next) {
+    grabReg();
+    S.err = validate(el.dataset.next);
+    if (S.err) return REG[S.view]();
+    S.view = el.dataset.next; return REG[S.view]();
+  }
+  if (el.dataset.late) { S.ans = {}; S.err = ''; return dailyLog(Number(el.dataset.late), true); }
+  if (el.dataset.fix) { S.ans = {}; S.err = ''; return dailyLog(Number(el.dataset.fix), false); }
+  if (el.dataset.logged) return logged(Number(el.dataset.logged));
+  if (el.id === 'gotSwitch') { store('switch_' + S.k, true); return dailyLog(currentDay(), false); }
+  if (el.id === 'copy') { (navigator.clipboard ? navigator.clipboard.writeText(myLink()) : Promise.reject()).then(function () { el.textContent = 'Copied'; }, function () { prompt('Copy this link', myLink()); }); return; }
+  if (el.id === 'ics') return downloadIcs();
+
+  if (el.id === 'submitReg') {
+    grabReg();
+    if (!S.reg.owner || !S.reg.phone) { S.err = 'Your name and phone, please, so we can arrange drop-off.'; return you(); }
+    if (!S.reg.agree) { S.err = 'Tick the box to say you got it.'; return you(); }
+    var r = S.reg;
+    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, owner: r.owner, phone: r.phone }, el, function () { S.view = 'registered'; registered(); });
+  }
+  if (el.id === 'submitLog') {
+    var a = S.ans; a.notes = document.getElementById('notes').value;
+    var neither = a.first === 'Neither';
+    if (!a.first || (!neither && (!a.finished || !a.eaten)) || !a.health) { S.err = 'Answer the 4 questions first. Notes are optional.'; return dailyLog(S.logDay, S.late); }
+    var day = S.logDay, rd = roundOf(day);
+    return save({ action: 'log', k: S.k, day: day, sticker: rd.sticker, side: aLeft(day) ? 'Left' : 'Right', first: a.first,
+      finished: neither ? 'n/a' : a.finished, eaten: neither ? 'n/a' : a.eaten, health: a.health, notes: a.notes, late: S.late }, el, function () {
+      if (!isLogged(day)) S.data.logged.push(day);
+      var sick = a.health !== 'All good'; S.ans = {};
+      if (sick) return stopScreen(day);
+      if (S.late && day < currentDay() && currentDay() <= total()) return home();
+      return logged(day);
+    });
+  }
+  if (el.id === 'submitFinal') {
+    var s = S.ans; s.fnotes = document.getElementById('fnotes').value;
+    if (!s.yellow || !s.green || !s.buy) { S.err = 'Answer the first 3. The last one is optional.'; return survey(); }
+    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
+  }
+  if (el.id === 'submitEmail') {
+    var em = document.getElementById('email').value.trim(), ok = document.getElementById('consent').checked;
+    if (!ok) { S.err = 'Tick the box if you want the emails. Or tap No thanks.'; return thankYou(); }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { S.err = 'That email looks off.'; return thankYou(); }
+    return save({ action: 'email', k: S.k, email: em, consent: true }, el, function () { S.data.dog.emailDone = true; S.err = ''; thankYou(); });
+  }
+  if (el.id === 'skipEmail') { store('emailSkip_' + S.k, true); return thankYou(); }
+});
+
+function route(keep) {
+  if (!S.k) { if (S.view === 'registered') return registered(); if (S.view === 'ingredients') return ingredients(); return (REG[S.view] || welcome)(); }
+  if (!S.data) return;
+  if (S.logDay && document.getElementById('submitLog')) return dailyLog(S.logDay, S.late);
+  if (document.getElementById('submitFinal')) return survey();
+  if (document.getElementById('submitEmail')) return thankYou();
+  return home();
+}
+
+/* ---------- start ---------- */
+if (!S.k) { S.view = 'welcome'; welcome(); }
+else apiGet().then(function (r) {
+  if (!r || !r.ok) { paint('<section class="top" style="background:var(--blue);min-height:60vh;justify-content:flex-end;gap:14px">' + logo() + '<h1 style="margin-top:auto">Hmm, that link didn\'t work.</h1><p class="lead">Message Roger or Ed and we\'ll send it again.</p></section>'); return; }
+  S.data = r; home();
+}).catch(function () { paint('<div class="spin">Can\'t reach the taste test right now. Check your signal and refresh.</div>'); });
+</script>
+</body>
+</html>
