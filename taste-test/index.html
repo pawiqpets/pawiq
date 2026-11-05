@@ -54,7 +54,7 @@ button{font-family:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight
 .back{background:none;border:0;font-size:15px;font-weight:700;padding:0;min-height:44px}
 label.f{font-size:16px;font-weight:700;display:flex;flex-direction:column;gap:8px}
 input[type=text],input[type=tel],input[type=email],input[type=number],input[type=date],textarea,select{font-family:inherit;font-size:17px;color:var(--ink);border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;width:100%}
-select{appearance:auto;height:52px}
+select{appearance:auto;height:56px;line-height:normal;padding-top:0;padding-bottom:0}
 textarea{resize:vertical;min-height:96px}
 input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .tick{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;font-weight:500;border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px}
@@ -421,6 +421,7 @@ function credential() {
     '<div class="sec"><h3>Start date and reminder</h3><p>Tell us the day you want to start. If you want a daily reminder, also pick a time and we\'ll add it to your calendar.</p>' +
     '<label class="f" for="startDate">Start date<select id="startDate"><option value="">Pick a day</option>' + startOptions(today, val) + '</select></label>' +
     '<label class="f" for="remindTime">Reminder time (optional)<select id="remindTime"><option value="">No reminder</option>' + remindOptions() + '</select></label>' + errBox() + '</div>' +
+    (S.remind && d.start ? '<div class="sec"><p class="muted">Reminder made. If your phone asked you to save a file, tap Save, then open the file to add it to your calendar. On iPhone it opens straight into Calendar in Safari. Or <a href="' + esc(gcalLink(S.remind)) + '" target="_blank" rel="noopener">add it to Google Calendar instead</a>.</p></div>' : '') +
     '<div class="foot"><button class="cta" id="setStart">' + (d.start ? 'Update start date' : 'Set start date') + '</button><button class="cta ghost" id="copy">Copy the link</button></div>');
 }
 
@@ -541,7 +542,16 @@ function remindOptions() {
   for (var h = 6; h <= 21; h++) { var h12 = h % 12 === 0 ? 12 : h % 12, hh = (h < 10 ? '0' : '') + h; ['00', '30'].forEach(function (m) { o += '<option value="' + hh + m + '">' + h12 + ':' + m + ' ' + (h < 12 ? 'AM' : 'PM') + '</option>'; }); }
   return o;
 }
+function gcalLink(time) {
+  var d = S.data.dog, st = d.start.replace(/-/g, ''), h = Number(time.slice(0, 2)), m = Number(time.slice(2)), em = m + 15, eh = h + (em >= 60 ? 1 : 0);
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var end = pad(eh) + pad(em % 60);
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(d.name + "'s taste test (1 min)") +
+    '&dates=' + st + 'T' + time + '00/' + st + 'T' + end + '00&recur=' + encodeURIComponent('RRULE:FREQ=DAILY;COUNT=' + (total() + 5)) +
+    '&details=' + encodeURIComponent('Put A and B down, then tap which went first: ' + myLink());
+}
 function downloadIcs(time) {
+  S.remind = time;
   var d = S.data.dog, t = time + '00', start = d.start.replace(/-/g, '');
   var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
   var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pawIQ//Taste Test//EN', 'BEGIN:VEVENT',
