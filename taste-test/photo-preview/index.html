@@ -537,12 +537,34 @@ function photoBlock() {
     '<div class="consent"><b>PHOTO CONSENT</b>' + PHOTO_CONSENT.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>' +
     '<label class="tick"><input type="checkbox" id="photoConsent"' + (a.photoConsent ? ' checked' : '') + '>I have read and agree to the Photo Consent above.</label></div>';
 }
-var PHOTO_MAX = 15 * 1024 * 1024; // original file goes up untouched, full resolution
+var PHOTO_MAX = 40 * 1024 * 1024; // biggest file we will accept from the phone
+var PHOTO_CAP = 6 * 1024 * 1024;  // what we upload: original if 6 MB or less, otherwise shrunk to fit
 function readPhoto(file, done) {
   var r = new FileReader();
   r.onload = function () { done(r.result); };
   r.onerror = function () { done(null); };
   r.readAsDataURL(file);
+}
+// original untouched when it already fits; otherwise re-encode as JPEG, stepping size and quality down until it is under the cap
+function preparePhoto(file, done) {
+  if (file.size <= PHOTO_CAP) return readPhoto(file, done);
+  var url = URL.createObjectURL(file), img = new Image();
+  img.onerror = function () { URL.revokeObjectURL(url); done(null); };
+  img.onload = function () {
+    var w = img.naturalWidth, h = img.naturalHeight, sc = Math.min(1, 4096 / Math.max(w, h)), q = 0.9, tries = 0;
+    (function attempt() {
+      var c = document.createElement('canvas'); c.width = Math.round(w * sc); c.height = Math.round(h * sc);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(function (blob) {
+        if (!blob) { URL.revokeObjectURL(url); return done(null); }
+        if (blob.size > PHOTO_CAP && tries++ < 10) { sc *= 0.85; q = Math.max(0.75, q - 0.03); return attempt(); }
+        URL.revokeObjectURL(url);
+        if (blob.size > PHOTO_CAP) return done(null);
+        readPhoto(blob, done);
+      }, 'image/jpeg', q);
+    })();
+  };
+  img.src = url;
 }
 function grabFinal() {
   var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
@@ -554,7 +576,7 @@ app.addEventListener('change', function (e) {
   if (!f || f.id !== 'photoFile' || !f.files || !f.files[0]) return;
   var file = f.files[0]; grabFinal(); S.photoErr = '';
   if (!/^image\//.test(file.type || 'image/')) S.photoErr = 'Please pick a photo.';
-  else if (file.size > PHOTO_MAX) S.photoErr = 'That photo is over 15 MB. Please pick a smaller one.';
+  else if (file.size > PHOTO_MAX) S.photoErr = 'That photo is too large. Please pick a smaller one.';
   if (S.photoErr) { S.keep = true; return survey(); }
   if (S.photoUrl) URL.revokeObjectURL(S.photoUrl);
   S.photoFile = file; S.photoUrl = URL.createObjectURL(file); S.photo = S.photoUrl; S.photoSaved = false; S.ans.photoConsent = false;
@@ -754,7 +776,7 @@ app.addEventListener('click', function (e) {
     };
     if (!S.photo || S.photoSaved) return sendFinal();
     el.disabled = true; el.textContent = 'Uploading photo…'; S.err = '';
-    return readPhoto(S.photoFile, function (data) {
+    return preparePhoto(S.photoFile, function (data) {
       if (!data) { S.err = "That photo couldn't be read. Tap Remove photo and pick it again."; S.keep = true; return survey(); }
       apiPost({ action: 'photo', k: S.k, photo: data, consent: true, consentVersion: PHOTO_CONSENT_V, consentText: PHOTO_CONSENT.join(' ') }).then(function (r) {
         if (!r || !r.ok) throw new Error(r && r.error);
