@@ -403,9 +403,9 @@ function dots(day) {
   return '<div class="dots" aria-label="' + S.data.logged.length + ' of ' + n + ' days logged">' + h + '</div>';
 }
 function lateLink(day) {
-  var lim = Math.min(day, total() + 1);
-  for (var y = 1; y < lim; y++) if (!isLogged(y)) return '<button class="link" data-late="' + y + '">Missed day ' + y + '? Log it</button>';
-  return '';
+  var lim = Math.min(day, total() + 1), h = '';
+  for (var y = 1; y < lim; y++) if (!isLogged(y)) h += '<button class="link" data-late="' + y + '">Missed day ' + y + '? Log it</button>';
+  return h;
 }
 
 function dailyLog(day, late) {
@@ -443,11 +443,11 @@ function switchScreen() {
 function stopScreen(day) {
   var t = T();
   function sms(n, ph) { return ph ? '<a class="cta" href="' + esc('sms:' + ph) + '">Text ' + n + '</a>' : '<span class="cta" style="opacity:.3" aria-disabled="true">Text ' + n + '</span>'; }
-  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Stop the chews for now.</h1>' +
-    '<p class="lead">Thanks for telling us. Please don\'t give ' + dog() + ' any more chews until Roger or Ed messages you. Tap to text us now.</p></section>' +
+  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Pause the chews for now.</h1>' +
+    '<p class="lead">Thanks for telling us. Please pause the chews for ' + dog() + ' until Roger or Ed messages you. Tap to text us now.</p></section>' +
     '<div class="sec"><div class="grid2">' + sms('Roger', t.rogerPhone) + sms('Ed', t.edPhone) + '</div>' +
     '<p style="font-weight:700">Worried? Call your vet.</p></div>' +
-    '<div class="foot"><button class="cta ghost" data-logged="' + day + '">Got it</button></div>');
+    '<div class="foot"><button class="cta ghost" data-fixprev="' + day + '">Change my answer</button><button class="cta" data-logged="' + day + '">Got it</button></div>');
 }
 function nextDogBtn() {
   if (!S.hh || S.hh.length < 2) return '';
@@ -577,6 +577,7 @@ app.addEventListener('click', function (e) {
   }
   if (el.dataset.late) { S.ans = {}; S.err = ''; return dailyLog(Number(el.dataset.late), true); }
   if (el.dataset.fix) { S.ans = {}; S.err = ''; return dailyLog(Number(el.dataset.fix), false); }
+  if (el.dataset.fixprev) { S.ans = JSON.parse(JSON.stringify(S.lastAns || {})); S.err = ''; return dailyLog(Number(el.dataset.fixprev), false); }
   if (el.dataset.logged) return logged(Number(el.dataset.logged));
   if (el.id === 'gotSwitch') { store('switch_' + S.k, true); return dailyLog(currentDay(), false); }
   if (el.id === 'copy') { (navigator.clipboard ? navigator.clipboard.writeText(myLink()) : Promise.reject()).then(function () { el.textContent = 'Copied'; }, function () { prompt('Copy this link', myLink()); }); return; }
@@ -597,7 +598,7 @@ app.addEventListener('click', function (e) {
     return save({ action: 'log', k: S.k, day: day, sticker: rd.sticker, side: aLeft(day) ? 'Left' : 'Right', first: a.first,
       finished: neither ? 'n/a' : a.finished, eaten: neither ? 'n/a' : a.eaten, health: a.health, notes: a.notes, late: S.late }, el, function () {
       if (!isLogged(day)) S.data.logged.push(day);
-      var sick = a.health !== 'All good'; S.ans = {};
+      var sick = a.health !== 'All good'; S.lastAns = JSON.parse(JSON.stringify(a)); S.ans = {};
       if (sick) return stopScreen(day);
       if (S.late && day < currentDay() && currentDay() <= total()) return home();
       return logged(day);
