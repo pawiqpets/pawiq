@@ -421,7 +421,9 @@ function credential() {
     '<div class="sec"><h3>Start date and reminder</h3><p>Tell us the day you want to start. If you want a daily reminder, also pick a time and we\'ll add it to your calendar.</p>' +
     '<label class="f" for="startDate">Start date<select id="startDate"><option value="">Pick a day</option>' + startOptions(today, val) + '</select></label>' +
     '<label class="f" for="remindTime">Reminder time (optional)<select id="remindTime"><option value="">No reminder</option>' + remindOptions() + '</select></label>' + errBox() + '</div>' +
-    (S.remind && d.start ? '<div class="sec"><p class="muted">Reminder made. If your phone asked you to save a file, tap Save, then open the file to add it to your calendar. On iPhone it opens straight into Calendar in Safari. Or <a href="' + esc(gcalLink(S.remind)) + '" target="_blank" rel="noopener">add it to Google Calendar instead</a>.</p></div>' : '') +
+    (S.remind && d.start ? (IOS_CHROME
+      ? '<div class="sec"><a class="cta" href="' + esc(gcalLink(S.remind)) + '" target="_blank" rel="noopener">Add the daily reminder to your calendar</a><p class="muted">Chrome on iPhone can\'t open calendar files. This opens Google Calendar instead. Safari adds it straight to Apple Calendar.</p></div>'
+      : '<div class="sec"><p class="muted">Reminder made. If your phone asked you to save a file, tap Save, then open the file to add it to your calendar. Or <a href="' + esc(gcalLink(S.remind)) + '" target="_blank" rel="noopener">add it to Google Calendar instead</a>.</p></div>') : '') +
     '<div class="foot"><button class="cta" id="setStart">' + (d.start ? 'Update start date' : 'Set start date') + '</button><button class="cta ghost" id="copy">Copy the link</button></div>');
 }
 
@@ -550,6 +552,7 @@ function gcalLink(time) {
     '&dates=' + st + 'T' + time + '00/' + st + 'T' + end + '00&recur=' + encodeURIComponent('RRULE:FREQ=DAILY;COUNT=' + (total() + 5)) +
     '&details=' + encodeURIComponent('Put A and B down, then tap which went first: ' + myLink());
 }
+var IOS_CHROME = /CriOS/.test(navigator.userAgent);
 function downloadIcs(time) {
   S.remind = time;
   var d = S.data.dog, t = time + '00', start = d.start.replace(/-/g, '');
@@ -652,8 +655,8 @@ app.addEventListener('click', function (e) {
     if (dayDiff(sd, td) > 7) { S.err = 'Pick a day within the next 7 days.'; return credential(); }
     return save({ action: 'start', k: S.k, start: sd }, el, function () {
       S.data.dog.start = sd; S.err = '';
-      if (rt) downloadIcs(rt);
-      if (dayDiff(sd, td) === 0) return home();
+      if (rt) { if (IOS_CHROME) S.remind = rt; else downloadIcs(rt); }
+      if (dayDiff(sd, td) === 0 && !(rt && IOS_CHROME)) return home();
       credential();
     });
   }
