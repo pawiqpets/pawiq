@@ -82,7 +82,8 @@ td{padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
 .note{transform:rotate(-1.5deg);display:inline-block;font-family:Caveat,"Segoe Print","Bradley Hand",cursive;font-weight:600;font-size:28px;line-height:1.1;color:var(--ink);padding:0 4px;margin:0;text-align:center}
 .noteWrap{padding:0 24px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .onblue{margin-top:auto;padding:0 0 4px}
-.full .top{border-bottom:0}
+.full .top{border-bottom:0;flex:1}
+.sheet{background:#F6F6F1;border-radius:28px 28px 0 0;border-top:2px solid var(--ink);margin-top:auto;display:flex;flex-direction:column;padding-top:8px}
 .daybig{font-family:Thunder,Satoshi,sans-serif;font-weight:700;text-transform:uppercase;font-size:40px;line-height:.9}
 @media (max-width:360px){h1{font-size:54px}h1.xl{font-size:64px}h2{font-size:34px}.tile{height:150px;font-size:88px}}
 </style>
@@ -134,6 +135,13 @@ function paint(html, noSwitch) {
   app.innerHTML = demoBar() + html;
   app.style.background = bg; document.body.style.background = bg; document.documentElement.style.background = bg;
   app.className = bg === '#F6F6F1' ? '' : 'full';
+  if (bg !== '#F6F6F1') {
+    var kids = [].slice.call(app.children).filter(function (e) { return !e.classList.contains('demo'); }), rest = kids.slice(1);
+    if (rest.some(function (e) { return e.textContent.trim() || e.querySelector('button,input,a'); })) {
+      var sheet = document.createElement('div'); sheet.className = 'sheet';
+      rest.forEach(function (e) { sheet.appendChild(e); }); app.appendChild(sheet);
+    }
+  }
   var tc = document.querySelector('meta[name=theme-color]'); if (tc) tc.setAttribute('content', bg === '#F6F6F1' ? '#5EC6FF' : bg);
   if (keep) window.scrollTo(0, y); else { window.scrollTo(0, 0); var f = app.querySelector('[autofocus]'); if (f) f.focus(); }
 }
@@ -165,18 +173,20 @@ function pr(he, she, they) { var g = (S.data && S.data.dog.gender) || S.reg.gend
 var demoDb = {
   get: function () {
     var day = Number(Q.get('day') || 3), isSib = S.k === 'demoSibKey000001';
-    var db = store('demo_' + S.k + day) || { logged: [], finalDone: false, emailDone: false };
-    var picked = Q.get('picked') !== '0';
-    // two demo dogs start on different days: Juno started 2 days after Bubbles
-    var start = Q.get('nostart') === '1' ? '' : addDays(todayPT(), 1 - (isSib ? day - 2 : day));
-    var otherStart = Q.get('nostart') === '1' ? '' : addDays(todayPT(), 1 - (isSib ? day : day - 2));
-    return { ok: true, dog: { name: isSib ? 'Juno' : 'Bubbles', owner: 'Sam', gender: Q.get('g') === 'boy' ? 'Boy' : 'Girl', picked: picked, start: start, finalDone: db.finalDone, emailDone: db.emailDone },
+    // demo: ?day=N means days 1..N-1 are already logged (Juno is 2 days behind Bubbles)
+    function prog(sib) { var n = Math.max(0, sib ? day - 3 : day - 1), a = []; for (var i = 1; i <= n; i++) a.push(i); return a; }
+    function startOf(sib) { return Q.get('nostart') === '1' ? '' : addDays(todayPT(), -prog(sib).length); }
+    var db = store('demo_' + S.k + day) || { logged: [], last: '', finalDone: false, emailDone: false };
+    var base = prog(isSib), logged = base.slice(), yest = addDays(todayPT(), -1);
+    db.logged.forEach(function (x) { if (logged.indexOf(x) < 0) logged.push(x); });
+    var picked = Q.get('picked') !== '0', other = prog(!isSib);
+    return { ok: true, dog: { name: isSib ? 'Juno' : 'Bubbles', owner: 'Sam', gender: Q.get('g') === 'boy' ? 'Boy' : 'Girl', picked: picked, start: startOf(isSib), lastDate: db.last || (base.length ? yest : ''), finalDone: db.finalDone, emailDone: db.emailDone },
       test: { daysPerRound: 5, r1Sticker: 'Blue', r1Formula: 'Skin & Immune', r2Sticker: 'Green', r2Formula: 'Gut Health', rogerPhone: '6045550101', edPhone: '6045550102' },
-      logged: db.logged, siblings: Q.get('sib') === '1' ? [{ key: S.k === 'demoSibKey000001' ? 'demoKey123456789' : 'demoSibKey000001', name: S.k === 'demoSibKey000001' ? 'Bubbles' : 'Juno', picked: true, start: otherStart, finalDone: false, logged: [] }] : [] };
+      logged: logged, siblings: Q.get('sib') === '1' ? [{ key: isSib ? 'demoKey123456789' : 'demoSibKey000001', name: isSib ? 'Bubbles' : 'Juno', picked: true, start: startOf(!isSib), finalDone: false, logged: other, lastDate: other.length ? yest : '' }] : [] };
   },
   post: function (p) {
     var day = Number(Q.get('day') || 3), db = store('demo_' + S.k + day) || { logged: [], finalDone: false, emailDone: false };
-    if (p.action === 'log' && db.logged.indexOf(p.day) < 0) db.logged.push(p.day);
+    if (p.action === 'log') { if (db.logged.indexOf(p.day) < 0) db.logged.push(p.day); db.last = todayPT(); }
     if (p.action === 'final') db.finalDone = true;
     if (p.action === 'email') db.emailDone = !!p.consent;
     if (p.action === 'register') { var fl = String(p.flags || ''); return { ok: true, key: 'demoNew' + Math.random().toString(36).slice(2, 12), status: /chicken/.test(fl) ? 'Excluded' : (fl.replace(/Nope, none of these|Sensitive stomach/g, '').replace(/[; ]/g, '') ? 'Needs review' : 'OK') }; }
@@ -323,17 +333,17 @@ function ingredients() {
 /* ======================= DAILY FLOW (?k=) ======================= */
 function setData(r) {
   S.data = r;
-  var me = { key: S.k, name: r.dog.name, picked: r.dog.picked, start: r.dog.start, finalDone: r.dog.finalDone, logged: r.logged };
+  var me = { key: S.k, name: r.dog.name, picked: r.dog.picked, start: r.dog.start, finalDone: r.dog.finalDone, logged: r.logged, lastDate: r.dog.lastDate || '' };
   S.hh = [me].concat(r.siblings || []);
 }
 function dogState(d) {
   var T0 = S.data.test, tot = T0.daysPerRound * 2;
   if (!d.picked) return 'Waiting for a kit';
   if (!d.start) return 'Start date coming';
-  var day = dayDiff(todayPT(), d.start) + 1;
-  if (day < 1) return 'Starts ' + niceDate(d.start);
-  if (day > tot) return d.finalDone ? 'All done' : 'Final questions to answer';
-  return d.logged.indexOf(day) >= 0 ? 'Day ' + day + ' logged' : 'Day ' + day + ' to log';
+  if (dayDiff(todayPT(), d.start) < 0) return 'Starts ' + niceDate(d.start);
+  var n = d.logged.length ? Math.max.apply(null, d.logged) : 0, done = d.lastDate === todayPT();
+  if (n >= tot && !done) return d.finalDone ? 'All done' : 'Final questions to answer';
+  return done ? 'Day ' + n + ' logged' : 'Day ' + (n + 1) + ' to log';
 }
 function picker() {
   S.err = ''; S.ans = {};
@@ -349,7 +359,11 @@ function dog() { return esc(S.data.dog.name); }
 function owner() { return esc(S.data.dog.owner || 'there'); }
 function total() { return T().daysPerRound * 2; }
 function roundOf(day) { var r1 = day <= T().daysPerRound; return { sticker: r1 ? T().r1Sticker : T().r2Sticker, formula: r1 ? T().r1Formula : T().r2Formula }; }
-function currentDay() { var s = S.data.dog.start; return s ? dayDiff(todayPT(), s) + 1 : 0; }
+/* Days count what was actually logged, not the calendar: Day N is the Nth day the dog gets chews.
+   A skipped day just moves everything back one, so every dog still gets all 5 days of each flavour. */
+function lastLogged() { var L = S.data.logged; return L.length ? Math.max.apply(null, L) : 0; }
+function doneToday() { return S.data.dog.lastDate === todayPT(); }
+function currentDay() { var s = S.data.dog.start; if (!s || dayDiff(todayPT(), s) < 0) return 0; return doneToday() ? lastLogged() : lastLogged() + 1; }
 function isLogged(day) { return S.data.logged.indexOf(day) >= 0; }
 function aLeft(day) { return (day + hash(S.k)) % 2 === 0; }
 
@@ -359,7 +373,7 @@ function home() {
   if (!d.picked) return notPicked();
   if (!d.start || day < 1) return credential();
   if (day <= total()) {
-    if (isLogged(day)) return logged(day);
+    if (doneToday()) return logged(day);
     if (day === T().daysPerRound + 1 && !store('switch_' + S.k)) return switchScreen();
     return dailyLog(day, false);
   }
@@ -403,9 +417,7 @@ function dots(day) {
   return '<div class="dots" aria-label="' + S.data.logged.length + ' of ' + n + ' days logged">' + h + '</div>';
 }
 function lateLink(day) {
-  var lim = Math.min(day, total() + 1), h = '';
-  for (var y = 1; y < lim; y++) if (!isLogged(y)) h += '<button class="link" data-late="' + y + '">Missed day ' + y + '? Log it</button>';
-  return h;
+  return '';
 }
 
 function dailyLog(day, late) {
@@ -426,6 +438,12 @@ function dailyLog(day, late) {
       btn('eaten', 'Straight up, like a treat', 'Straight up, like a treat', 'opt left') + btn('eaten', 'Crumbled on food', 'Crumbled on food', 'opt left') + btn('eaten', 'Hidden in something', 'Hidden in something', 'opt left') + '</div></div>') +
     '<div class="sec"><h3>How\'s ' + dog() + ' today? <span style="font-weight:500;font-size:15px">(tap all that apply)</span></h3><div class="wrap">' +
     ['All good', 'Threw up', 'Loose poop', 'Extra itchy', 'Something else'].map(function (x) { var on = (a.healthList || []).indexOf(x) >= 0; return '<button type="button" class="opt pill" aria-pressed="' + on + '" data-hv="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div></div>' +
+    (function () {
+      var hl = a.healthList || [], serious = hl.indexOf('Threw up') >= 0 || hl.indexOf('Something else') >= 0;
+      if (serious || !(hl.indexOf('Loose poop') >= 0 || hl.indexOf('Extra itchy') >= 0)) return '';
+      return '<div class="sec"><h3>Is that normal for ' + dog() + '?</h3><div class="stack">' + btn('normal', 'Yes', 'Yes, that\'s normal for ' + S.data.dog.name, 'opt left') + btn('normal', 'No', 'No, it\'s new or worse', 'opt left') +
+        '</div><p class="muted">Normal for ' + dog() + '? Keep going. Not normal? We\'ll ask you to pause.</p></div>';
+    })() +
     '<div class="sec"><label class="f" for="notes">Notes on the chews (optional)</label><textarea id="notes" maxlength="1000" placeholder="Smell, texture, how ' + pr('he', 'she', 'they') + ' reacted, anything you noticed">' + esc(a.notes || '') + '</textarea></div>' +
     '<div class="foot">' + errBox() + '<button class="cta" id="submitLog">Done</button>' + (late ? '' : lateLink(day)) + '</div>');
 }
@@ -493,7 +511,7 @@ function downloadIcs() {
   var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
   var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pawIQ//Taste Test//EN', 'BEGIN:VEVENT',
     'UID:' + S.k + '@pawiqpets.com', 'DTSTAMP:' + stamp, 'DTSTART:' + start + 'T' + t, 'DURATION:PT10M',
-    'RRULE:FREQ=DAILY;COUNT=' + total(), 'SUMMARY:' + S.data.dog.name + "'s taste test (1 min)",
+    'RRULE:FREQ=DAILY;COUNT=' + (total() + 4), 'SUMMARY:' + S.data.dog.name + "'s taste test (1 min)",
     'DESCRIPTION:Put A and B down\\, then tap which went first: ' + myLink(), 'URL:' + myLink(),
     'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Taste test time', 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
   var a = document.createElement('a');
@@ -594,11 +612,15 @@ app.addEventListener('click', function (e) {
     var a = S.ans; a.notes = document.getElementById('notes').value;
     var neither = a.first === 'Neither';
     if (!a.first || (!neither && (!a.finished || !a.eaten)) || !a.health) { S.err = 'Answer the 4 questions first. Notes are optional.'; S.keep = true; return dailyLog(S.logDay, S.late); }
+    var hl = a.healthList || [], mild = !(hl.indexOf('Threw up') >= 0 || hl.indexOf('Something else') >= 0) && (hl.indexOf('Loose poop') >= 0 || hl.indexOf('Extra itchy') >= 0);
+    if (mild && !a.normal) { S.err = 'Is that normal for ' + S.data.dog.name + '? Tap yes or no.'; S.keep = true; return dailyLog(S.logDay, S.late); }
+    var healthOut = a.health + (mild ? (a.normal === 'Yes' ? ' (normal for dog)' : ' (not normal)') : '');
     var day = S.logDay, rd = roundOf(day);
     return save({ action: 'log', k: S.k, day: day, sticker: rd.sticker, side: aLeft(day) ? 'Left' : 'Right', first: a.first,
-      finished: neither ? 'n/a' : a.finished, eaten: neither ? 'n/a' : a.eaten, health: a.health, notes: a.notes, late: S.late }, el, function () {
+      finished: neither ? 'n/a' : a.finished, eaten: neither ? 'n/a' : a.eaten, health: healthOut, notes: a.notes, late: S.late }, el, function () {
       if (!isLogged(day)) S.data.logged.push(day);
-      var sick = a.health !== 'All good'; S.lastAns = JSON.parse(JSON.stringify(a)); S.ans = {};
+      S.data.dog.lastDate = todayPT(); S.hh.forEach(function (x) { if (x.key === S.k) x.lastDate = todayPT(); });
+      var sick = !(a.health === 'All good' || (mild && a.normal === 'Yes')); S.lastAns = JSON.parse(JSON.stringify(a)); S.ans = {};
       if (sick) return stopScreen(day);
       if (S.late && day < currentDay() && currentDay() <= total()) return home();
       return logged(day);
