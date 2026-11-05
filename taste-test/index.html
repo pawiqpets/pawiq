@@ -53,7 +53,8 @@ button{font-family:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight
 .link{background:none;border:0;font-size:14px;font-weight:700;text-decoration:underline;min-height:44px;padding:0 4px}
 .back{background:none;border:0;font-size:15px;font-weight:700;padding:0;min-height:44px}
 label.f{font-size:16px;font-weight:700;display:flex;flex-direction:column;gap:8px}
-input[type=text],input[type=tel],input[type=email],input[type=number],textarea{font-family:inherit;font-size:17px;color:var(--ink);border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;width:100%}
+input[type=text],input[type=tel],input[type=email],input[type=number],textarea,select{font-family:inherit;font-size:17px;color:var(--ink);border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;width:100%}
+select{appearance:auto;height:52px}
 textarea{resize:vertical;min-height:96px}
 input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .tick{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;font-weight:500;border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px}
@@ -176,7 +177,7 @@ var demoDb = {
     var day = Number(Q.get('day') || 3), isSib = S.k === 'demoSibKey000001';
     // demo: ?day=N means days 1..N-1 are already logged (Juno is 2 days behind Bubbles)
     function prog(sib) { var n = Math.max(0, sib ? day - 3 : day - 1), a = []; for (var i = 1; i <= n; i++) a.push(i); return a; }
-    function startOf(sib) { return Q.get('nostart') === '1' ? '' : addDays(todayPT(), -prog(sib).length); }
+    function startOf(sib) { return Q.get('nostart') === '1' ? '' : Q.get('future') === '1' ? addDays(todayPT(), 2) : addDays(todayPT(), -prog(sib).length); }
     var db = store('demo_' + S.k + day) || { logged: [], last: '', finalDone: false, emailDone: false };
     var base = prog(isSib), logged = base.slice(), yest = addDays(todayPT(), -1);
     db.logged.forEach(function (x) { if (logged.indexOf(x) < 0) logged.push(x); });
@@ -414,9 +415,9 @@ function credential() {
   paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:16px">' + logo() +
     '<h1 class="xl" style="margin-top:28px">' + dog() + ' is in!</h1><p class="lead">Thank you both. ' + when + '</p></section>' +
     '<div class="sec"><h3>' + poss(dog()) + ' daily link</h3><div class="keybox">' + esc(myLink().replace(/^https?:\/\//, '')) + '</div>' +
-    '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p>' + errBox() + '</div>' +
+    '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p>' + (d.start ? '' : errBox()) + '</div>' +
     '<div class="foot">' + (d.start
-      ? '<button class="cta" id="ics">Add daily reminders to my calendar</button><p class="muted" style="text-align:center">Each reminder has ' + poss(dog()) + ' link in it.</p>'
+      ? '<label class="f" for="remindTime">What time of day suits ' + dog() + '?<select id="remindTime"><option value="">Pick a time</option>' + remindOptions() + '</select></label>' + errBox() + '<button class="cta" id="ics">Add daily reminders to my calendar</button><p class="muted" style="text-align:center">Each reminder has ' + poss(dog()) + ' link in it.</p>'
       : '<p class="muted" style="text-align:center">Calendar reminders show up here once we set your start date.</p>') +
     '<button class="cta ghost" id="copy">Copy the link</button></div>');
 }
@@ -528,8 +529,15 @@ function thankYou() {
 }
 
 /* ---------- calendar reminders (.ics) ---------- */
+function remindOptions() {
+  var o = '';
+  for (var h = 6; h <= 21; h++) { var h12 = h % 12 === 0 ? 12 : h % 12; o += '<option value="' + (h < 10 ? '0' : '') + h + '00">' + h12 + ':00 ' + (h < 12 ? 'AM' : 'PM') + '</option>'; }
+  return o;
+}
 function downloadIcs() {
-  var d = S.data.dog, t = CONFIG.reminderTime.replace(':', '') + '00', start = d.start.replace(/-/g, '');
+  var sel = document.getElementById('remindTime');
+  if (!sel || !sel.value) { S.err = 'Pick a time first.'; return credential(); }
+  var d = S.data.dog, t = sel.value + '00', start = d.start.replace(/-/g, '');
   var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
   var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pawIQ//Taste Test//EN', 'BEGIN:VEVENT',
     'UID:' + S.k + '@pawiqpets.com', 'DTSTAMP:' + stamp, 'DTSTART:' + start + 'T' + t, 'DURATION:PT10M',
