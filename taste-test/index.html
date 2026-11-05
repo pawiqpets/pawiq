@@ -53,7 +53,7 @@ button{font-family:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight
 .link{background:none;border:0;font-size:14px;font-weight:700;text-decoration:underline;min-height:44px;padding:0 4px}
 .back{background:none;border:0;font-size:15px;font-weight:700;padding:0;min-height:44px}
 label.f{font-size:16px;font-weight:700;display:flex;flex-direction:column;gap:8px}
-input[type=text],input[type=tel],input[type=email],input[type=number],textarea,select{font-family:inherit;font-size:17px;color:var(--ink);border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;width:100%}
+input[type=text],input[type=tel],input[type=email],input[type=number],input[type=date],textarea,select{font-family:inherit;font-size:17px;color:var(--ink);border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;width:100%}
 select{appearance:auto;height:52px}
 textarea{resize:vertical;min-height:96px}
 input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
@@ -182,7 +182,7 @@ var demoDb = {
     var base = prog(isSib), logged = base.slice(), yest = addDays(todayPT(), -1);
     db.logged.forEach(function (x) { if (logged.indexOf(x) < 0) logged.push(x); });
     var picked = Q.get('picked') !== '0', other = prog(!isSib);
-    return { ok: true, dog: { name: isSib ? 'Juno' : 'Bubbles', owner: 'Sam', gender: Q.get('g') === 'boy' ? 'Boy' : 'Girl', picked: picked, start: startOf(isSib), lastDate: db.last || (base.length ? yest : ''), finalDone: db.finalDone, emailDone: db.emailDone },
+    return { ok: true, dog: { name: isSib ? 'Juno' : 'Bubbles', owner: 'Sam', gender: Q.get('g') === 'boy' ? 'Boy' : 'Girl', picked: picked, start: (db.start && !isSib) ? db.start : startOf(isSib), lastDate: db.last || (base.length ? yest : ''), finalDone: db.finalDone, emailDone: db.emailDone },
       test: { daysPerRound: 5, r1Sticker: 'Blue', r1Formula: 'Skin & Immune', r2Sticker: 'Green', r2Formula: 'Gut Health', rogerPhone: '6045550101', edPhone: '6045550102' },
       logged: logged, siblings: Q.get('sib') === '1' ? [{ key: isSib ? 'demoKey123456789' : 'demoSibKey000001', name: isSib ? 'Bubbles' : 'Juno', picked: true, start: startOf(!isSib), finalDone: false, logged: other, lastDate: other.length ? yest : '' }] : [] };
   },
@@ -190,6 +190,7 @@ var demoDb = {
     var day = Number(Q.get('day') || 3), db = store('demo_' + S.k + day) || { logged: [], finalDone: false, emailDone: false };
     if (p.action === 'log') { if (db.logged.indexOf(p.day) < 0) db.logged.push(p.day); db.last = todayPT(); }
     if (p.action === 'final') db.finalDone = true;
+    if (p.action === 'start') db.start = p.start;
     if (p.action === 'email') db.emailDone = !!p.consent;
     if (p.action === 'register') { var fl = String(p.flags || ''); return { ok: true, key: 'demoNew' + Math.random().toString(36).slice(2, 12), status: /chicken/.test(fl) ? 'Excluded' : (fl.replace(/Nope, none of these|Sensitive stomach/g, '').replace(/[; ]/g, '') ? 'Needs review' : 'OK') }; }
     store('demo_' + S.k + day, db);
@@ -410,16 +411,17 @@ function notPicked() {
 }
 
 function credential() {
-  var d = S.data.dog;
-  var when = d.start ? 'Day 1 is ' + niceDate(d.start) + '. We\'ll drop off your kit before then.' : 'Our team will be in touch with your start date and drop-off details.';
+  var d = S.data.dog, today = todayPT();
+  var when = d.start ? 'Day 1 is ' + niceDate(d.start) + '.' : 'Choose your start date below.';
+  var val = d.start && dayDiff(d.start, today) >= 0 ? d.start : '';
   paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:16px">' + logo() +
     '<h1 class="xl" style="margin-top:28px">' + dog() + ' is in!</h1><p class="lead">Thank you both. ' + when + '</p></section>' +
     '<div class="sec"><h3>' + poss(dog()) + ' daily link</h3><div class="keybox">' + esc(myLink().replace(/^https?:\/\//, '')) + '</div>' +
-    '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p>' + (d.start ? '' : errBox()) + '</div>' +
-    '<div class="foot">' + (d.start
-      ? '<label class="f" for="remindTime">What time of day suits ' + dog() + '?<select id="remindTime"><option value="">Pick a time</option>' + remindOptions() + '</select></label>' + errBox() + '<button class="cta" id="ics">Add daily reminders to my calendar</button><p class="muted" style="text-align:center">Each reminder has ' + poss(dog()) + ' link in it.</p>'
-      : '<p class="muted" style="text-align:center">Calendar reminders show up here once we set your start date.</p>') +
-    '<button class="cta ghost" id="copy">Copy the link</button></div>');
+    '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p></div>' +
+    '<div class="sec"><h3>Start date and reminder</h3><p>Tell us the day you want to start. If you want a daily reminder, also pick a time and we\'ll add it to your calendar.</p>' +
+    '<label class="f" for="startDate">Start date<input type="date" id="startDate" min="' + today + '" max="' + addDays(today, 60) + '" value="' + esc(val) + '"></label>' +
+    '<label class="f" for="remindTime">Reminder time (optional)<select id="remindTime"><option value="">No reminder</option>' + remindOptions() + '</select></label>' + errBox() + '</div>' +
+    '<div class="foot"><button class="cta" id="setStart">' + (d.start ? 'Update start date' : 'Set start date') + '</button><button class="cta ghost" id="copy">Copy the link</button></div>');
 }
 
 function header(day) {
@@ -534,10 +536,8 @@ function remindOptions() {
   for (var h = 6; h <= 21; h++) { var h12 = h % 12 === 0 ? 12 : h % 12; o += '<option value="' + (h < 10 ? '0' : '') + h + '00">' + h12 + ':00 ' + (h < 12 ? 'AM' : 'PM') + '</option>'; }
   return o;
 }
-function downloadIcs() {
-  var sel = document.getElementById('remindTime');
-  if (!sel || !sel.value) { S.err = 'Pick a time first.'; return credential(); }
-  var d = S.data.dog, t = sel.value + '00', start = d.start.replace(/-/g, '');
+function downloadIcs(time) {
+  var d = S.data.dog, t = time + '00', start = d.start.replace(/-/g, '');
   var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
   var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pawIQ//Taste Test//EN', 'BEGIN:VEVENT',
     'UID:' + S.k + '@pawiqpets.com', 'DTSTAMP:' + stamp, 'DTSTART:' + start + 'T' + t, 'DURATION:PT10M',
@@ -630,7 +630,18 @@ app.addEventListener('click', function (e) {
   if (el.dataset.logged) return logged(Number(el.dataset.logged));
   if (el.id === 'gotSwitch') { store('switch_' + S.k, true); return dailyLog(currentDay(), false); }
   if (el.id === 'copy') { (navigator.clipboard ? navigator.clipboard.writeText(myLink()) : Promise.reject()).then(function () { el.textContent = 'Copied'; }, function () { prompt('Copy this link', myLink()); }); return; }
-  if (el.id === 'ics') return downloadIcs();
+  if (el.id === 'setStart') {
+    var sd = document.getElementById('startDate').value, rt = document.getElementById('remindTime').value, td = todayPT();
+    if (!sd) { S.err = 'Pick your start date first.'; return credential(); }
+    if (dayDiff(sd, td) < 0) { S.err = 'The start date can\'t be in the past.'; return credential(); }
+    if (dayDiff(sd, td) > 60) { S.err = 'Pick a date within the next 60 days.'; return credential(); }
+    return save({ action: 'start', k: S.k, start: sd }, el, function () {
+      S.data.dog.start = sd; S.err = '';
+      if (rt) downloadIcs(rt);
+      if (dayDiff(sd, td) === 0) return home();
+      credential();
+    });
+  }
 
   if (el.id === 'submitReg') {
     grabReg();
