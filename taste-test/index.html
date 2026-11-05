@@ -131,18 +131,23 @@ function btn(group, val, label, cls, sub) {
   return '<button type="button" class="' + (cls || 'opt') + '" aria-pressed="' + on + '" data-g="' + group + '" data-v="' + esc(val) + '">' + esc(label) + (sub ? '<span class="tl">' + esc(sub) + '</span>' : '') + '</button>';
 }
 function errBox() { return S.err ? '<div class="err" role="alert">' + esc(S.err) + '</div>' : ''; }
+/* Pages with a grey sheet at the bottom: the area past the page bottom (rubber-band scroll, behind the iPhone toolbar) shows the html colour, so it is grey; the top overscroll stays blue. */
+var SHEET_BG = null;
+function syncBg() { if (!SHEET_BG) return; document.documentElement.style.background = window.scrollY < 0 ? SHEET_BG : '#F6F6F1'; }
+window.addEventListener('scroll', syncBg, { passive: true });
 function paint(html, noSwitch) {
   if (!noSwitch && S.k && S.hh && S.hh.length > 1) html += '<div class="foot" style="padding-top:0"><button class="link" data-go="picker">Back to both dogs</button></div>';
   var keep = S.keep, y = window.scrollY, bg = S.bg || '#F6F6F1';
   S.keep = false; S.bg = null;
   app.innerHTML = demoBar() + html;
-  app.style.background = bg; document.body.style.background = bg; document.documentElement.style.background = bg;
+  app.style.background = bg; document.body.style.background = bg; document.documentElement.style.background = bg; SHEET_BG = null;
   app.className = bg === '#F6F6F1' ? '' : 'full';
   if (bg !== '#F6F6F1') {
     var kids = [].slice.call(app.children).filter(function (e) { return !e.classList.contains('demo'); }), rest = kids.slice(1);
     if (rest.some(function (e) { return e.textContent.trim() || e.querySelector('button,input,a'); })) {
       var sheet = document.createElement('div'); sheet.className = 'sheet';
       rest.forEach(function (e) { sheet.appendChild(e); }); app.appendChild(sheet);
+      SHEET_BG = bg; syncBg();
     }
   }
   var tc = document.querySelector('meta[name=theme-color]'); if (tc) tc.setAttribute('content', bg === '#F6F6F1' ? '#5EC6FF' : bg);
