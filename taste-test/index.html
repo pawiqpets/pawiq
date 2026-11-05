@@ -19,7 +19,7 @@
 :root{--ink:#00080B;--paper:#F6F6F1;--blue:#5EC6FF;--green:#4FD6A5;--grey:#3D4245;--line:#C9CCCF}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Satoshi,"Open Sans",system-ui,sans-serif;-webkit-text-size-adjust:100%}
-body{min-height:100vh}
+body{min-height:100vh;overflow-x:hidden}
 #app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--paper)}
 a{color:var(--ink)}
 .top{padding:20px 24px 26px;display:flex;flex-direction:column;gap:10px;border-bottom:2px solid var(--ink)}
@@ -83,7 +83,8 @@ td{padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
 .noteWrap{padding:0 24px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .onblue{margin-top:auto;padding:0 0 4px}
 .full .top{border-bottom:0;flex:1}
-.sheet{background:#F6F6F1;border-radius:28px 28px 0 0;border-top:2px solid var(--ink);margin-top:auto;display:flex;flex-direction:column;padding-top:8px}
+.sheet{position:relative;isolation:isolate;margin-top:auto;display:flex;flex-direction:column;padding-top:8px}
+.sheet::before{content:'';position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:#F6F6F1;border-top:2px solid var(--ink);border-radius:28px 28px 0 0}
 .daybig{font-family:Thunder,Satoshi,sans-serif;font-weight:700;text-transform:uppercase;font-size:40px;line-height:.9}
 @media (max-width:360px){h1{font-size:54px}h1.xl{font-size:64px}h2{font-size:34px}.tile{height:150px;font-size:88px}}
 </style>
@@ -383,8 +384,9 @@ function home() {
 
 function notPicked() {
   paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);min-height:60vh;justify-content:flex-end;gap:16px">' + logo() +
-    '<h1 class="xl" style="margin-top:auto">Thanks, ' + dog() + '!</h1>' +
-    '<p class="lead">You\'re signed up. We\'ll be in touch soon.</p></section><div class="foot"></div>');
+    '<p class="eyebrow">Not picked yet</p><h1 class="xl">Hang tight, ' + dog() + '.</h1>' +
+    '<p class="lead">We\'re still choosing dogs for this test, aiming for a mix of sizes and ages. If ' + dog() + ' is picked, we\'ll message you and this link becomes the daily check-in. If not, thank you for wanting to help. It means a lot.</p></section>' +
+    '<div class="foot"><p class="muted">Questions? ' + CONFIG.contactEmail + '</p></div>');
 }
 
 function credential() {
@@ -483,14 +485,15 @@ function logged(day) {
 }
 
 function survey() {
-  var t = T();
+  var t = T(), a = S.ans;
   function q(g) { return '<div class="grid3">' + btn(g, 'A', 'A') + btn(g, 'B', 'B') + btn(g, "Couldn't tell", 'No difference') + '</div>'; }
-  paint('<section class="top" style="background:var(--blue)">' + logo() + '<h1 style="margin-top:22px">Last bit, we promise.</h1><p class="lead">4 quick ones about the whole ' + total() + ' days.</p></section>' +
-    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker · ' + esc(t.r1Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('yellow') + '</div>' +
-    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r2Sticker) + ' sticker · ' + esc(t.r2Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('green') + '</div>' +
-    '<div class="sec"><h3>Would you buy these for ' + dog() + '?</h3><div class="grid3">' + btn('buy', 'Yes', 'Yes') + btn('buy', 'Maybe', 'Maybe') + btn('buy', 'No', 'No') + '</div></div>' +
+  function buy(g, formula) { return '<h3 style="margin-top:8px">Would you buy ' + esc(formula) + ' chews for ' + dog() + '?</h3><div class="grid3">' + btn(g, 'Yes', 'Yes') + btn(g, 'Maybe', 'Maybe') + btn(g, 'No', 'No') + '</div>'; }
+  var yes = a.problems === 'Yes';
+  paint('<section class="top" style="background:var(--blue)">' + logo() + '<h1 style="margin-top:22px">Last bit, we promise.</h1><p class="lead">A few quick ones about the whole ' + total() + ' days.</p></section>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker<br>' + esc(t.r1Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('yellow') + (a.yellow ? buy('buy', t.r1Formula) : '') + '</div>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r2Sticker) + ' sticker<br>' + esc(t.r2Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('green') + (a.green ? buy('buy2', t.r2Formula) : '') + '</div>' +
     '<div class="sec"><h3>Any problems at all with ' + dog() + ' over the ' + total() + ' days?</h3><div class="grid2">' + btn('problems', 'No', 'No') + btn('problems', 'Yes', 'Yes, I\'ll say below') + '</div></div>' +
-    '<div class="sec"><label class="f" for="fnotes">Anything else? (optional)</label><textarea id="fnotes" maxlength="1000">' + esc(S.ans.fnotes || '') + '</textarea></div>' +
+    '<div class="sec"><label class="f" for="fnotes">' + (yes ? 'What happened? (required)' : 'Anything else? (optional)') + '</label><textarea id="fnotes" maxlength="1000"' + (yes ? ' placeholder="Tell us what happened so we can help"' : '') + '>' + esc(a.fnotes || '') + '</textarea></div>' +
     '<div class="foot">' + errBox() + '<button class="cta" id="submitFinal">Send</button>' + lateLink(currentDay()) + '</div>');
 }
 
@@ -628,8 +631,9 @@ app.addEventListener('click', function (e) {
   }
   if (el.id === 'submitFinal') {
     var s = S.ans; s.fnotes = document.getElementById('fnotes').value;
-    if (!s.yellow || !s.green || !s.buy || !s.problems) { S.err = 'Answer the first 4. The last box is optional.'; S.keep = true; return survey(); }
-    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
+    if (!s.yellow || !s.green || !s.buy || !s.buy2 || !s.problems) { S.err = 'Please answer every question above. The box at the bottom is optional.'; S.keep = true; return survey(); }
+    if (s.problems === 'Yes' && !s.fnotes.trim()) { S.err = 'Please tell us what happened in the box, so we can help.'; S.keep = true; return survey(); }
+    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
   }
   if (el.id === 'submitEmail') {
     var em = document.getElementById('email').value.trim(), ok = document.getElementById('consent').checked;
