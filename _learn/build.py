@@ -211,9 +211,15 @@ def render_post(p, date, review_html="", others=()):
 {review_html}""" + FOOT
 
 
+DIGESTIVE_SYMPTOMS = re.compile(r"\b(stool|poop|diarrh\w*|vomit\w*|stomach upset|upset stomach|upset (?:your|a|the) (?:dog's )?stomach|gurgl\w*|constipat\w*|gas|bloat\w*)\b", re.I)
+
+
 def related(p, others):
     """Up to 3 related posts: same hub, then neighbouring hubs, then newest. Evergreen posts never show seasonal ones."""
     pool = [x for x in others if not (p.get("hub") != "Seasonal care" and x[0].get("hub") == "Seasonal care")]
+    # Never show a gut-health card on a post that discusses digestive symptoms (Roger, Nov 5, 2026).
+    if p.get("hub") != "Gut health" and DIGESTIVE_SYMPTOMS.search(re.sub(r"<[^>]+>", " ", p.get("body", ""))):
+        pool = [x for x in pool if x[0].get("hub") != "Gut health"]
     hub = p.get("hub")
     order = [hub] + NEIGHBOURS.get(hub, []) if hub else []
     picks = []
