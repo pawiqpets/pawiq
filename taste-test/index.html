@@ -24,7 +24,7 @@ body{min-height:100vh;overflow-x:hidden}
 a{color:var(--ink)}
 .top{padding:20px 24px 26px;display:flex;flex-direction:column;gap:10px;border-bottom:2px solid var(--ink)}
 .bar{display:flex;justify-content:space-between;align-items:center;min-height:28px}
-.logo{height:24px;width:auto;display:block}
+.logo{height:24px;width:auto;display:block;align-self:flex-start}
 .eyebrow{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0}
 h1,h2,.display{font-family:Thunder,Satoshi,sans-serif;font-weight:700;text-transform:uppercase;line-height:.86;margin:0}
 h1{font-size:64px}
@@ -418,12 +418,10 @@ function credential() {
     '<h1 class="xl" style="margin-top:28px">' + dog() + ' is in!</h1><p class="lead">Thank you both. ' + when + '</p></section>' +
     '<div class="sec"><h3>' + poss(dog()) + ' daily link</h3><div class="keybox">' + esc(myLink().replace(/^https?:\/\//, '')) + '</div>' +
     '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p></div>' +
-    '<div class="sec"><h3>Start date and reminder</h3><p>Tell us the day you want to start. If you want a daily reminder, also pick a time and we\'ll add it to your calendar.</p>' +
+    '<div class="sec"><h3>Start date and reminder</h3><p>' + (IOS_CHROME ? 'Tell us the day you want to start.' : 'Tell us the day you want to start. If you want a daily reminder, also pick a time and we\'ll add it to your calendar.') + '</p>' +
     '<label class="f" for="startDate">Start date<select id="startDate"><option value="">Pick a day</option>' + startOptions(today, val) + '</select></label>' +
-    '<label class="f" for="remindTime">Reminder time (optional)<select id="remindTime"><option value="">No reminder</option>' + remindOptions() + '</select></label>' + errBox() + '</div>' +
-    (S.remind && d.start ? (IOS_CHROME
-      ? '<div class="sec"><a class="cta" href="' + esc(gcalLink(S.remind)) + '" target="_blank" rel="noopener">Add the daily reminder to your calendar</a><p class="muted">Chrome on iPhone can\'t open calendar files. This opens Google Calendar instead. Safari adds it straight to Apple Calendar.</p></div>'
-      : '<div class="sec"><p class="muted">Reminder made. If your phone asked you to save a file, tap Save, then open the file to add it to your calendar. Or <a href="' + esc(gcalLink(S.remind)) + '" target="_blank" rel="noopener">add it to Google Calendar instead</a>.</p></div>') : '') +
+    (IOS_CHROME ? '' : '<label class="f" for="remindTime">Reminder time (optional)<select id="remindTime"><option value="">No reminder</option>' + remindOptions() + '</select></label>') + errBox() + '</div>' +
+    (S.remind && d.start ? '<div class="sec"><p class="muted">Reminder made. If your phone asked you to save a file, tap Save, then open the file to add it to your calendar.</p></div>' : '') +
     '<div class="foot"><button class="cta" id="setStart">' + (d.start ? 'Update start date' : 'Set start date') + '</button><button class="cta ghost" id="copy">Copy the link</button></div>');
 }
 
@@ -649,14 +647,14 @@ app.addEventListener('click', function (e) {
   if (el.id === 'gotSwitch') { store('switch_' + S.k, true); return dailyLog(currentDay(), false); }
   if (el.id === 'copy') { (navigator.clipboard ? navigator.clipboard.writeText(myLink()) : Promise.reject()).then(function () { el.textContent = 'Copied'; }, function () { prompt('Copy this link', myLink()); }); return; }
   if (el.id === 'setStart') {
-    var sd = document.getElementById('startDate').value, rt = document.getElementById('remindTime').value, td = todayPT();
+    var sd = document.getElementById('startDate').value, rt = (document.getElementById('remindTime') || {}).value || '', td = todayPT();
     if (!sd) { S.err = 'Pick your start date first.'; return credential(); }
     if (dayDiff(sd, td) < 0) { S.err = 'The start date can\'t be in the past.'; return credential(); }
     if (dayDiff(sd, td) > 7) { S.err = 'Pick a day within the next 7 days.'; return credential(); }
     return save({ action: 'start', k: S.k, start: sd }, el, function () {
       S.data.dog.start = sd; S.err = '';
-      if (rt) { if (IOS_CHROME) S.remind = rt; else downloadIcs(rt); }
-      if (dayDiff(sd, td) === 0 && !(rt && IOS_CHROME)) return home();
+      if (rt) downloadIcs(rt);
+      if (dayDiff(sd, td) === 0) return home();
       credential();
     });
   }
