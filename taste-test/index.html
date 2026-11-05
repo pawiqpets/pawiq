@@ -59,6 +59,11 @@ textarea{resize:vertical;min-height:96px}
 input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .tick{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;font-weight:500;border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px}
 .tick input{width:22px;height:22px;flex:none;margin:1px 0 0;accent-color:var(--ink)}
+.photo-prev{display:block;width:100%;max-height:280px;object-fit:cover;border-radius:14px;border:2px solid var(--ink)}
+.pfile{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.consent{border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;font-size:14px;line-height:1.5;display:flex;flex-direction:column;gap:8px}
+.consent b{font-size:12px;letter-spacing:.14em}
+.consent p{margin:0}
 .foot{margin-top:auto;padding:28px 24px 32px;display:flex;flex-direction:column;gap:8px}
 .err{background:#FFE1E1;border:2px solid var(--ink);border-radius:12px;padding:10px 14px;font-size:15px;font-weight:700}
 .muted{color:var(--grey);font-size:14px}
@@ -517,6 +522,67 @@ function logged(day) {
     '<div class="foot">' + nextDogBtn() + lateLink(currentDay()) + '<button class="link" data-fix="' + day + '">Oops, fix today\'s answer</button></div>');
 }
 
+var PHOTO_CONSENT_V = 'v1-2026-11-05';
+var PHOTO_CONSENT = [
+  'I give Pawz Best Group Inc. (pawIQ) permission to use the photo I am uploading, which shows me and my dog, in its website, social media, advertising, packaging and other marketing, in any format, without payment or review.',
+  'I confirm that I took or own the photo, that every person in it is an adult, and that each has agreed to this use.',
+  'I understand this permission is optional and does not affect my taste test. I can withdraw it at any time by emailing roger.chan@pawiqpets.com. pawIQ will stop any new use, but cannot recall material already published.'
+];
+function photoBlock() {
+  var a = S.ans, nm = dog();
+  var head = '<h3>A photo of you and ' + nm + ' (optional)</h3><p style="margin:0;font-size:15px;line-height:1.45">We\'re putting together a collage of our testing troop. Add one if you\'d like to be in it.</p>';
+  if (!S.photo) return '<div class="sec">' + head + '<label class="cta ghost" for="photoFile" style="cursor:pointer">Add a photo</label><input type="file" class="pfile" id="photoFile" accept="image/*">' + (S.photoErr ? '<div class="err" role="alert">' + esc(S.photoErr) + '</div>' : '') + '</div>';
+  return '<div class="sec">' + head + '<img class="photo-prev" src="' + S.photo + '" alt="Your photo">' +
+    '<button type="button" class="link" data-photo="remove" style="align-self:flex-start">Remove photo</button>' +
+    '<div class="consent"><b>PHOTO CONSENT</b>' + PHOTO_CONSENT.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>' +
+    '<label class="tick"><input type="checkbox" id="photoConsent"' + (a.photoConsent ? ' checked' : '') + '>I have read and agree to the Photo Consent above.</label></div>';
+}
+var PHOTO_MAX = 40 * 1024 * 1024; // biggest file we will accept from the phone
+var PHOTO_CAP = 6 * 1024 * 1024;  // what we upload: original if 6 MB or less, otherwise shrunk to fit
+function readPhoto(file, done) {
+  var r = new FileReader();
+  r.onload = function () { done(r.result); };
+  r.onerror = function () { done(null); };
+  r.readAsDataURL(file);
+}
+// original untouched when it already fits; otherwise re-encode as JPEG, stepping size and quality down until it is under the cap
+function preparePhoto(file, done) {
+  if (file.size <= PHOTO_CAP) return readPhoto(file, done);
+  var url = URL.createObjectURL(file), img = new Image();
+  img.onerror = function () { URL.revokeObjectURL(url); done(null); };
+  img.onload = function () {
+    var w = img.naturalWidth, h = img.naturalHeight, sc = Math.min(1, 4096 / Math.max(w, h)), q = 0.9, tries = 0;
+    (function attempt() {
+      var c = document.createElement('canvas'); c.width = Math.round(w * sc); c.height = Math.round(h * sc);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(function (blob) {
+        if (!blob) { URL.revokeObjectURL(url); return done(null); }
+        if (blob.size > PHOTO_CAP && tries++ < 10) { sc *= 0.85; q = Math.max(0.75, q - 0.03); return attempt(); }
+        URL.revokeObjectURL(url);
+        if (blob.size > PHOTO_CAP) return done(null);
+        readPhoto(blob, done);
+      }, 'image/jpeg', q);
+    })();
+  };
+  img.src = url;
+}
+function grabFinal() {
+  var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
+  ['why', 'why2'].forEach(function (id) { var e2 = document.getElementById(id); if (e2) S.ans[id] = e2.value; });
+  var pc = document.getElementById('photoConsent'); if (pc) S.ans.photoConsent = pc.checked;
+}
+app.addEventListener('change', function (e) {
+  var f = e.target;
+  if (!f || f.id !== 'photoFile' || !f.files || !f.files[0]) return;
+  var file = f.files[0]; grabFinal(); S.photoErr = '';
+  if (!/^image\//.test(file.type || 'image/')) S.photoErr = 'Please pick a photo.';
+  else if (file.size > PHOTO_MAX) S.photoErr = 'That photo is too large. Please pick a smaller one.';
+  if (S.photoErr) { S.keep = true; return survey(); }
+  if (S.photoUrl) URL.revokeObjectURL(S.photoUrl);
+  S.photoFile = file; S.photoUrl = URL.createObjectURL(file); S.photo = S.photoUrl; S.photoSaved = false; S.ans.photoConsent = false;
+  S.err = ''; S.keep = true; survey();
+});
+
 function survey() {
   var t = T(), a = S.ans;
   function q(g) { return '<div class="grid3">' + btn(g, 'A', 'A') + btn(g, 'B', 'B') + btn(g, "Couldn't tell", 'No difference') + '</div>'; }
@@ -526,7 +592,7 @@ function survey() {
     '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker<br>' + esc(t.r1Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('yellow') + buy('buy', t.r1Formula) + '</div>' +
     '<div class="sec"><div class="card" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r2Sticker) + ' sticker<br>' + esc(t.r2Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('green') + buy('buy2', t.r2Formula) + '</div>' +
     '<div class="sec"><h3>Any problems at all with ' + dog() + ' during the test?</h3><div class="grid2">' + btn('problems', 'No', 'No') + btn('problems', 'Yes', 'Yes, I\'ll say below') + '</div></div>' +
-    '<div class="sec"><label class="f" for="fnotes">' + (yes ? 'What happened? (required)' : 'Anything else? (optional)') + '</label><textarea id="fnotes" maxlength="1000"' + (yes ? ' placeholder="Tell us what happened so we can help"' : '') + '>' + esc(a.fnotes || '') + '</textarea></div>' +
+    '<div class="sec"><label class="f" for="fnotes">' + (yes ? 'What happened? (required)' : 'Anything else? (optional)') + '</label><textarea id="fnotes" maxlength="1000"' + (yes ? ' placeholder="Tell us what happened so we can help"' : '') + '>' + esc(a.fnotes || '') + '</textarea></div>' + photoBlock() +
     '<div class="foot">' + errBox() + '<button class="cta" id="submitFinal">Send</button>' + lateLink(currentDay()) + '</div>');
 }
 
@@ -616,10 +682,12 @@ app.addEventListener('click', function (e) {
     S.ans.healthList = L; S.ans.health = L.join('; '); S.err = ''; S.keep = true;
     return dailyLog(S.logDay, S.late);
   }
+  if (el.dataset.photo === 'remove') { grabFinal(); if (S.photoUrl) URL.revokeObjectURL(S.photoUrl); S.photo = S.photoFile = S.photoUrl = null; S.photoSaved = false; S.ans.photoConsent = false; S.photoErr = ''; S.keep = true; return survey(); }
   if (el.dataset.g) { // single-choice buttons
     var notes = document.getElementById('notes'); if (notes) S.ans.notes = notes.value;
     var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
     ['why', 'why2'].forEach(function (id) { var el2 = document.getElementById(id); if (el2) S.ans[id] = el2.value; });
+    var pc0 = document.getElementById('photoConsent'); if (pc0) S.ans.photoConsent = pc0.checked;
     grabReg(); S.err = ''; S.keep = true;
     S.ans[el.dataset.g] = el.dataset.v;
     if (el.dataset.g === 'fussy') S.reg.fussy = el.dataset.v;
@@ -699,11 +767,25 @@ app.addEventListener('click', function (e) {
     });
   }
   if (el.id === 'submitFinal') {
-    var s = S.ans; s.fnotes = document.getElementById('fnotes').value;
-    ['why', 'why2'].forEach(function (id) { var el2 = document.getElementById(id); if (el2) s[id] = el2.value; });
+    var s = S.ans; grabFinal();
     if (!s.yellow || !s.green || !s.buy || !s.buy2 || !s.problems) { S.err = 'Please answer every question above.'; S.keep = true; return survey(); }
     if (s.problems === 'Yes' && !s.fnotes.trim()) { S.err = 'Please tell us what happened in the box, so we can help.'; S.keep = true; return survey(); }
-    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, why: (s.buy === 'Yes' ? '' : s.why || ''), why2: (s.buy2 === 'Yes' ? '' : s.why2 || ''), problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
+    if (S.photo && !s.photoConsent) { S.err = 'Tick the photo consent, or tap Remove photo.'; S.keep = true; return survey(); }
+    var sendFinal = function () {
+      save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, why: (s.buy === 'Yes' ? '' : s.why || ''), why2: (s.buy2 === 'Yes' ? '' : s.why2 || ''), problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; S.photo = S.photoFile = S.photoUrl = null; S.photoSaved = false; thankYou(); });
+    };
+    if (!S.photo || S.photoSaved) return sendFinal();
+    el.disabled = true; el.textContent = 'Uploading photo…'; S.err = '';
+    return preparePhoto(S.photoFile, function (data) {
+      if (!data) { S.err = "That photo couldn't be read. Tap Remove photo and pick it again."; S.keep = true; return survey(); }
+      apiPost({ action: 'photo', k: S.k, photo: data, consent: true, consentVersion: PHOTO_CONSENT_V, consentText: PHOTO_CONSENT.join(' ') }).then(function (r) {
+        if (!r || !r.ok) throw new Error(r && r.error);
+        S.photoSaved = true; sendFinal();
+      }).catch(function () {
+        S.err = "The photo didn't upload. Check your signal and tap Send again, or tap Remove photo. Your answers are still here.";
+        S.keep = true; survey();
+      });
+    });
   }
   if (el.id === 'submitEmail') {
     var em = document.getElementById('email').value.trim(), ok = document.getElementById('consent').checked;
