@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#5EC6FF">
+<title>pawIQ Taste Test</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+@font-face{font-family:Thunder;src:url(../assets/thunder-bold.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:Caveat;src:url(../assets/caveat.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:Satoshi;src:url(../assets/satoshi-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Satoshi;src:url(../assets/satoshi-500.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:Satoshi;src:url(../assets/satoshi-700.woff2) format("woff2");font-weight:700;font-display:swap}
+:root{--ink:#00080B;--paper:#F6F6F1;--blue:#5EC6FF;--green:#4FD6A5;--grey:#3D4245;--line:#C9CCCF}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Satoshi,"Open Sans",system-ui,sans-serif;-webkit-text-size-adjust:100%}
+body{min-height:100vh;min-height:100svh;overflow-x:hidden}
+#app{max-width:480px;margin:0 auto;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;background:var(--paper)}
+a{color:var(--ink)}
+.top{padding:20px 24px 26px;display:flex;flex-direction:column;gap:10px;border-bottom:2px solid var(--ink)}
+.bar{display:flex;justify-content:space-between;align-items:center;min-height:28px}
+.logo{height:24px;width:auto;display:block;align-self:flex-start}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0}
+h1,h2,.display{font-family:Thunder,Satoshi,sans-serif;font-weight:700;text-transform:uppercase;line-height:.86;margin:0}
+h1{font-size:64px}
+h1.xl{font-size:76px}
+h2{font-size:38px;line-height:.9}
+h3{font-size:18px;font-weight:700;margin:0}
+p{margin:0;line-height:1.5}
+.lead{font-size:18px;font-weight:500}
+.sec{padding:24px 24px 0;display:flex;flex-direction:column;gap:12px}
+.stack{display:flex;flex-direction:column;gap:8px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wrap{display:flex;flex-wrap:wrap;gap:8px}
+button{font-family:inherit;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opt{min-height:52px;border:2px solid var(--ink);border-radius:14px;background:#fff;font-size:16px;font-weight:700;padding:0 16px}
+.opt.left{text-align:left}
+.opt.pill{border-radius:999px;min-height:48px;font-size:15px}
+.opt[aria-pressed=true]{background:var(--ink);color:#fff}
+.tl{display:block;font-family:Satoshi,sans-serif;font-weight:700;font-size:16px;letter-spacing:.14em;text-transform:uppercase;line-height:1;margin-top:6px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;height:170px;border:2px solid var(--ink);border-radius:20px;background:#fff;font-family:Thunder,Satoshi,sans-serif;font-weight:700;font-size:104px;line-height:.95;padding:0}
+.tile[aria-pressed=true]{background:var(--ink);color:#fff}
+.dash{border-style:dashed;background:transparent}
+.cta{display:flex;justify-content:center;align-items:center;min-height:60px;border-radius:999px;background:var(--ink);color:#fff;font-size:17px;font-weight:700;text-decoration:none;border:0;width:100%}
+.cta[disabled]{opacity:.35;cursor:not-allowed}
+.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.link{background:none;border:0;font-size:14px;font-weight:700;text-decoration:underline;min-height:44px;padding:0 4px}
+.back{background:none;border:0;font-size:15px;font-weight:700;padding:0;min-height:44px}
+label.f{font-size:16px;font-weight:700;display:flex;flex-direction:column;gap:8px}
+input[type=text],input[type=tel],input[type=email],input[type=number],input[type=date],textarea,select{font-family:inherit;font-size:17px;color:var(--ink);border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;width:100%}
+select{appearance:auto;height:56px;line-height:normal;padding-top:0;padding-bottom:0}
+textarea{resize:vertical;min-height:96px}
+input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.tick{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;font-weight:500;border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px}
+.tick input{width:22px;height:22px;flex:none;margin:1px 0 0;accent-color:var(--ink)}
+.photo-prev{display:block;width:100%;max-height:280px;object-fit:cover;border-radius:14px;border:2px solid var(--ink)}
+.pfile{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.consent{border:2px solid var(--ink);border-radius:14px;background:#fff;padding:14px 16px;font-size:14px;line-height:1.5;display:flex;flex-direction:column;gap:8px}
+.consent b{font-size:12px;letter-spacing:.14em}
+.consent p{margin:0}
+.foot{margin-top:auto;padding:28px 24px 32px;display:flex;flex-direction:column;gap:8px}
+.err{background:#FFE1E1;border:2px solid var(--ink);border-radius:12px;padding:10px 14px;font-size:15px;font-weight:700}
+.muted{color:var(--grey);font-size:14px}
+.step{display:flex;gap:16px;align-items:flex-start;border-top:2px solid var(--ink);padding-top:14px}
+.step .n{font-family:Thunder,Satoshi,sans-serif;font-size:56px;line-height:.8;min-width:44px}
+.card{border:2px solid var(--ink);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.dots{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.dot{width:22px;height:22px;border-radius:999px;border:2px solid var(--ink);background:#fff}
+.dot.now{border-width:4px}
+.keybox{font-size:14px;font-weight:700;word-break:break-all;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:12px 14px}
+.sw{display:flex;align-items:center;gap:12px}
+.sw .chip{flex:1;border:2px solid var(--ink);border-radius:14px;padding:14px;font-weight:700;font-size:14px}
+.demo{background:var(--ink);color:#fff;font-size:12px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;position:sticky;top:0;z-index:5}
+.demo a{color:#fff;font-weight:700;background:#ffffff22;border-radius:999px;padding:4px 10px;text-decoration:none}
+table{border-collapse:collapse;width:100%}
+td{padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.spin{padding:80px 24px;text-align:center;font-weight:700}
+.dogchip{align-self:flex-start;background:var(--ink);color:#fff;border-radius:999px;padding:6px 16px;font-size:17px;margin-top:4px}
+.sh{display:inline-block;transform:rotate(-2.5deg);font-family:Caveat,"Segoe Print","Bradley Hand",cursive;font-weight:600;font-size:30px;line-height:1.1;margin:0;color:var(--ink);white-space:nowrap}
+.doodle{display:block;width:100%;max-width:250px;height:auto;margin:0 auto}
+.doodle text{font-family:Caveat,"Segoe Print","Bradley Hand",cursive;font-weight:600;fill:var(--ink)}
+.note{transform:rotate(-1.5deg);display:inline-block;font-family:Caveat,"Segoe Print","Bradley Hand",cursive;font-weight:600;font-size:28px;line-height:1.1;color:var(--ink);padding:0 4px;margin:0;text-align:center}
+.noteWrap{padding:0 24px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.onblue{margin-top:auto;padding:0 0 4px}
+.full .top{border-bottom:0;flex:1}
+.sheet{position:relative;isolation:isolate;margin-top:auto;display:flex;flex-direction:column;padding-top:8px;padding-bottom:env(safe-area-inset-bottom)}
+.sheet::before{content:'';position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:#F6F6F1;border-top:2px solid var(--ink);border-radius:28px 28px 0 0}
+.daybig{font-family:Thunder,Satoshi,sans-serif;font-weight:700;text-transform:uppercase;font-size:40px;line-height:.9}
+@media (max-width:360px){h1{font-size:54px}h1.xl{font-size:64px}h2{font-size:34px}.tile{height:150px;font-size:88px}}
+</style>
+</head>
+<body>
+<div id="app"><div class="spin">Loading…</div></div>
+<script>
+/* ============ CONFIG: the only thing to change per test ============ */
+var CONFIG = {
+  // Paste the Apps Script web app URL here (ends in /exec). Leave empty to run the page in demo mode.
+  scriptUrl: 'https://script.google.com/macros/s/AKfycbylFzksOQ4T0iZTxQ4tBfSpxeyExiIYoerQzaWdzSR8lC2zLDWW30plH1OMtOPri-qEMg/exec',
+  contactEmail: 'hello@pawiqpets.com',
+  reminderTime: '17:00'   // daily calendar reminder, local time
+};
+/* =================================================================== */
+
+var TZ = 'America/Vancouver';
+var COLORS = { Blue: '#5EC6FF', Green: '#4FD6A5' };
+var Q = new URLSearchParams(location.search);
+// Preview shortcuts use plain #names (e.g. #day-3) so they also work where query strings are dropped.
+var HASHES = { picked: 'k=demo&nostart=1', notpicked: 'k=demo&picked=0', survey: 'k=demo&day=11' };
+var hm = location.hash.slice(1);
+if (!CONFIG.scriptUrl && hm) Q = new URLSearchParams(HASHES[hm] || (/^day-\d+$/.test(hm) ? 'k=demo&day=' + hm.slice(4) : ''));
+window.addEventListener('hashchange', function () { if (!CONFIG.scriptUrl) location.reload(); });
+var DEMO = !CONFIG.scriptUrl || Q.get('demo') === '1';
+var app = document.getElementById('app');
+var S = { k: Q.get('k') || '', reg: { flags: [] }, ans: {}, data: null, err: '' };
+
+/* ---------- small helpers ---------- */
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function poss(n) { return /s$/i.test(n) ? n + "'" : n + "'s"; }
+function todayPT() { return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+function addDays(iso, n) { var d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+function dayDiff(a, b) { return Math.round((Date.parse(a + 'T12:00:00Z') - Date.parse(b + 'T12:00:00Z')) / 864e5); }
+function niceDate(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }); }
+function shortDate(iso) { return new Date(iso + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }); }
+function hash(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+function store(key, val) { try { if (val === undefined) return JSON.parse(localStorage.getItem('pq_' + key)); localStorage.setItem('pq_' + key, JSON.stringify(val)); } catch (e) { return null; } }
+function myLink() { return location.origin + location.pathname + '?k=' + encodeURIComponent(S.k); }
+function logo() { return '<img class="logo" src="../assets/logo.svg" alt="pawIQ">'; }
+function btn(group, val, label, cls, sub) {
+  var on = S.ans[group] === val;
+  return '<button type="button" class="' + (cls || 'opt') + '" aria-pressed="' + on + '" data-g="' + group + '" data-v="' + esc(val) + '">' + esc(label) + (sub ? '<span class="tl">' + esc(sub) + '</span>' : '') + '</button>';
+}
+function errBox() { return S.err ? '<div class="err" role="alert">' + esc(S.err) + '</div>' : ''; }
+/* Pages with a grey sheet at the bottom: the area past the page bottom (rubber-band scroll, behind the iPhone toolbar) shows the html colour, so it is grey; the top overscroll stays blue. */
+var SHEET_BG = null;
+function syncBg() { if (!SHEET_BG) return; document.documentElement.style.background = window.scrollY < 0 ? SHEET_BG : '#F6F6F1'; }
+window.addEventListener('scroll', syncBg, { passive: true });
+function paint(html, noSwitch) {
+  if (!noSwitch && S.k && S.hh && S.hh.length > 1) html += '<div class="foot" style="padding-top:0"><button class="link" data-go="picker">Back to both dogs</button></div>';
+  var keep = S.keep, y = window.scrollY, bg = S.bg || '#F6F6F1';
+  S.keep = false; S.bg = null;
+  app.innerHTML = demoBar() + html;
+  app.style.background = bg; document.body.style.background = bg; document.documentElement.style.background = bg; SHEET_BG = null;
+  app.className = bg === '#F6F6F1' ? '' : 'full';
+  if (bg !== '#F6F6F1') {
+    var kids = [].slice.call(app.children).filter(function (e) { return !e.classList.contains('demo'); }), rest = kids.slice(1);
+    if (rest.some(function (e) { return e.textContent.trim() || e.querySelector('button,input,a'); })) {
+      var sheet = document.createElement('div'); sheet.className = 'sheet';
+      rest.forEach(function (e) { sheet.appendChild(e); }); app.appendChild(sheet);
+      SHEET_BG = bg; app.style.background = '#F6F6F1'; document.body.style.background = '#F6F6F1'; syncBg();
+    }
+  }
+  var tc = document.querySelector('meta[name=theme-color]'); if (tc) tc.setAttribute('content', bg === '#F6F6F1' ? '#5EC6FF' : bg);
+  if (keep) window.scrollTo(0, y); else { window.scrollTo(0, 0); var f = app.querySelector('[autofocus]'); if (f) f.focus(); }
+}
+function paintFull(color, html, noSwitch) { S.bg = color; paint(html, noSwitch); }
+
+/* ---------- hand-drawn touches ---------- */
+function bowl(note1, note2) {
+  return '<div class="onblue"><svg class="doodle" viewBox="0 12 340 193" role="img" aria-label="Hand-drawn dog bowl with two chews, A and B">' +
+    '<g transform="translate(0 16)"><ellipse cx="170" cy="172" rx="96" ry="7" fill="#00080B" opacity=".12"/>' +
+    '<g stroke="#00080B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M62 108 C64 148 102 166 170 166 C238 166 276 148 278 108 Z" fill="#F6F6F1"/>' +
+    '<path d="M120 166 C122 172 218 172 220 166" fill="#F6F6F1"/>' +
+    '<ellipse cx="170" cy="108" rx="108" ry="32" fill="#F6F6F1"/>' +
+    '<ellipse cx="170" cy="110" rx="93" ry="24" fill="#D8D2C4"/>' +
+    '<g transform="translate(138 122)"><path d="M-20 -30 V0 A20 7 0 0 0 20 0 V-30 Z" fill="#8A5A2E"/><ellipse cx="0" cy="-30" rx="20" ry="7" fill="#B07A44"/><g fill="#5E3A1B" stroke="none"><circle cx="-12" cy="-20" r="1.7"/><circle cx="12" cy="-12" r="1.7"/><circle cx="-12" cy="-4" r="1.7"/></g></g>' +
+    '<g transform="translate(204 126)"><path d="M-20 -30 V0 A20 7 0 0 0 20 0 V-30 Z" fill="#8A5A2E"/><ellipse cx="0" cy="-30" rx="20" ry="7" fill="#B07A44"/><g fill="#5E3A1B" stroke="none"><circle cx="13" cy="-20" r="1.7"/><circle cx="-12" cy="-13" r="1.7"/><circle cx="12" cy="-4" r="1.7"/></g></g>' +
+    '</g>' +
+    '<text x="138" y="118" font-size="24" text-anchor="middle" style="fill:#F6F6F1">A</text><text x="204" y="122" font-size="24" text-anchor="middle" style="fill:#F6F6F1">B</text></g>' +
+    '<g fill="none" stroke="#5EC6FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="stroke:#00080B">' +
+    '<path d="M250 52 C292 50 306 76 288 100"/><path d="M282 88 L289 101 L299 91"/></g>' +
+    '<g transform="rotate(-2.5 12 40)"><text x="12" y="40" font-size="30">' + esc(note1) + '</text>' + (note2 ? '<text x="12" y="68" font-size="30">' + esc(note2) + '</text>' : '') + '</g></svg></div>';
+}
+function handNote(t) { return '<div class="noteWrap"><p class="note">' + esc(t) + '</p></div>'; }
+function arrowDown() { return '<svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true" style="display:block;margin:-2px auto 0"><g fill="none" stroke="#00080B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 C24 8 32 16 30 30"/><path d="M21 24 L30 33 L38 22"/></g></svg>'; }
+/* he/she, with a neutral fallback for entries that have no gender yet */
+function pr(he, she, they) { var g = (S.data && S.data.dog.gender) || S.reg.gender; return g === 'Boy' ? he : g === 'Girl' ? she : (they || he); }
+
+/* ---------- backend ---------- */
+var demoDb = {
+  get: function () {
+    var day = Number(Q.get('day') || 3), isSib = S.k === 'demoSibKey000001';
+    // demo: ?day=N means days 1..N-1 are already logged (Juno is 2 days behind Bubbles)
+    function prog(sib) { var n = Math.max(0, sib ? day - 3 : day - 1), a = []; for (var i = 1; i <= n; i++) a.push(i); return a; }
+    function startOf(sib) { return Q.get('nostart') === '1' ? '' : Q.get('future') === '1' ? addDays(todayPT(), 2) : addDays(todayPT(), -prog(sib).length); }
+    var db = store('demo_' + S.k + day) || { logged: [], last: '', finalDone: false, emailDone: false };
+    var base = prog(isSib), logged = base.slice(), yest = addDays(todayPT(), -1);
+    db.logged.forEach(function (x) { if (logged.indexOf(x) < 0) logged.push(x); });
+    var picked = Q.get('picked') !== '0', other = prog(!isSib);
+    return { ok: true, dog: { name: isSib ? 'Juno' : 'Bubbles', owner: 'Sam', gender: Q.get('g') === 'boy' ? 'Boy' : 'Girl', picked: picked, start: (db.start && !isSib) ? db.start : startOf(isSib), lastDate: db.last || (base.length ? yest : ''), finalDone: db.finalDone, emailDone: db.emailDone },
+      test: { daysPerRound: 5, r1Sticker: 'Blue', r1Formula: 'Skin & Immune', r2Sticker: 'Green', r2Formula: 'Gut Health', rogerPhone: '6045550101', edPhone: '6045550102' },
+      logged: logged, siblings: Q.get('sib') === '1' ? [{ key: isSib ? 'demoKey123456789' : 'demoSibKey000001', name: isSib ? 'Bubbles' : 'Juno', picked: true, start: startOf(!isSib), finalDone: false, logged: other, lastDate: other.length ? yest : '' }] : [] };
+  },
+  post: function (p) {
+    var day = Number(Q.get('day') || 3), db = store('demo_' + S.k + day) || { logged: [], finalDone: false, emailDone: false };
+    if (p.action === 'log') { if (db.logged.indexOf(p.day) < 0) db.logged.push(p.day); db.last = todayPT(); }
+    if (p.action === 'final') db.finalDone = true;
+    if (p.action === 'start') db.start = p.start;
+    if (p.action === 'email') db.emailDone = !!p.consent;
+    if (p.action === 'register') { var fl = String(p.flags || ''); return { ok: true, key: 'demoNew' + Math.random().toString(36).slice(2, 12), status: /chicken/.test(fl) ? 'Excluded' : (fl.replace(/Nope, none of these|Sensitive stomach/g, '').replace(/[; ]/g, '') ? 'Needs review' : 'OK') }; }
+    store('demo_' + S.k + day, db);
+    return { ok: true, row: 2 };
+  }
+};
+function apiGet() {
+  if (DEMO) return Promise.resolve(demoDb.get());
+  return fetch(CONFIG.scriptUrl + '?k=' + encodeURIComponent(S.k)).then(function (r) { return r.json(); });
+}
+function apiPost(p) {
+  if (DEMO) return new Promise(function (res) { setTimeout(function () { res(demoDb.post(p)); }, 350); });
+  return fetch(CONFIG.scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(p) })
+    .then(function (r) { return r.json(); });
+}
+function save(p, btnEl, then) {
+  S.err = '';
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Saving…'; }
+  apiPost(p).then(function (r) {
+    if (!r || !r.ok) throw new Error(r && r.error);
+    then(r);
+  }).catch(function () {
+    S.err = "That didn't save. Check your signal and tap again. Your answers are still here.";
+    S.keep = true; route();
+  });
+}
+
+/* ---------- demo bar (only when no backend URL is set) ---------- */
+function demoBar() {
+  if (!DEMO) return '';
+  function l(h, t) { return '<a href="#' + h + '">' + t + '</a>'; }
+  return '<div class="demo"><span>Preview, nothing is saved:</span>' + l('signup', 'Sign-up') + l('picked', 'Picked') +
+    l('day-1', 'Day 1') + l('day-2', 'Day 2') + l('day-3', 'Day 3') + l('day-4', 'Day 4') + l('day-5', 'Day 5') + l('day-6', 'Day 6') + l('day-7', 'Day 7') +
+    l('survey', 'Survey') + l('notpicked', 'Not picked') + '</div>';
+}
+
+/* ======================= SIGN-UP FLOW (no key) ======================= */
+function welcome() {
+  paint(
+    '<section class="top" style="background:var(--blue);padding-bottom:40px;gap:18px">' + logo() +
+    '<p class="eyebrow" style="margin-top:24px">The pawIQ taste test</p>' +
+    '<h1 class="xl">Thank you. Seriously.</h1>' +
+    '<p class="lead">You and your dog are helping us pick our final recipe. Your dog does the hard part: eating.</p>' +
+    '<button class="cta" data-go="join">Sign up your dog</button>' +
+    '<div style="display:flex;flex-direction:column;align-items:center;margin-top:-6px"><svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true" style="display:block;transform:scaleY(-1);margin-bottom:-4px"><g fill="none" stroke="#00080B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 C24 8 32 16 30 30"/><path d="M21 24 L30 33 L38 22"/></g></svg><p class="sh">start here. takes 2 minutes.</p></div></section>' +
+    '<section class="sec" style="padding-top:36px;gap:20px"><p class="eyebrow">How it works</p>' +
+    '<div class="step"><span class="n">1</span><p style="font-size:17px"><strong>Sign up your dog.</strong> If we get more dogs than chews, we\'ll pick a mix of sizes and ages.</p></div>' +
+    '<div class="step"><span class="n">2</span><p style="font-size:17px"><strong>We drop off a kit.</strong> Two bags of chews, labelled A and B, with simple instructions inside.</p></div>' +
+    '<div class="step"><span class="n">3</span><p style="font-size:17px"><strong>10 days, 1 minute a day.</strong> Put both down, tap which one your dog ate first.</p></div>' +
+    '<div class="grid2" style="margin-top:6px">' +
+    '<div class="card" style="background:var(--blue)"><span class="eyebrow" style="font-size:11px">Days 1 to 5<br>Blue sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span></div>' +
+    '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Days 6 to 10<br>Green sticker</span><span class="display" style="font-size:30px">Gut Health</span></div></div></section>' +
+    '<div class="foot" style="flex-direction:row;flex-wrap:wrap;gap:6px;font-size:14px"><span>Questions?</span><a href="mailto:' + CONFIG.contactEmail + '"><strong>' + CONFIG.contactEmail + '</strong></a><span>·</span><a href="#" data-go="ingredients"><strong>What\'s in the chews</strong></a></div>'
+  );
+}
+
+function formTop(n, title) {
+  return '<div class="sec" style="padding-top:16px"><div class="bar"><button class="back" data-go="' + (n === 1 ? 'welcome' : ['', 'join', 'about', 'checks'][n - 1]) + '">← Back</button><span style="font-size:13px;font-weight:700">' + n + ' of 4</span></div>' +
+    '<h1 style="margin-top:12px">' + title + '</h1>' + errBox() + '</div>';
+}
+function join() {
+  S.ans.gender = S.reg.gender;
+  paint(formTop(1, "Who's a good dog?") +
+    '<div class="sec"><label class="f">Dog\'s name<input type="text" id="dog" maxlength="40" autocomplete="off" placeholder="Enter your dog\'s name" value="' + esc(S.reg.dog || '') + '" autofocus></label></div>' +
+    '<div class="sec"><h3>Boy or girl?</h3><div class="grid2" style="grid-template-columns:repeat(3,1fr)">' + btn('gender', 'Boy', 'Boy') + btn('gender', 'Girl', 'Girl') + btn('gender', 'Not sure', 'Not sure') + '</div></div>' +
+    '<div class="foot"><button class="cta" id="next" data-next="about">Next</button></div>');
+}
+function about() {
+  var d = esc(S.reg.dog);
+  S.ans.fussy = S.reg.fussy;
+  paint(formTop(2, 'Tell us about ' + d + '.') +
+    '<div class="sec"><label class="f">Breed (or best guess)<input type="text" id="breed" maxlength="60" value="' + esc(S.reg.breed || '') + '"></label>' +
+    '<div class="grid2"><label class="f">Age (years)<input type="number" id="age" inputmode="decimal" min="0" max="25" step="0.5" value="' + esc(S.reg.age || '') + '"></label>' +
+    '<label class="f">Weight (lb)<input type="number" id="weight" inputmode="decimal" min="1" max="250" value="' + esc(S.reg.weight || '') + '"></label></div></div>' +
+    '<div class="sec"><h3>How picky is ' + d + ' about food and treats?</h3><div class="stack">' +
+    btn('fussy', 'Eats anything', 'Eats anything', 'opt left') + btn('fussy', 'A little picky', 'A little picky', 'opt left') + btn('fussy', 'Very picky', 'Very picky', 'opt left') +
+    '</div></div><div class="foot"><button class="cta" data-next="checks">Next</button></div>');
+}
+function checkList() { return ['Allergic to chicken', 'Allergic to fish', 'Allergic to dairy or beef', 'Under 1 year old'].concat(S.reg.gender !== 'Boy' ? ['Pregnant or nursing'] : [], ['Diabetes', 'Pancreatitis, liver or gallbladder problems', 'Heart, kidney or blood pressure problems', 'Takes steroids, NSAIDs, blood thinners or immune meds', 'On other medication or a special vet diet', 'Sensitive stomach']); }
+function checks() {
+  var f = S.reg.flags;
+  S.ans.usualtime = S.reg.usualtime; S.ans.sidebyside = S.reg.sidebyside;
+  function c(label, i) { return '<label class="tick"><input type="checkbox" data-flag="' + esc(label) + '"' + (f.indexOf(label) >= 0 ? ' checked' : '') + '>' + esc(label) + '</label>'; }
+  paint(formTop(3, 'Any of these sound like ' + esc(S.reg.dog) + '?') +
+    '<div class="sec"><p class="muted" style="margin:0">Tick all that apply.</p><div class="stack">' + checkList().map(c).join('') + c('Nope, none of these') + '</div></div>' +
+    '<div class="sec"><h3>When will you usually give the chews?</h3><div class="wrap">' + ['Morning', 'Midday', 'Evening', 'Varies'].map(function (x) { return btn('usualtime', x, x, 'opt pill'); }).join('') + '</div>' +
+    (S.reg.hh ? '<h3 style="margin-top:14px">Do both dogs get their chews at the same time, side by side?</h3><div class="wrap">' + btn('sidebyside', 'Yes', 'Yes', 'opt pill') + btn('sidebyside', 'No', 'No', 'opt pill') + '</div>' : '') + '</div>' +
+    '<div class="sec"><label class="f">Takes any supplements? (optional)<input type="text" id="supps" maxlength="200" placeholder="e.g. fish oil, joint chew" value="' + esc(S.reg.supplements || '') + '"></label>' +
+    '<label class="f">Anything else we should know about ' + esc(S.reg.dog) + '? (optional)<textarea id="other" maxlength="500" placeholder="Health, allergies, medications, how ' + pr('he', 'she', 'they') + ' acts around food">' + esc(S.reg.other || '') + '</textarea></label></div>' +
+    '<div class="foot"><button class="cta" data-next="you">Next</button></div>');
+}
+function chickenModal() {
+  var r = S.reg, d = esc(r.dog || 'your dog');
+  var m = document.createElement('div');
+  m.id = 'chickenModal'; m.setAttribute('role', 'alertdialog'); m.setAttribute('aria-modal', 'true');
+  m.style.cssText = 'position:fixed;inset:0;background:rgba(0,8,11,.6);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50';
+  m.innerHTML = '<div style="background:#fff;border:2px solid var(--ink);border-radius:24px;padding:26px 22px;max-width:360px;display:flex;flex-direction:column;gap:14px">' +
+    '<h2 style="margin:0">We\'re so sorry.</h2>' +
+    '<p style="font-size:17px">Every chew in this test has chicken in it, and since ' + d + ' is allergic to chicken, ' + pr('he', 'she', 'they') + ' can\'t take part. It just wouldn\'t be safe for ' + pr('him', 'her', 'them') + '.</p>' +
+    '<p style="font-size:17px">Thank you so much for your time, and for wanting to help. We really appreciate it.</p>' +
+    '<button class="cta" id="chickenOk">OK</button><button class="link" id="chickenUndo">I ticked that by mistake</button></div>';
+  document.body.appendChild(m);
+  document.getElementById('chickenUndo').onclick = function () { m.remove(); };
+  document.getElementById('chickenOk').onclick = function () {
+    var f = S.reg.flags, i = f.indexOf('Nope, none of these'); if (i >= 0) f.splice(i, 1);
+    if (f.indexOf('Allergic to chicken') < 0) f.push('Allergic to chicken');
+    m.remove(); chickenStop(null);
+  };
+}
+function chickenStop(btnEl) {
+  var r = S.reg;
+  function show() {
+    paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);min-height:60vh;gap:16px">' + logo() + '<h1 class="xl" style="margin-top:28px">Sorry, ' + esc(r.dog) + '.</h1>' +
+      '<p class="lead">We\'re sorry ' + esc(r.dog) + ' can\'t take part this time. Thank you for your time and for wanting to help, it means a lot. We\'ve let Roger and Ed know.</p></section>' +
+      '<div class="foot"><p class="muted">Questions? ' + CONFIG.contactEmail + '</p></div>', true);
+  }
+  save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: '', phone: '', hh: r.hh || '', usualtime: '', sidebyside: '' }, btnEl, show);
+}
+function you() {
+  S.ans.referrer = S.reg.referrer;
+  paint(formTop(4, 'And you are?') +
+    '<div class="sec"><label class="f">Your full name<input type="text" id="owner" maxlength="80" autocomplete="name" value="' + esc(S.reg.owner || '') + '"></label>' +
+    '<label class="f">Phone<input type="tel" id="phone" maxlength="30" autocomplete="tel" value="' + esc(S.reg.phone || '') + '"></label>' +
+    '<label class="f">Home address<input type="text" id="address" maxlength="120" autocomplete="street-address" value="' + esc(S.reg.address || '') + '"></label>' +
+    '<label class="f">City<input type="text" id="city" maxlength="60" autocomplete="address-level2" value="' + esc(S.reg.city || '') + '"></label></div>' +
+    '<div class="sec"><h3>Who referred you?</h3><div class="grid2">' + ['Roger', 'Ed', 'Rob', 'Other'].map(function (x) { return btn('referrer', x, x); }).join('') + '</div>' +
+    (S.reg.referrer === 'Other' ? '<label class="f">Who?<input type="text" id="refOther" maxlength="60" autocomplete="off" value="' + esc(S.reg.refOther || '') + '"></label>' : '') + '</div>' +
+    '<div class="sec"><label class="tick"><input type="checkbox" id="agree"' + (S.reg.agree ? ' checked' : '') + '>Got it. These are early samples, just for this test. Some dogs get a tummy upset with new chews. If ' + esc(S.reg.dog) + ' seems off, I\'ll stop the chews and tell Roger or Ed. I can stop any time.</label></div>' +
+    '<div class="foot"><button class="cta" id="submitReg">Sign ' + esc(S.reg.dog) + ' up</button></div>');
+}
+function registered() {
+  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);min-height:60vh;gap:16px">' + logo() +
+    bowl("that's the easy part done.", "next up: the chews.") +
+    '<h1 class="xl" style="margin-top:8px">Thanks, ' + esc(S.reg.dog) + '!</h1>' +
+    '<p class="lead">You\'re signed up. Once we\'ve reviewed everyone\'s profiles, we\'ll reach back out to you all.</p></section>' +
+    '<div class="foot"><button class="cta ghost" data-go="again">Two dogs? Sign up the other one</button></div>');
+}
+function ingredients() {
+  paint('<section class="top" style="background:var(--blue)"><div class="bar">' + logo() + '<button class="back" data-go="' + (S.k ? 'home' : 'welcome') + '">← Back</button></div>' +
+    '<h1 style="margin-top:18px">What\'s in the chews</h1><p class="lead">A and B are the same recipe. Only the flavour is different.</p></section>' +
+    '<div class="sec"><div class="card" style="background:var(--blue)"><span class="eyebrow" style="font-size:11px">Days 1 to 5<br>Blue sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span><p style="font-size:15px;margin-top:8px"><strong>Ingredients:</strong> Chicken and its products (chicken meal, chicken liver, chicken fat), potato, brown rice, pea, flaxseed, molasses, vitamin E, rosemary extract, citric acid, silicon dioxide, sunflower lecithin, glycerinum, potassium sorbate, fish oil, Boswellia serrata extract, Curcuma longa extract, bovine colostrum powder, bromelain, vitamin C, black pepper extract, Bacillus coagulans, Bacillus subtilis, licorice extract, malt syrup.</p></div>' +
+    '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Days 6 to 10<br>Green sticker</span><span class="display" style="font-size:30px">Gut Health</span><p style="font-size:15px;margin-top:8px"><strong>Ingredients:</strong> Chicken and its products (chicken meal, chicken liver, chicken fat), potato, brown rice, pea, flaxseed, molasses, vitamin E, rosemary extract, citric acid, silicon dioxide, sunflower lecithin, glycerinum, potassium sorbate, inulin, pumpkin powder, FOS, Bacillus coagulans, Bacillus subtilis, Lactobacillus plantarum, Lactobacillus acidophilus, Bifidobacterium animalis subsp. lactis, Lallemand YANG postbiotic (inactivated yeast).</p></div>' +
+    '<p class="muted">Amounts per chew are printed on the sheet in your kit.</p></div>' +
+    '<div class="sec"><p class="muted">What makes A different from B stays a secret until the end.</p></div>' +
+    '<div class="foot"><p class="muted">Early samples, just for this taste test. No health claims. ' + CONFIG.contactEmail + '</p></div>');
+}
+
+/* ======================= DAILY FLOW (?k=) ======================= */
+function setData(r) {
+  S.data = r;
+  var me = { key: S.k, name: r.dog.name, picked: r.dog.picked, start: r.dog.start, finalDone: r.dog.finalDone, logged: r.logged, lastDate: r.dog.lastDate || '' };
+  S.hh = [me].concat(r.siblings || []);
+}
+function dogState(d) {
+  var T0 = S.data.test, tot = T0.daysPerRound * 2;
+  if (!d.picked) return 'Waiting for a kit';
+  if (!d.start) return 'Start date coming';
+  if (dayDiff(todayPT(), d.start) < 0) return 'Starts ' + niceDate(d.start);
+  var n = d.logged.length ? Math.max.apply(null, d.logged) : 0, done = d.lastDate === todayPT();
+  if (n >= tot && !done) return d.finalDone ? 'All done' : 'Final questions to answer';
+  return done ? 'Day ' + n + ' logged' : 'Day ' + (n + 1) + ' to log';
+}
+function picker() {
+  S.err = ''; S.ans = {};
+  var due = S.hh.filter(function (d) { return /to log$/.test(dogState(d)); }).length, doneToday = S.hh.filter(function (d) { return /logged$/.test(dogState(d)); }).length;
+  var pk = due === 0 ? ['You\'re done!', 'See you tomorrow!'] : doneToday > 0 ? ['Who\'s next?', 'One more to log today.'] : ['Who\'s up first?', 'Log both dogs today. Order doesn\'t matter.'];
+  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:14px"><div class="bar">' + logo() + '</div><h1 class="xl" style="margin-top:12px">' + pk[0] + '</h1><p class="lead">' + pk[1] + '</p></section>' +
+    '<div class="sec"><div class="stack">' + S.hh.map(function (d) {
+      return '<button type="button" class="opt left" style="padding:14px 18px" data-pick="' + esc(d.key) + '"><span class="display" style="font-size:30px;display:block;line-height:1.05">' + esc(d.name) + '</span><span style="font-size:14px;font-weight:500">' + esc(dogState(d)) + '</span></button>';
+    }).join('') + '</div></div>', true);
+}
+function T() { return S.data.test; }
+function dog() { return esc(S.data.dog.name); }
+function owner() { return esc(S.data.dog.owner || 'there'); }
+function total() { return T().daysPerRound * 2; }
+function roundOf(day) { var r1 = day <= T().daysPerRound; return { sticker: r1 ? T().r1Sticker : T().r2Sticker, formula: r1 ? T().r1Formula : T().r2Formula }; }
+/* Days count what was actually logged, not the calendar: Day N is the Nth day the dog gets chews.
+   A skipped day just moves everything back one, so every dog still gets all 5 days of each flavour. */
+function lastLogged() { var L = S.data.logged; return L.length ? Math.max.apply(null, L) : 0; }
+function doneToday() { return S.data.dog.lastDate === todayPT(); }
+function currentDay() { var s = S.data.dog.start; if (!s || dayDiff(todayPT(), s) < 0) return 0; return doneToday() ? lastLogged() : lastLogged() + 1; }
+function isLogged(day) { return S.data.logged.indexOf(day) >= 0; }
+function aLeft(day) { return (day + hash(S.k)) % 2 === 0; }
+
+function home() {
+  S.err = ''; S.ans = {};
+  var d = S.data.dog, day = currentDay();
+  if (!d.picked) return notPicked();
+  if (!d.start || day < 1) return credential();
+  if (day <= total()) {
+    if (doneToday()) return logged(day);
+    if (day === T().daysPerRound + 1 && !store('switch_' + S.k)) return switchScreen();
+    return dailyLog(day, false);
+  }
+  if (!d.finalDone) return survey();
+  return thankYou();
+}
+
+function waitDoodle() {
+  return '<div class="onblue"><svg class="doodle" viewBox="0 0 340 230" role="img" aria-label="Hand-drawn alarm clock">' +
+'<ellipse cx="170" cy="212" rx="78" ry="8" fill="#00080B" opacity=".12"/>' +
+'<g stroke="#00080B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">' +
+'<path d="M104 52 C92 30 62 34 62 62 Z" fill="#F6F1E4"/>' +
+'<path d="M236 52 C248 30 278 34 278 62 Z" fill="#F6F1E4"/>' +
+'<path d="M126 192 L112 210 M214 192 L228 210" fill="none"/>' +
+'<circle cx="170" cy="118" r="86" fill="#F6F1E4"/>' +
+'<circle cx="170" cy="118" r="68" fill="#FFFFFF" stroke-width="3"/>' +
+'<path d="M170 60 V70 M170 166 V176 M112 118 H122 M218 118 H228" fill="none"/>' +
+'<path d="M170 118 V80" fill="none" stroke-width="5"/>' +
+'<path d="M170 118 L198 134" fill="none" stroke-width="5"/>' +
+'<circle cx="170" cy="118" r="6" fill="#00080B"/>' +
+'</g>' +
+'<g stroke="#00080B" stroke-width="4" stroke-linecap="round" fill="none"><path d="M60 100 C52 112 52 126 60 138"/><path d="M280 100 C288 112 288 126 280 138"/><path d="M44 90 C32 110 32 130 44 150"/><path d="M296 90 C308 110 308 130 296 150"/></g>' +
+  '</svg></div>';
+}
+
+function notPicked() {
+  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);min-height:60vh;gap:16px"><div class="bar">' + logo() + '</div>' + waitDoodle() +
+    '<p class="eyebrow">Not confirmed yet</p><h1 class="xl">Hang tight, ' + dog() + '.</h1>' +
+    '<p class="lead">We\'re still choosing dogs for this test, aiming for a mix of sizes and ages. If ' + dog() + ' is picked, we\'ll message you and this link becomes the daily check-in. If not, thank you for wanting to help. It means a lot.</p></section>' +
+    '<div class="foot"><p class="muted">Questions? ' + CONFIG.contactEmail + '</p></div>');
+}
+
+function credential() {
+  var d = S.data.dog, today = todayPT();
+  var when = d.start ? 'Day 1 is ' + shortDate(d.start) + '.' : 'Choose your start date below.';
+  var val = d.start && dayDiff(d.start, today) >= 0 ? d.start : '';
+  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:16px">' + logo() +
+    '<h1 class="xl" style="margin-top:28px">' + dog() + ' is in!</h1><p class="lead">Thank you both.<br>' + when + '<br></p></section>' +
+    '<div class="sec"><h3>' + poss(dog()) + ' daily link</h3><div class="keybox">' + esc(myLink().replace(/^https?:\/\//, '')) + '</div>' +
+    '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p></div>' +
+    '<div class="sec"><h3>Start date and reminder</h3><p>' + (IOS_CHROME ? 'Tell us the day you want to start.' : 'Tell us the day you want to start. If you want a daily reminder, also pick a time and we\'ll add it to your calendar.') + '</p>' +
+    '<label class="f" for="startDate">Start date<select id="startDate"><option value="">Pick a day</option>' + startOptions(today, val) + '</select></label>' +
+    (IOS_CHROME ? '' : '<label class="f" for="remindTime">Reminder time (optional)<select id="remindTime"><option value="">No reminder</option>' + remindOptions() + '</select></label>') + errBox() + '</div>' +
+    (S.remind && d.start ? '<div class="sec"><p class="muted">Reminder made. If your phone asked you to save a file, tap Save, then open the file to add it to your calendar.</p></div>' : '') +
+    '<div class="foot"><button class="cta" id="setStart">' + (d.start ? 'Update start date' : 'Set start date') + '</button><button class="cta ghost" id="copy">Copy the link</button></div>');
+}
+
+function header(day) {
+  var r = roundOf(day);
+  return '<div class="top" style="background:' + (COLORS[r.sticker] || 'var(--blue)') + '"><div class="bar">' + logo() +
+    '<span class="daybig">Day ' + day + ' of ' + total() + '</span></div>' +
+    '<span class="dogchip">' + (S.hh && S.hh.length > 1 ? 'Logging for ' : '') + '<strong>' + dog() + '</strong></span>' +
+    '<span class="display" style="font-size:46px;margin-top:6px">' + esc(r.formula) + '</span>' +
+    '<span style="font-size:16px;font-weight:700">Use the bags with the ' + esc(r.sticker.toLowerCase()) + ' sticker</span></div>';
+}
+function dots(day) {
+  var h = '', n = total(), half = T().daysPerRound;
+  for (var i = 1; i <= n; i++) {
+    var col = isLogged(i) ? (COLORS[roundOf(i).sticker] || 'var(--blue)') : '#fff';
+    h += '<span class="dot' + (i === day ? ' now' : '') + '" style="background:' + col + '"></span>' + (i === half ? '<span style="width:10px"></span>' : '');
+  }
+  return '<div class="dots" aria-label="' + S.data.logged.length + ' of ' + n + ' days logged">' + h + '</div>';
+}
+function lateLink(day) {
+  return '';
+}
+
+function dailyLog(day, late) {
+  S.logDay = day; S.late = late;
+  var left = aLeft(day), a = S.ans, neither = a.first === 'Neither';
+  var side = 'Put A on YOUR ' + (left ? 'left' : 'right') + ' and B on YOUR ' + (left ? 'right' : 'left') + ', as you face ' + dog() + '.';
+  paint(header(day) +
+    '<div class="sec">' + (late ? '<p class="err" style="background:#fff">Logging missed day ' + day + '. <button class="link" data-go="home">Back to today</button></p>' : '') +
+    '<p style="font-size:18px;font-weight:700">Hi ' + owner() + '! ' + side + '</p>' +
+    '<p class="muted" style="margin:-6px 0 0">Same time each day, before a meal, no other treats first. Don\'t coach.</p>' +
+    '<h2 style="margin-top:4px">Which chew did ' + dog() + ' eat first?</h2>' +
+    '<p class="muted" style="margin:-8px 0 0">The first one ' + pr('he', 'she', 'they') + ' actually ate. Both at once? Pick the one ' + pr('he', 'she', 'they') + ' went to first.</p>' +
+    '<div class="grid2">' + (left ? btn('first', 'A', 'A', 'tile', 'left') + btn('first', 'B', 'B', 'tile', 'right') : btn('first', 'B', 'B', 'tile', 'left') + btn('first', 'A', 'A', 'tile', 'right')) + '</div>' +
+    btn('first', 'Neither', 'Neither. Sniffed both, walked off.', 'opt dash') + (neither ? '<p class="note" style="align-self:center;margin-top:4px">it happens. we still want to know.</p>' : '') + '</div>' +
+    (neither ? '' :
+      '<div class="sec"><h3>Did ' + dog() + ' eat the second chew too?</h3><div class="grid3">' + btn('finished', 'Yep', 'Yep') + btn('finished', 'Some', 'Some') + btn('finished', 'Nope', 'Nope') + '</div></div>' +
+      '<div class="sec"><h3>How did ' + dog() + ' eat them?</h3><div class="stack">' +
+      btn('eaten', 'Straight up, like a treat', 'Straight up, like a treat', 'opt left') + btn('eaten', 'Crumbled on food', 'Crumbled on food', 'opt left') + btn('eaten', 'Hidden in something', 'Hidden in something', 'opt left') + '</div></div>') +
+    '<div class="sec"><h3>How\'s ' + dog() + ' today? <span style="font-weight:500;font-size:15px">(tap all that apply)</span></h3><div class="wrap">' +
+    ['All good', 'Threw up', 'Loose poop', 'Extra itchy', 'Something else'].map(function (x) { var on = (a.healthList || []).indexOf(x) >= 0; return '<button type="button" class="opt pill" aria-pressed="' + on + '" data-hv="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div></div>' +
+    (function () {
+      var hl = a.healthList || [], serious = hl.indexOf('Threw up') >= 0 || hl.indexOf('Something else') >= 0;
+      if (serious || !(hl.indexOf('Loose poop') >= 0 || hl.indexOf('Extra itchy') >= 0)) return '';
+      return '<div class="sec"><h3>Is that normal for ' + dog() + '?</h3><div class="stack">' + btn('normal', 'Yes', 'Yes, that\'s normal for ' + S.data.dog.name, 'opt left') + btn('normal', 'No', 'No, it\'s new or worse', 'opt left') +
+        '</div><p class="muted">Normal for ' + dog() + '? Keep going. Not normal? We\'ll ask you to pause.</p></div>';
+    })() +
+    '<div class="sec"><label class="f" for="notes">Notes on the chews (optional)</label><textarea id="notes" maxlength="1000" placeholder="Smell, texture, how ' + pr('he', 'she', 'they') + ' reacted, anything you noticed">' + esc(a.notes || '') + '</textarea></div>' +
+    '<div class="foot">' + errBox() + '<button class="cta" id="submitLog">Done</button>' + (late ? '' : lateLink(day)) + '</div>');
+}
+
+function switchScreen() {
+  var t = T(), day = t.daysPerRound + 1;
+  paintFull(COLORS[t.r2Sticker] || '#5EC6FF', '<section class="top" style="background:' + (COLORS[t.r2Sticker] || 'var(--blue)') + ';gap:14px"><div class="bar">' + logo() + '<span class="daybig">Day ' + day + ' of ' + total() + '</span></div>' +
+    '<p class="eyebrow" style="margin-top:20px">Halfway there, ' + dog() + '</p><h1>Switch to the ' + esc(t.r2Sticker.toLowerCase()) + ' stickers.</h1>' +
+    '<p class="lead">Today starts ' + esc(t.r2Formula) + '. Put the ' + esc(t.r1Sticker.toLowerCase()) + '-sticker bags away for good.</p></section>' +
+    '<div class="sec"><div class="sw"><span class="chip" style="background:' + (COLORS[t.r1Sticker] || '#fff') + ';opacity:.55"><s>' + esc(t.r1Sticker) + ' sticker · ' + esc(t.r1Formula) + '</s><br>Done</span>' +
+    '<span style="font-weight:700">→</span><span class="chip" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '">' + esc(t.r2Sticker) + ' sticker · ' + esc(t.r2Formula) + '<br>Now</span></div></div>' +
+    '<div class="foot"><button class="cta" id="gotSwitch">Got the ' + esc(t.r2Sticker.toLowerCase()) + '-sticker bags</button></div>');
+}
+
+function stopScreen(day) {
+  var t = T();
+  function sms(n, ph) { return ph ? '<a class="cta" href="' + esc('sms:' + ph) + '">Text ' + n + '</a>' : '<span class="cta" style="opacity:.3" aria-disabled="true">Text ' + n + '</span>'; }
+  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Pause the chews for now.</h1>' +
+    '<p class="lead">Thanks for telling us. Please pause the chews for ' + dog() + ' until we message you. Tap to text us now.</p></section>' +
+    '<div class="sec"><div class="grid2">' + sms('Roger', t.rogerPhone) + sms('Ed', t.edPhone) + '</div>' +
+    '<p style="font-weight:700">Worried? Call your vet.</p></div>' +
+    '<div class="foot"><button class="cta ghost" data-fixprev="' + day + '">Change my answer</button><button class="cta" data-logged="' + day + '">Got it</button></div>');
+}
+function nextDogBtn() {
+  if (!S.hh || S.hh.length < 2) return '';
+  var o = S.hh.filter(function (d) { return d.key !== S.k && /to log$/.test(dogState(d)); })[0];
+  return o ? '<button class="cta" data-go="picker">Now log ' + esc(o.name) + '</button>' : '';
+}
+function logged(day) {
+  var last = day === total(), nm = S.data.dog.name;
+  var LINES = [['good one, ' + nm + '.', 'see you tomorrow.'], ['noted.', nm + ' is thorough.'], ['another day,', 'another data point.'], [nm + ', the official', 'taste tester.'], ['that\'s day ' + day + '.', nm + ' is on a roll.'], ['we\'re taking notes.', nm + ' is, too.'], ['good dog.', 'good data.']];
+  var L = last ? ['that\'s all 10 chews.', 'thank you, truly.'] : LINES[(day - 1) % LINES.length];
+  paintFull(COLORS[roundOf(day).sticker] || '#5EC6FF', '<section class="top" style="background:' + (COLORS[roundOf(day).sticker] || 'var(--blue)') + ';min-height:40vh;gap:6px;padding-bottom:96px"><div class="bar">' + logo() + '</div>' +
+    (S.hh && S.hh.length > 1 ? '<span class="dogchip">' + dog() + '</span>' : '') + bowl(L[0], L[1]) + '<h1 class="xl" style="margin-top:0">Day ' + day + ', done.</h1>' +
+    '<p class="lead">' + (last ? 'That\'s all 10 chews, ' + dog() + '. Last questions open tomorrow.' : 'Thanks, ' + dog() + '. Same time tomorrow.') + '</p></section>' +
+    '<div class="foot">' + nextDogBtn() + lateLink(currentDay()) + '<button class="link" data-fix="' + day + '">Oops, fix today\'s answer</button></div>');
+}
+
+var PHOTO_CONSENT_V = 'v1-2026-11-05';
+var PHOTO_CONSENT = [
+  'I give Pawz Best Group Inc. (pawIQ) permission to use the photo I am uploading, which shows me and my dog, in its website, social media, advertising, packaging and other marketing, in any format, without payment or review.',
+  'I confirm that I took or own the photo, that every person in it is an adult, and that each has agreed to this use.',
+  'I understand this permission is optional and does not affect my taste test. I can withdraw it at any time by emailing roger.chan@pawiqpets.com. pawIQ will stop any new use, but cannot recall material already published.'
+];
+function photoBlock() {
+  var a = S.ans, nm = dog();
+  var head = '<h3>A photo of you and ' + nm + ' (optional)</h3><p style="margin:0;font-size:15px;line-height:1.45">We\'re putting together a collage of our testing troop. Add one if you\'d like to be in it.</p>';
+  if (!S.photo) return '<div class="sec">' + head + '<label class="cta ghost" for="photoFile" style="cursor:pointer">Add a photo</label><input type="file" class="pfile" id="photoFile" accept="image/*">' + (S.photoErr ? '<div class="err" role="alert">' + esc(S.photoErr) + '</div>' : '') + '</div>';
+  return '<div class="sec">' + head + '<img class="photo-prev" src="' + S.photo + '" alt="Your photo">' +
+    '<button type="button" class="link" data-photo="remove" style="align-self:flex-start">Remove photo</button>' +
+    '<div class="consent"><b>PHOTO CONSENT</b>' + PHOTO_CONSENT.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>' +
+    '<label class="tick"><input type="checkbox" id="photoConsent"' + (a.photoConsent ? ' checked' : '') + '>I have read and agree to the Photo Consent above.</label></div>';
+}
+function resizePhoto(file, done) {
+  var url = URL.createObjectURL(file), img = new Image();
+  img.onload = function () {
+    var M = 1600, w = img.naturalWidth, h = img.naturalHeight, r = Math.min(1, M / Math.max(w, h)), c = document.createElement('canvas');
+    c.width = Math.round(w * r); c.height = Math.round(h * r);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    URL.revokeObjectURL(url);
+    done(c.toDataURL('image/jpeg', 0.82));
+  };
+  img.onerror = function () { URL.revokeObjectURL(url); done(null); };
+  img.src = url;
+}
+function grabFinal() {
+  var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
+  ['why', 'why2'].forEach(function (id) { var e2 = document.getElementById(id); if (e2) S.ans[id] = e2.value; });
+  var pc = document.getElementById('photoConsent'); if (pc) S.ans.photoConsent = pc.checked;
+}
+app.addEventListener('change', function (e) {
+  var f = e.target;
+  if (!f || f.id !== 'photoFile' || !f.files || !f.files[0]) return;
+  grabFinal(); S.photoErr = '';
+  resizePhoto(f.files[0], function (data) {
+    if (!data) S.photoErr = "That photo couldn't be read. Try another one.";
+    else { S.photo = data; S.photoSaved = false; S.ans.photoConsent = false; }
+    S.err = ''; S.keep = true; survey();
+  });
+});
+
+function survey() {
+  var t = T(), a = S.ans;
+  function q(g) { return '<div class="grid3">' + btn(g, 'A', 'A') + btn(g, 'B', 'B') + btn(g, "Couldn't tell", 'No difference') + '</div>'; }
+  function buy(g, formula) { var w = g === 'buy' ? 'why' : 'why2', v = a[g], why = (v === 'Maybe' || v === 'No') ? '<label class="f" for="' + w + '">What would make it a yes? Or what put you off?<textarea id="' + w + '" maxlength="500">' + esc(a[w] || '') + '</textarea></label>' : ''; return '<h3 style="margin-top:8px">Would you buy ' + esc(formula) + ' chews for ' + dog() + '?</h3><div class="grid3">' + btn(g, 'Yes', 'Yes') + btn(g, 'Maybe', 'Maybe') + btn(g, 'No', 'No') + '</div>' + why; }
+  var yes = a.problems === 'Yes';
+  paint('<section class="top" style="background:var(--blue)">' + logo() + '<h1 style="margin-top:22px">Last bit, we promise.</h1><p class="lead">A few quick ones about the whole test.</p></section>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker<br>' + esc(t.r1Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('yellow') + buy('buy', t.r1Formula) + '</div>' +
+    '<div class="sec"><div class="card" style="background:' + (COLORS[t.r2Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r2Sticker) + ' sticker<br>' + esc(t.r2Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('green') + buy('buy2', t.r2Formula) + '</div>' +
+    '<div class="sec"><h3>Any problems at all with ' + dog() + ' during the test?</h3><div class="grid2">' + btn('problems', 'No', 'No') + btn('problems', 'Yes', 'Yes, I\'ll say below') + '</div></div>' +
+    '<div class="sec"><label class="f" for="fnotes">' + (yes ? 'What happened? (required)' : 'Anything else? (optional)') + '</label><textarea id="fnotes" maxlength="1000"' + (yes ? ' placeholder="Tell us what happened so we can help"' : '') + '>' + esc(a.fnotes || '') + '</textarea></div>' + photoBlock() +
+    '<div class="foot">' + errBox() + '<button class="cta" id="submitFinal">Send</button>' + lateLink(currentDay()) + '</div>');
+}
+
+function thankYou() {
+  var done = S.data.dog.emailDone || store('emailSkip_' + S.k);
+  paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Thank you, ' + dog() + '.</h1>' +
+    '<p class="lead">' + total() + ' chews done. We couldn\'t have done this without you both. Once every dog finishes, we\'ll tell you which recipe won.</p></section>' +
+    (done ? '<div class="foot"></div>' :
+      '<div class="sec"><h2>Want launch news?</h2>' +
+      '<label class="f">Email<input type="email" id="email" autocomplete="email" maxlength="120"></label>' +
+      '<label class="tick"><input type="checkbox" id="consent">Yes, pawIQ can email me. Unsubscribe anytime.</label>' + errBox() + '</div>' +
+      '<div class="foot"><button class="cta" id="submitEmail">Keep me posted</button><button class="link" id="skipEmail">No thanks</button></div>'));
+}
+
+/* ---------- calendar reminders (.ics) ---------- */
+function startOptions(today, val) {
+  var o = '';
+  for (var i = 0; i <= 7; i++) { var d = addDays(today, i); o += '<option value="' + d + '"' + (d === val ? ' selected' : '') + '>' + niceDate(d) + (i === 0 ? ' (today)' : '') + '</option>'; }
+  return o;
+}
+function remindOptions() {
+  var o = '';
+  for (var h = 6; h <= 21; h++) { var h12 = h % 12 === 0 ? 12 : h % 12, hh = (h < 10 ? '0' : '') + h; ['00', '30'].forEach(function (m) { o += '<option value="' + hh + m + '">' + h12 + ':' + m + ' ' + (h < 12 ? 'AM' : 'PM') + '</option>'; }); }
+  return o;
+}
+function gcalLink(time) {
+  var d = S.data.dog, st = d.start.replace(/-/g, ''), h = Number(time.slice(0, 2)), m = Number(time.slice(2)), em = m + 15, eh = h + (em >= 60 ? 1 : 0);
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var end = pad(eh) + pad(em % 60);
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(d.name + "'s taste test (1 min)") +
+    '&dates=' + st + 'T' + time + '00/' + st + 'T' + end + '00&recur=' + encodeURIComponent('RRULE:FREQ=DAILY;COUNT=' + (total() + 5)) +
+    '&details=' + encodeURIComponent('Put A and B down, then tap which went first: ' + myLink());
+}
+var IOS_CHROME = /CriOS/.test(navigator.userAgent);
+function downloadIcs(time) {
+  S.remind = time;
+  var d = S.data.dog, t = time + '00', start = d.start.replace(/-/g, '');
+  var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+  var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pawIQ//Taste Test//EN', 'BEGIN:VEVENT',
+    'UID:' + S.k + '@pawiqpets.com', 'DTSTAMP:' + stamp, 'DTSTART:' + start + 'T' + t, 'DURATION:PT15M',
+    'RRULE:FREQ=DAILY;COUNT=' + (total() + 5), 'SUMMARY:' + S.data.dog.name + "'s taste test (1 min)",
+    'DESCRIPTION:Put A and B down\\, then tap which went first: ' + myLink(), 'URL:' + myLink(),
+    'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Taste test time', 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  a.download = 'pawIQ-taste-test.ics'; document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ======================= EVENTS ======================= */
+function grabReg() {
+  ['dog', 'breed', 'age', 'weight', 'owner', 'phone', 'address', 'city', 'refOther'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
+  var sp = document.getElementById('supps'); if (sp) S.reg.supplements = sp.value.trim();
+  var ot = document.getElementById('other'); if (ot) S.reg.other = ot.value.trim();
+  var ag = document.getElementById('agree'); if (ag) S.reg.agree = ag.checked;
+  if (S.ans.fussy) S.reg.fussy = S.ans.fussy;
+}
+var REG = { welcome: welcome, join: join, about: about, checks: checks, you: you };
+function validate(step) {
+  var r = S.reg;
+  if (step === 'about' && !r.dog) return "What's your dog's name?";
+  if (step === 'about' && !r.gender) return 'Boy, girl or not sure? Tap one.';
+  if (step === 'checks' && (!r.age || !r.weight || !r.fussy)) return 'Age, weight and fussiness help us pick a good mix.';
+  if (step === 'checks' && (Number(r.weight) < 1 || Number(r.weight) > 250)) return 'Weight looks off. In pounds, please.';
+  if (step === 'you' && !r.flags.length) return 'Tick any that fit, or "Nope, none of these".';
+  if (step === 'you' && !r.usualtime) return 'Pick a usual time of day for the chews.';
+  if (step === 'you' && r.hh && !r.sidebyside) return 'Are the two dogs fed side by side? Tap one.';
+  return '';
+}
+
+app.addEventListener('click', function (e) {
+  var el = e.target.closest('button, a, input[data-flag]');
+  if (!el) return;
+  S.keep = false;
+  if (el.dataset.flag) { // checkboxes on the checks screen
+    var f = S.reg.flags, v = el.dataset.flag, none = 'Nope, none of these';
+    if (el.checked && v === 'Allergic to chicken') { el.checked = false; return chickenModal(); }
+    if (el.checked) { if (v === none) f.length = 0; else { var i = f.indexOf(none); if (i >= 0) f.splice(i, 1); } f.push(v); }
+    else f.splice(f.indexOf(v), 1);
+    app.querySelectorAll('input[data-flag]').forEach(function (c) { c.checked = f.indexOf(c.dataset.flag) >= 0; });
+    return;
+  }
+  if (el.dataset.hv) { // how's the dog today: tap all that apply
+    var nt = document.getElementById('notes'); if (nt) S.ans.notes = nt.value;
+    var L = (S.ans.healthList || []).slice(), v = el.dataset.hv, i = L.indexOf(v);
+    if (v === 'All good') L = i >= 0 ? [] : ['All good'];
+    else { var g = L.indexOf('All good'); if (g >= 0) L.splice(g, 1); i = L.indexOf(v); if (i >= 0) L.splice(i, 1); else L.push(v); }
+    S.ans.healthList = L; S.ans.health = L.join('; '); S.err = ''; S.keep = true;
+    return dailyLog(S.logDay, S.late);
+  }
+  if (el.dataset.photo === 'remove') { grabFinal(); S.photo = null; S.photoSaved = false; S.ans.photoConsent = false; S.photoErr = ''; S.keep = true; return survey(); }
+  if (el.dataset.g) { // single-choice buttons
+    var notes = document.getElementById('notes'); if (notes) S.ans.notes = notes.value;
+    var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
+    ['why', 'why2'].forEach(function (id) { var el2 = document.getElementById(id); if (el2) S.ans[id] = el2.value; });
+    var pc0 = document.getElementById('photoConsent'); if (pc0) S.ans.photoConsent = pc0.checked;
+    grabReg(); S.err = ''; S.keep = true;
+    S.ans[el.dataset.g] = el.dataset.v;
+    if (el.dataset.g === 'fussy') S.reg.fussy = el.dataset.v;
+    if (el.dataset.g === 'gender') S.reg.gender = el.dataset.v;
+    if (el.dataset.g === 'usualtime') S.reg.usualtime = el.dataset.v;
+    if (el.dataset.g === 'sidebyside') S.reg.sidebyside = el.dataset.v;
+    if (el.dataset.g === 'referrer') S.reg.referrer = el.dataset.v;
+    if (S.data && S.logDay && !S.data.dog.finalDone && document.getElementById('submitLog')) return dailyLog(S.logDay, S.late);
+    return route(true);
+  }
+  if (el.dataset.pick) {
+    S.k = el.dataset.pick; S.picked = true; S.logDay = null; S.late = false;
+    paint('<div class="spin">One sec…</div>', true);
+    return apiGet().then(function (r) { if (!r || !r.ok) throw 0; setData(r); home(); }).catch(function () { paint('<div class="spin">Can\'t reach the taste test right now. Check your signal and refresh.</div>', true); });
+  }
+  if (el.dataset.go) {
+    e.preventDefault(); S.err = ''; grabReg();
+    var g = el.dataset.go;
+    if (g === 'again') { S.reg = { flags: [], owner: S.reg.owner, phone: S.reg.phone, address: S.reg.address, city: S.reg.city, referrer: S.reg.referrer, refOther: S.reg.refOther, hh: S.hhKey || '' }; S.ans = {}; S.view = 'join'; return join(); }
+    if (g === 'picker') return picker();
+    if (g === 'home') return home();
+    if (g === 'ingredients') { S.view = 'ingredients'; return ingredients(); }
+    S.view = g; return REG[g]();
+  }
+  if (el.dataset.next) {
+    grabReg();
+    if (el.dataset.next === 'you' && S.reg.flags.indexOf('Allergic to chicken') >= 0) return chickenStop(el);
+    S.err = validate(el.dataset.next);
+    if (S.err) return REG[S.view]();
+    S.view = el.dataset.next; return REG[S.view]();
+  }
+  if (el.dataset.late) { S.ans = {}; S.err = ''; return dailyLog(Number(el.dataset.late), true); }
+  if (el.dataset.fix) { S.ans = {}; S.err = ''; return dailyLog(Number(el.dataset.fix), false); }
+  if (el.dataset.fixprev) { S.ans = JSON.parse(JSON.stringify(S.lastAns || {})); S.err = ''; return dailyLog(Number(el.dataset.fixprev), false); }
+  if (el.dataset.logged) return logged(Number(el.dataset.logged));
+  if (el.id === 'gotSwitch') { store('switch_' + S.k, true); return dailyLog(currentDay(), false); }
+  if (el.id === 'copy') { (navigator.clipboard ? navigator.clipboard.writeText(myLink()) : Promise.reject()).then(function () { el.textContent = 'Copied'; }, function () { prompt('Copy this link', myLink()); }); return; }
+  if (el.id === 'setStart') {
+    var sd = document.getElementById('startDate').value, rt = (document.getElementById('remindTime') || {}).value || '', td = todayPT();
+    if (!sd) { S.err = 'Pick your start date first.'; return credential(); }
+    if (dayDiff(sd, td) < 0) { S.err = 'The start date can\'t be in the past.'; return credential(); }
+    if (dayDiff(sd, td) > 7) { S.err = 'Pick a day within the next 7 days.'; return credential(); }
+    return save({ action: 'start', k: S.k, start: sd }, el, function () {
+      S.data.dog.start = sd; S.err = '';
+      if (rt) downloadIcs(rt);
+      if (dayDiff(sd, td) === 0) return home();
+      credential();
+    });
+  }
+
+  if (el.id === 'submitReg') {
+    grabReg();
+    if (!S.reg.owner || !S.reg.phone) { S.err = 'Your name and phone, please, so we can arrange drop-off.'; return you(); }
+    if (!S.reg.address || !S.reg.city) { S.err = 'Your home address and city, please, so we can arrange drop-off.'; return you(); }
+    if (!S.reg.referrer) { S.err = 'Please tell us who referred you.'; return you(); }
+    if (S.reg.referrer === 'Other' && !(S.reg.refOther || '').trim()) { S.err = 'Please tell us who referred you.'; return you(); }
+    if (!S.reg.agree) { S.err = 'Tick the box to say you got it.'; return you(); }
+    var r = S.reg;
+    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: r.owner, phone: r.phone, address: r.address, city: r.city, hh: r.hh || '', usualtime: r.usualtime, sidebyside: r.sidebyside || '', referrer: r.referrer === 'Other' ? 'Other: ' + (r.refOther || '').trim() : r.referrer }, el, function (res) { S.reviewNote = res.status === 'Needs review'; if (!S.hhKey && res.key) S.hhKey = res.key; S.regCount = (S.regCount || 0) + 1; S.view = 'registered'; registered(); });
+  }
+  if (el.id === 'submitLog') {
+    var a = S.ans; a.notes = document.getElementById('notes').value;
+    var neither = a.first === 'Neither';
+    if (!a.first || (!neither && (!a.finished || !a.eaten)) || !a.health) { S.err = 'Answer the 4 questions first. Notes are optional.'; S.keep = true; return dailyLog(S.logDay, S.late); }
+    var hl = a.healthList || [], mild = !(hl.indexOf('Threw up') >= 0 || hl.indexOf('Something else') >= 0) && (hl.indexOf('Loose poop') >= 0 || hl.indexOf('Extra itchy') >= 0);
+    if (mild && !a.normal) { S.err = 'Is that normal for ' + S.data.dog.name + '? Tap yes or no.'; S.keep = true; return dailyLog(S.logDay, S.late); }
+    var healthOut = a.health + (mild ? (a.normal === 'Yes' ? ' (normal for dog)' : ' (not normal)') : '');
+    var day = S.logDay, rd = roundOf(day);
+    return save({ action: 'log', k: S.k, day: day, sticker: rd.sticker, side: aLeft(day) ? 'Left' : 'Right', first: a.first,
+      finished: neither ? 'n/a' : a.finished, eaten: neither ? 'n/a' : a.eaten, health: healthOut, notes: a.notes, late: S.late }, el, function () {
+      if (!isLogged(day)) S.data.logged.push(day);
+      S.data.dog.lastDate = todayPT(); S.hh.forEach(function (x) { if (x.key === S.k) x.lastDate = todayPT(); });
+      var sick = !(a.health === 'All good' || (mild && a.normal === 'Yes')); S.lastAns = JSON.parse(JSON.stringify(a)); S.ans = {};
+      if (sick) return stopScreen(day);
+      if (S.late && day < currentDay() && currentDay() <= total()) return home();
+      return logged(day);
+    });
+  }
+  if (el.id === 'submitFinal') {
+    var s = S.ans; grabFinal();
+    if (!s.yellow || !s.green || !s.buy || !s.buy2 || !s.problems) { S.err = 'Please answer every question above.'; S.keep = true; return survey(); }
+    if (s.problems === 'Yes' && !s.fnotes.trim()) { S.err = 'Please tell us what happened in the box, so we can help.'; S.keep = true; return survey(); }
+    if (S.photo && !s.photoConsent) { S.err = 'Tick the photo consent, or tap Remove photo.'; S.keep = true; return survey(); }
+    var sendFinal = function () {
+      save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, why: (s.buy === 'Yes' ? '' : s.why || ''), why2: (s.buy2 === 'Yes' ? '' : s.why2 || ''), problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; S.photo = null; S.photoSaved = false; thankYou(); });
+    };
+    if (!S.photo || S.photoSaved) return sendFinal();
+    el.disabled = true; el.textContent = 'Uploading photo…'; S.err = '';
+    return apiPost({ action: 'photo', k: S.k, photo: S.photo, consent: true, consentVersion: PHOTO_CONSENT_V, consentText: PHOTO_CONSENT.join(' ') }).then(function (r) {
+      if (!r || !r.ok) throw new Error(r && r.error);
+      S.photoSaved = true; sendFinal();
+    }).catch(function () {
+      S.err = "The photo didn't upload. Check your signal and tap Send again, or tap Remove photo. Your answers are still here.";
+      S.keep = true; survey();
+    });
+  }
+  if (el.id === 'submitEmail') {
+    var em = document.getElementById('email').value.trim(), ok = document.getElementById('consent').checked;
+    if (!ok) { S.err = 'Tick the box if you want the emails. Or tap No thanks.'; S.keep = true; return thankYou(); }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { S.err = 'That email looks off.'; S.keep = true; return thankYou(); }
+    return save({ action: 'email', k: S.k, email: em, consent: true }, el, function () { S.data.dog.emailDone = true; S.err = ''; thankYou(); });
+  }
+  if (el.id === 'skipEmail') { store('emailSkip_' + S.k, true); return thankYou(); }
+});
+
+function route(keep) {
+  if (!S.k) { if (S.view === 'registered') return registered(); if (S.view === 'ingredients') return ingredients(); return (REG[S.view] || welcome)(); }
+  if (!S.data) return;
+  if (S.logDay && document.getElementById('submitLog')) return dailyLog(S.logDay, S.late);
+  if (document.getElementById('submitFinal')) return survey();
+  if (document.getElementById('submitEmail')) return thankYou();
+  return home();
+}
+
+/* ---------- start ---------- */
+if (!S.k) { S.view = 'welcome'; welcome(); }
+else apiGet().then(function (r) {
+  if (!r || !r.ok) { paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);min-height:60vh;justify-content:flex-end;gap:14px">' + logo() + '<h1 style="margin-top:auto">Hmm, that link didn\'t work.</h1><p class="lead">Message Roger or Ed and we\'ll send it again.</p></section>'); return; }
+  setData(r);
+  var ready = S.hh.filter(function (d) { return d.picked; });
+  if (S.hh.length > 1 && ready.length > 1) return picker();
+  home();
+}).catch(function () { paint('<div class="spin">Can\'t reach the taste test right now. Check your signal and refresh.</div>'); });
+</script>
+</body>
+</html>
