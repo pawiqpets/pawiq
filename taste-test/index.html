@@ -235,8 +235,8 @@ function welcome() {
     '<button class="cta" data-go="join">Sign up your dog</button>' +
     '<div style="display:flex;flex-direction:column;align-items:center;margin-top:-6px"><svg width="46" height="40" viewBox="0 0 46 40" aria-hidden="true" style="display:block;transform:scaleY(-1);margin-bottom:-4px"><g fill="none" stroke="#00080B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6 C24 8 32 16 30 30"/><path d="M21 24 L30 33 L38 22"/></g></svg><p class="sh">start here. takes 2 minutes.</p></div></section>' +
     '<section class="sec" style="padding-top:36px;gap:20px"><p class="eyebrow">How it works</p>' +
-    '<div class="step"><span class="n">1</span><p style="font-size:17px"><strong>Sign up your dog.</strong> Two dogs? Sign each one up, you\'ll get one link for both. If we get more dogs than chews, we\'ll pick a mix of sizes and ages.</p></div>' +
-    '<div class="step"><span class="n">2</span><p style="font-size:17px"><strong>We drop off a kit.</strong> 2 flavours, labelled A and B. Nobody can play favourites.</p></div>' +
+    '<div class="step"><span class="n">1</span><p style="font-size:17px"><strong>Sign up your dog.</strong> If we get more dogs than chews, we\'ll pick a mix of sizes and ages.</p></div>' +
+    '<div class="step"><span class="n">2</span><p style="font-size:17px"><strong>We drop off a kit.</strong> Two bags of chews, labelled A and B, with simple instructions inside.</p></div>' +
     '<div class="step"><span class="n">3</span><p style="font-size:17px"><strong>10 days, 1 minute a day.</strong> Put both down, tap which one your dog ate first.</p></div>' +
     '<div class="grid2" style="margin-top:6px">' +
     '<div class="card" style="background:var(--blue)"><span class="eyebrow" style="font-size:11px">Days 1 to 5<br>Blue sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span></div>' +
@@ -318,8 +318,8 @@ function registered() {
   paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);min-height:60vh;gap:16px">' + logo() +
     bowl("that's the easy part done.", "next up: the chews.") +
     '<h1 class="xl" style="margin-top:8px">Thanks, ' + esc(S.reg.dog) + '!</h1>' +
-    '<p class="lead">You\'re signed up. We\'ll send your start date in a few days. (If we get more dogs than chews, we\'ll pick a mix of sizes and ages.)' + (S.reviewNote ? ' One thing: we\'ll check a detail with you before we send a kit.' : '') + '</p></section>' +
-    '<div class="foot"><button class="cta ghost" data-go="again">Two dogs? Sign up the other one</button><p style="font-size:14px;text-align:center;opacity:.8;margin-top:4px">One link will cover both dogs. You just pick who you\'re logging for.</p></div>');
+    '<p class="lead">You\'re signed up. Once we\'ve reviewed everyone\'s profiles, we\'ll reach back out to you all.</p></section>' +
+    '<div class="foot"><button class="cta ghost" data-go="again">Two dogs? Sign up the other one</button></div>');
 }
 function ingredients() {
   paint('<section class="top" style="background:var(--blue)"><div class="bar">' + logo() + '<button class="back" data-go="' + (S.k ? 'home' : 'welcome') + '">← Back</button></div>' +
@@ -327,7 +327,7 @@ function ingredients() {
     '<div class="sec"><div class="card" style="background:var(--blue)"><span class="eyebrow" style="font-size:11px">Days 1 to 5<br>Blue sticker</span><span class="display" style="font-size:30px">Skin &amp; Immune</span><p style="font-size:15px;margin-top:8px"><strong>Ingredients:</strong> Chicken and its products (chicken meal, chicken liver, chicken fat), potato, brown rice, pea, flaxseed, molasses, vitamin E, rosemary extract, citric acid, silicon dioxide, sunflower lecithin, glycerinum, potassium sorbate, fish oil, Boswellia serrata extract, Curcuma longa extract, bovine colostrum powder, bromelain, vitamin C, black pepper extract, Bacillus coagulans, Bacillus subtilis, licorice extract, malt syrup.</p></div>' +
     '<div class="card" style="background:var(--green)"><span class="eyebrow" style="font-size:11px">Days 6 to 10<br>Green sticker</span><span class="display" style="font-size:30px">Gut Health</span><p style="font-size:15px;margin-top:8px"><strong>Ingredients:</strong> Chicken and its products (chicken meal, chicken liver, chicken fat), potato, brown rice, pea, flaxseed, molasses, vitamin E, rosemary extract, citric acid, silicon dioxide, sunflower lecithin, glycerinum, potassium sorbate, inulin, pumpkin powder, FOS, Bacillus coagulans, Bacillus subtilis, Lactobacillus plantarum, Lactobacillus acidophilus, Bifidobacterium animalis subsp. lactis, Lallemand YANG postbiotic (inactivated yeast).</p></div>' +
     '<p class="muted">Amounts per chew are printed on the sheet in your kit.</p></div>' +
-    '<div class="sec"><p class="muted">What makes A different from B stays a secret until the end, so nobody can play favourites.</p></div>' +
+    '<div class="sec"><p class="muted">What makes A different from B stays a secret until the end.</p></div>' +
     '<div class="foot"><p class="muted">Early samples, just for this taste test. No health claims. ' + CONFIG.contactEmail + '</p></div>');
 }
 
@@ -506,7 +506,7 @@ function logged(day) {
 function survey() {
   var t = T(), a = S.ans;
   function q(g) { return '<div class="grid3">' + btn(g, 'A', 'A') + btn(g, 'B', 'B') + btn(g, "Couldn't tell", 'No difference') + '</div>'; }
-  function buy(g, formula) { return '<h3 style="margin-top:8px">Would you buy ' + esc(formula) + ' chews for ' + dog() + '?</h3><div class="grid3">' + btn(g, 'Yes', 'Yes') + btn(g, 'Maybe', 'Maybe') + btn(g, 'No', 'No') + '</div>'; }
+  function buy(g, formula) { var w = g === 'buy' ? 'why' : 'why2', v = a[g], why = (v === 'Maybe' || v === 'No') ? '<label class="f" for="' + w + '">What would make it a yes? Or what put you off?<textarea id="' + w + '" maxlength="500">' + esc(a[w] || '') + '</textarea></label>' : ''; return '<h3 style="margin-top:8px">Would you buy ' + esc(formula) + ' chews for ' + dog() + '?</h3><div class="grid3">' + btn(g, 'Yes', 'Yes') + btn(g, 'Maybe', 'Maybe') + btn(g, 'No', 'No') + '</div>' + why; }
   var yes = a.problems === 'Yes';
   paint('<section class="top" style="background:var(--blue)">' + logo() + '<h1 style="margin-top:22px">Last bit, we promise.</h1><p class="lead">A few quick ones about the whole test.</p></section>' +
     '<div class="sec"><div class="card" style="background:' + (COLORS[t.r1Sticker] || '#fff') + '"><span class="eyebrow" style="font-size:11px">' + esc(t.r1Sticker) + ' sticker<br>' + esc(t.r1Formula) + '</span><h3>Overall, which did ' + dog() + ' seem to like more?</h3></div>' + q('yellow') + buy('buy', t.r1Formula) + '</div>' +
@@ -521,7 +521,7 @@ function thankYou() {
   paintFull('#5EC6FF', '<section class="top" style="background:var(--blue);gap:14px">' + logo() + '<h1 class="xl" style="margin-top:28px">Thank you, ' + dog() + '.</h1>' +
     '<p class="lead">' + total() + ' chews done. We couldn\'t have done this without you both. Once every dog finishes, we\'ll tell you which recipe won.</p></section>' +
     (done ? '<div class="foot"></div>' :
-      '<div class="sec"><h2>Want launch news?</h2><p>1 email when we launch, then 1 a month at most.</p>' +
+      '<div class="sec"><h2>Want launch news?</h2>' +
       '<label class="f">Email<input type="email" id="email" autocomplete="email" maxlength="120"></label>' +
       '<label class="tick"><input type="checkbox" id="consent">Yes, pawIQ can email me. Unsubscribe anytime.</label>' + errBox() + '</div>' +
       '<div class="foot"><button class="cta" id="submitEmail">Keep me posted</button><button class="link" id="skipEmail">No thanks</button></div>'));
@@ -585,6 +585,7 @@ app.addEventListener('click', function (e) {
   if (el.dataset.g) { // single-choice buttons
     var notes = document.getElementById('notes'); if (notes) S.ans.notes = notes.value;
     var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
+    ['why', 'why2'].forEach(function (id) { var el2 = document.getElementById(id); if (el2) S.ans[id] = el2.value; });
     grabReg(); S.err = ''; S.keep = true;
     S.ans[el.dataset.g] = el.dataset.v;
     if (el.dataset.g === 'fussy') S.reg.fussy = el.dataset.v;
@@ -650,9 +651,10 @@ app.addEventListener('click', function (e) {
   }
   if (el.id === 'submitFinal') {
     var s = S.ans; s.fnotes = document.getElementById('fnotes').value;
+    ['why', 'why2'].forEach(function (id) { var el2 = document.getElementById(id); if (el2) s[id] = el2.value; });
     if (!s.yellow || !s.green || !s.buy || !s.buy2 || !s.problems) { S.err = 'Please answer every question above.'; S.keep = true; return survey(); }
     if (s.problems === 'Yes' && !s.fnotes.trim()) { S.err = 'Please tell us what happened in the box, so we can help.'; S.keep = true; return survey(); }
-    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
+    return save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, why: (s.buy === 'Yes' ? '' : s.why || ''), why2: (s.buy2 === 'Yes' ? '' : s.why2 || ''), problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; thankYou(); });
   }
   if (el.id === 'submitEmail') {
     var em = document.getElementById('email').value.trim(), ok = document.getElementById('consent').checked;
