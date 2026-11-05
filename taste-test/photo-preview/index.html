@@ -537,17 +537,12 @@ function photoBlock() {
     '<div class="consent"><b>PHOTO CONSENT</b>' + PHOTO_CONSENT.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>' +
     '<label class="tick"><input type="checkbox" id="photoConsent"' + (a.photoConsent ? ' checked' : '') + '>I have read and agree to the Photo Consent above.</label></div>';
 }
-function resizePhoto(file, done) {
-  var url = URL.createObjectURL(file), img = new Image();
-  img.onload = function () {
-    var M = 1600, w = img.naturalWidth, h = img.naturalHeight, r = Math.min(1, M / Math.max(w, h)), c = document.createElement('canvas');
-    c.width = Math.round(w * r); c.height = Math.round(h * r);
-    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-    URL.revokeObjectURL(url);
-    done(c.toDataURL('image/jpeg', 0.82));
-  };
-  img.onerror = function () { URL.revokeObjectURL(url); done(null); };
-  img.src = url;
+var PHOTO_MAX = 15 * 1024 * 1024; // original file goes up untouched, full resolution
+function readPhoto(file, done) {
+  var r = new FileReader();
+  r.onload = function () { done(r.result); };
+  r.onerror = function () { done(null); };
+  r.readAsDataURL(file);
 }
 function grabFinal() {
   var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
@@ -557,12 +552,13 @@ function grabFinal() {
 app.addEventListener('change', function (e) {
   var f = e.target;
   if (!f || f.id !== 'photoFile' || !f.files || !f.files[0]) return;
-  grabFinal(); S.photoErr = '';
-  resizePhoto(f.files[0], function (data) {
-    if (!data) S.photoErr = "That photo couldn't be read. Try another one.";
-    else { S.photo = data; S.photoSaved = false; S.ans.photoConsent = false; }
-    S.err = ''; S.keep = true; survey();
-  });
+  var file = f.files[0]; grabFinal(); S.photoErr = '';
+  if (!/^image\//.test(file.type || 'image/')) S.photoErr = 'Please pick a photo.';
+  else if (file.size > PHOTO_MAX) S.photoErr = 'That photo is over 15 MB. Please pick a smaller one.';
+  if (S.photoErr) { S.keep = true; return survey(); }
+  if (S.photoUrl) URL.revokeObjectURL(S.photoUrl);
+  S.photoFile = file; S.photoUrl = URL.createObjectURL(file); S.photo = S.photoUrl; S.photoSaved = false; S.ans.photoConsent = false;
+  S.err = ''; S.keep = true; survey();
 });
 
 function survey() {
@@ -664,7 +660,7 @@ app.addEventListener('click', function (e) {
     S.ans.healthList = L; S.ans.health = L.join('; '); S.err = ''; S.keep = true;
     return dailyLog(S.logDay, S.late);
   }
-  if (el.dataset.photo === 'remove') { grabFinal(); S.photo = null; S.photoSaved = false; S.ans.photoConsent = false; S.photoErr = ''; S.keep = true; return survey(); }
+  if (el.dataset.photo === 'remove') { grabFinal(); if (S.photoUrl) URL.revokeObjectURL(S.photoUrl); S.photo = S.photoFile = S.photoUrl = null; S.photoSaved = false; S.ans.photoConsent = false; S.photoErr = ''; S.keep = true; return survey(); }
   if (el.dataset.g) { // single-choice buttons
     var notes = document.getElementById('notes'); if (notes) S.ans.notes = notes.value;
     var fn = document.getElementById('fnotes'); if (fn) S.ans.fnotes = fn.value;
@@ -754,16 +750,19 @@ app.addEventListener('click', function (e) {
     if (s.problems === 'Yes' && !s.fnotes.trim()) { S.err = 'Please tell us what happened in the box, so we can help.'; S.keep = true; return survey(); }
     if (S.photo && !s.photoConsent) { S.err = 'Tick the photo consent, or tap Remove photo.'; S.keep = true; return survey(); }
     var sendFinal = function () {
-      save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, why: (s.buy === 'Yes' ? '' : s.why || ''), why2: (s.buy2 === 'Yes' ? '' : s.why2 || ''), problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; S.photo = null; S.photoSaved = false; thankYou(); });
+      save({ action: 'final', k: S.k, yellow: s.yellow, green: s.green, buy: s.buy, buy2: s.buy2, why: (s.buy === 'Yes' ? '' : s.why || ''), why2: (s.buy2 === 'Yes' ? '' : s.why2 || ''), problems: s.problems, notes: s.fnotes }, el, function () { S.data.dog.finalDone = true; S.ans = {}; S.photo = S.photoFile = S.photoUrl = null; S.photoSaved = false; thankYou(); });
     };
     if (!S.photo || S.photoSaved) return sendFinal();
     el.disabled = true; el.textContent = 'Uploading photo…'; S.err = '';
-    return apiPost({ action: 'photo', k: S.k, photo: S.photo, consent: true, consentVersion: PHOTO_CONSENT_V, consentText: PHOTO_CONSENT.join(' ') }).then(function (r) {
-      if (!r || !r.ok) throw new Error(r && r.error);
-      S.photoSaved = true; sendFinal();
-    }).catch(function () {
-      S.err = "The photo didn't upload. Check your signal and tap Send again, or tap Remove photo. Your answers are still here.";
-      S.keep = true; survey();
+    return readPhoto(S.photoFile, function (data) {
+      if (!data) { S.err = "That photo couldn't be read. Tap Remove photo and pick it again."; S.keep = true; return survey(); }
+      apiPost({ action: 'photo', k: S.k, photo: data, consent: true, consentVersion: PHOTO_CONSENT_V, consentText: PHOTO_CONSENT.join(' ') }).then(function (r) {
+        if (!r || !r.ok) throw new Error(r && r.error);
+        S.photoSaved = true; sendFinal();
+      }).catch(function () {
+        S.err = "The photo didn't upload. Check your signal and tap Send again, or tap Remove photo. Your answers are still here.";
+        S.keep = true; survey();
+      });
     });
   }
   if (el.id === 'submitEmail') {
