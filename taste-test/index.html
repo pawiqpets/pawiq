@@ -419,7 +419,7 @@ function credential() {
     '<div class="sec"><h3>' + poss(dog()) + ' daily link</h3><div class="keybox">' + esc(myLink().replace(/^https?:\/\//, '')) + '</div>' +
     '<p class="muted">Save it. Anyone who feeds ' + dog() + ' can use it.</p></div>' +
     '<div class="sec"><h3>Start date and reminder</h3><p>Tell us the day you want to start. If you want a daily reminder, also pick a time and we\'ll add it to your calendar.</p>' +
-    '<label class="f" for="startDate">Start date<input type="date" id="startDate" min="' + today + '" max="' + addDays(today, 60) + '" value="' + esc(val) + '"></label>' +
+    '<label class="f" for="startDate">Start date<select id="startDate"><option value="">Pick a day</option>' + startOptions(today, val) + '</select></label>' +
     '<label class="f" for="remindTime">Reminder time (optional)<select id="remindTime"><option value="">No reminder</option>' + remindOptions() + '</select></label>' + errBox() + '</div>' +
     '<div class="foot"><button class="cta" id="setStart">' + (d.start ? 'Update start date' : 'Set start date') + '</button><button class="cta ghost" id="copy">Copy the link</button></div>');
 }
@@ -500,7 +500,7 @@ function logged(day) {
   var last = day === total(), nm = S.data.dog.name;
   var LINES = [['good one, ' + nm + '.', 'see you tomorrow.'], ['noted.', nm + ' is thorough.'], ['another day,', 'another data point.'], [nm + ', the official', 'taste tester.'], ['that\'s day ' + day + '.', nm + ' is on a roll.'], ['we\'re taking notes.', nm + ' is, too.'], ['good dog.', 'good data.']];
   var L = last ? ['that\'s all 10 chews.', 'thank you, truly.'] : LINES[(day - 1) % LINES.length];
-  paintFull(COLORS[roundOf(day).sticker] || '#5EC6FF', '<section class="top" style="background:' + (COLORS[roundOf(day).sticker] || 'var(--blue)') + ';min-height:52vh;gap:6px"><div class="bar">' + logo() + '</div>' +
+  paintFull(COLORS[roundOf(day).sticker] || '#5EC6FF', '<section class="top" style="background:' + (COLORS[roundOf(day).sticker] || 'var(--blue)') + ';min-height:40vh;gap:6px;padding-bottom:96px"><div class="bar">' + logo() + '</div>' +
     (S.hh && S.hh.length > 1 ? '<span class="dogchip">' + dog() + '</span>' : '') + bowl(L[0], L[1]) + '<h1 class="xl" style="margin-top:0">Day ' + day + ', done.</h1>' +
     '<p class="lead">' + (last ? 'That\'s all 10 chews, ' + dog() + '. Last questions open tomorrow.' : 'Thanks, ' + dog() + '. Same time tomorrow.') + '</p></section>' +
     '<div class="foot">' + nextDogBtn() + lateLink(currentDay()) + '<button class="link" data-fix="' + day + '">Oops, fix today\'s answer</button></div>');
@@ -531,17 +531,22 @@ function thankYou() {
 }
 
 /* ---------- calendar reminders (.ics) ---------- */
+function startOptions(today, val) {
+  var o = '';
+  for (var i = 0; i <= 7; i++) { var d = addDays(today, i); o += '<option value="' + d + '"' + (d === val ? ' selected' : '') + '>' + niceDate(d) + (i === 0 ? ' (today)' : '') + '</option>'; }
+  return o;
+}
 function remindOptions() {
   var o = '';
-  for (var h = 6; h <= 21; h++) { var h12 = h % 12 === 0 ? 12 : h % 12; o += '<option value="' + (h < 10 ? '0' : '') + h + '00">' + h12 + ':00 ' + (h < 12 ? 'AM' : 'PM') + '</option>'; }
+  for (var h = 6; h <= 21; h++) { var h12 = h % 12 === 0 ? 12 : h % 12, hh = (h < 10 ? '0' : '') + h; ['00', '30'].forEach(function (m) { o += '<option value="' + hh + m + '">' + h12 + ':' + m + ' ' + (h < 12 ? 'AM' : 'PM') + '</option>'; }); }
   return o;
 }
 function downloadIcs(time) {
   var d = S.data.dog, t = time + '00', start = d.start.replace(/-/g, '');
   var stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
   var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//pawIQ//Taste Test//EN', 'BEGIN:VEVENT',
-    'UID:' + S.k + '@pawiqpets.com', 'DTSTAMP:' + stamp, 'DTSTART:' + start + 'T' + t, 'DURATION:PT10M',
-    'RRULE:FREQ=DAILY;COUNT=' + (total() + 4), 'SUMMARY:' + S.data.dog.name + "'s taste test (1 min)",
+    'UID:' + S.k + '@pawiqpets.com', 'DTSTAMP:' + stamp, 'DTSTART:' + start + 'T' + t, 'DURATION:PT15M',
+    'RRULE:FREQ=DAILY;COUNT=' + (total() + 5), 'SUMMARY:' + S.data.dog.name + "'s taste test (1 min)",
     'DESCRIPTION:Put A and B down\\, then tap which went first: ' + myLink(), 'URL:' + myLink(),
     'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Taste test time', 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
   var a = document.createElement('a');
@@ -634,7 +639,7 @@ app.addEventListener('click', function (e) {
     var sd = document.getElementById('startDate').value, rt = document.getElementById('remindTime').value, td = todayPT();
     if (!sd) { S.err = 'Pick your start date first.'; return credential(); }
     if (dayDiff(sd, td) < 0) { S.err = 'The start date can\'t be in the past.'; return credential(); }
-    if (dayDiff(sd, td) > 60) { S.err = 'Pick a date within the next 60 days.'; return credential(); }
+    if (dayDiff(sd, td) > 7) { S.err = 'Pick a day within the next 7 days.'; return credential(); }
     return save({ action: 'start', k: S.k, start: sd }, el, function () {
       S.data.dog.start = sd; S.err = '';
       if (rt) downloadIcs(rt);
