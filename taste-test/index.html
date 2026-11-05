@@ -316,10 +316,13 @@ function chickenStop(btnEl) {
   save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: '', phone: '', hh: r.hh || '', usualtime: '', sidebyside: '' }, btnEl, show);
 }
 function you() {
+  S.ans.referrer = S.reg.referrer;
   paint(formTop(4, 'And you are?') +
     '<div class="sec"><label class="f">Your full name<input type="text" id="owner" maxlength="80" autocomplete="name" value="' + esc(S.reg.owner || '') + '"></label>' +
-    '<label class="f">Phone<input type="tel" id="phone" maxlength="30" autocomplete="tel" value="' + esc(S.reg.phone || '') + '"></label>' +
-    '<label class="tick"><input type="checkbox" id="agree"' + (S.reg.agree ? ' checked' : '') + '>Got it. These are early samples, just for this test. Some dogs get a tummy upset with new chews. If ' + esc(S.reg.dog) + ' seems off, I\'ll stop the chews and tell Roger or Ed. I can stop any time.</label></div>' +
+    '<label class="f">Phone<input type="tel" id="phone" maxlength="30" autocomplete="tel" value="' + esc(S.reg.phone || '') + '"></label></div>' +
+    '<div class="sec"><h3>Who referred you?</h3><div class="grid2">' + ['Roger', 'Ed', 'Rob', 'Other'].map(function (x) { return btn('referrer', x, x); }).join('') + '</div>' +
+    (S.reg.referrer === 'Other' ? '<label class="f">Who?<input type="text" id="refOther" maxlength="60" autocomplete="off" value="' + esc(S.reg.refOther || '') + '"></label>' : '') + '</div>' +
+    '<div class="sec"><label class="tick"><input type="checkbox" id="agree"' + (S.reg.agree ? ' checked' : '') + '>Got it. These are early samples, just for this test. Some dogs get a tummy upset with new chews. If ' + esc(S.reg.dog) + ' seems off, I\'ll stop the chews and tell Roger or Ed. I can stop any time.</label></div>' +
     '<div class="foot"><button class="cta" id="submitReg">Sign ' + esc(S.reg.dog) + ' up</button></div>');
 }
 function registered() {
@@ -572,7 +575,7 @@ function downloadIcs(time) {
 
 /* ======================= EVENTS ======================= */
 function grabReg() {
-  ['dog', 'breed', 'age', 'weight', 'owner', 'phone'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
+  ['dog', 'breed', 'age', 'weight', 'owner', 'phone', 'refOther'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
   var sp = document.getElementById('supps'); if (sp) S.reg.supplements = sp.value.trim();
   var ot = document.getElementById('other'); if (ot) S.reg.other = ot.value.trim();
   var ag = document.getElementById('agree'); if (ag) S.reg.agree = ag.checked;
@@ -621,6 +624,7 @@ app.addEventListener('click', function (e) {
     if (el.dataset.g === 'gender') S.reg.gender = el.dataset.v;
     if (el.dataset.g === 'usualtime') S.reg.usualtime = el.dataset.v;
     if (el.dataset.g === 'sidebyside') S.reg.sidebyside = el.dataset.v;
+    if (el.dataset.g === 'referrer') S.reg.referrer = el.dataset.v;
     if (S.data && S.logDay && !S.data.dog.finalDone && document.getElementById('submitLog')) return dailyLog(S.logDay, S.late);
     return route(true);
   }
@@ -632,7 +636,7 @@ app.addEventListener('click', function (e) {
   if (el.dataset.go) {
     e.preventDefault(); S.err = ''; grabReg();
     var g = el.dataset.go;
-    if (g === 'again') { S.reg = { flags: [], owner: S.reg.owner, phone: S.reg.phone, hh: S.hhKey || '' }; S.ans = {}; S.view = 'join'; return join(); }
+    if (g === 'again') { S.reg = { flags: [], owner: S.reg.owner, phone: S.reg.phone, referrer: S.reg.referrer, refOther: S.reg.refOther, hh: S.hhKey || '' }; S.ans = {}; S.view = 'join'; return join(); }
     if (g === 'picker') return picker();
     if (g === 'home') return home();
     if (g === 'ingredients') { S.view = 'ingredients'; return ingredients(); }
@@ -667,9 +671,11 @@ app.addEventListener('click', function (e) {
   if (el.id === 'submitReg') {
     grabReg();
     if (!S.reg.owner || !S.reg.phone) { S.err = 'Your name and phone, please, so we can arrange drop-off.'; return you(); }
+    if (!S.reg.referrer) { S.err = 'Please tell us who referred you.'; return you(); }
+    if (S.reg.referrer === 'Other' && !(S.reg.refOther || '').trim()) { S.err = 'Please tell us who referred you.'; return you(); }
     if (!S.reg.agree) { S.err = 'Tick the box to say you got it.'; return you(); }
     var r = S.reg;
-    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: r.owner, phone: r.phone, hh: r.hh || '', usualtime: r.usualtime, sidebyside: r.sidebyside || '' }, el, function (res) { S.reviewNote = res.status === 'Needs review'; if (!S.hhKey && res.key) S.hhKey = res.key; S.regCount = (S.regCount || 0) + 1; S.view = 'registered'; registered(); });
+    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: r.owner, phone: r.phone, hh: r.hh || '', usualtime: r.usualtime, sidebyside: r.sidebyside || '', referrer: r.referrer === 'Other' ? 'Other: ' + (r.refOther || '').trim() : r.referrer }, el, function (res) { S.reviewNote = res.status === 'Needs review'; if (!S.hhKey && res.key) S.hhKey = res.key; S.regCount = (S.regCount || 0) + 1; S.view = 'registered'; registered(); });
   }
   if (el.id === 'submitLog') {
     var a = S.ans; a.notes = document.getElementById('notes').value;
