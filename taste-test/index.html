@@ -65,6 +65,9 @@ input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--blue);ou
 .consent b{font-size:12px;letter-spacing:.14em}
 .consent p{margin:0}
 .foot{margin-top:auto;padding:28px 24px 32px;display:flex;flex-direction:column;gap:8px}
+.bad{border-color:#C8102E!important;background:#FFF3F3!important;box-shadow:0 0 0 3px #C8102E33}
+.badgrp{outline:3px solid #C8102E;outline-offset:4px;border-radius:16px}
+.wrow{display:flex;gap:8px}.wrow input{flex:1;min-width:0}.wrow select{width:84px;flex:none}
 .err{background:#FFE1E1;border:2px solid var(--ink);border-radius:12px;padding:10px 14px;font-size:15px;font-weight:700}
 .muted{color:var(--grey);font-size:14px}
 .step{display:flex;gap:16px;align-items:flex-start;border-top:2px solid var(--ink);padding-top:14px}
@@ -135,6 +138,11 @@ function btn(group, val, label, cls, sub) {
   var on = S.ans[group] === val;
   return '<button type="button" class="' + (cls || 'opt') + '" aria-pressed="' + on + '" data-g="' + group + '" data-v="' + esc(val) + '">' + esc(label) + (sub ? '<span class="tl">' + esc(sub) + '</span>' : '') + '</button>';
 }
+function markBad() { // show which field was missed: red outline, and scroll it into view
+  var bad = S.bad || []; S.bad = null; var first = null;
+  bad.forEach(function (sel) { var el = app.querySelector(sel); if (!el) return; if (el.matches('button') || el.matches('input[type=checkbox]')) el = el.parentNode; el.classList.add(el.matches('input,select,textarea,.tick') ? 'bad' : 'badgrp'); first = first || el; });
+  if (first) setTimeout(function () { try { first.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { first.scrollIntoView(); } }, 60);
+}
 function errBox() { return S.err ? '<div class="err" role="alert">' + esc(S.err) + '</div>' : ''; }
 /* Pages with a grey sheet at the bottom: the area past the page bottom (rubber-band scroll, behind the iPhone toolbar) shows the html colour, so it is grey; the top overscroll stays blue. */
 var SHEET_BG = null;
@@ -145,6 +153,7 @@ function paint(html, noSwitch) {
   var keep = S.keep, y = window.scrollY, bg = S.bg || '#F6F6F1';
   S.keep = false; S.bg = null;
   app.innerHTML = demoBar() + html;
+  markBad();
   app.style.background = bg; document.body.style.background = bg; document.documentElement.style.background = bg; SHEET_BG = null;
   app.className = bg === '#F6F6F1' ? '' : 'full';
   if (bg !== '#F6F6F1') {
@@ -276,7 +285,7 @@ function about() {
   paint(formTop(2, 'Tell us about ' + d + '.') +
     '<div class="sec"><label class="f">Breed (or best guess)<input type="text" id="breed" maxlength="60" value="' + esc(S.reg.breed || '') + '"></label>' +
     '<div class="grid2"><label class="f">Age (years)<input type="number" id="age" inputmode="decimal" min="0" max="25" step="0.5" value="' + esc(S.reg.age || '') + '"></label>' +
-    '<label class="f">Weight (lb)<input type="number" id="weight" inputmode="decimal" min="1" max="250" value="' + esc(S.reg.weight || '') + '"></label></div></div>' +
+    '<label class="f">Weight<span class="wrow"><input type="number" id="weight" inputmode="decimal" min="1" max="250" value="' + esc(S.reg.wunit === 'kg' ? (S.reg.wshown || '') : (S.reg.weight || '')) + '"><select id="wunit" aria-label="Weight unit"><option value="lb"' + (S.reg.wunit === 'kg' ? '' : ' selected') + '>lb</option><option value="kg"' + (S.reg.wunit === 'kg' ? ' selected' : '') + '>kg</option></select></span></label></div></div>' +
     '<div class="sec"><h3>How picky is ' + d + ' about food and treats?</h3><div class="stack">' +
     btn('fussy', 'Eats anything', 'Eats anything', 'opt left') + btn('fussy', 'A little picky', 'A little picky', 'opt left') + btn('fussy', 'Very picky', 'Very picky', 'opt left') +
     '</div></div><div class="foot"><button class="cta" data-next="checks">Next</button></div>');
@@ -520,7 +529,7 @@ function logged(day) {
   var L = last ? ['that\'s all 10 chews.', 'thank you, truly.'] : LINES[(day - 1) % LINES.length];
   paintFull(COLORS[roundOf(day).sticker] || '#5EC6FF', '<section class="top" style="background:' + (COLORS[roundOf(day).sticker] || 'var(--blue)') + ';min-height:40vh;gap:6px;padding-bottom:96px"><div class="bar">' + logo() + '</div>' +
     (S.hh && S.hh.length > 1 ? '<span class="dogchip">' + dog() + '</span>' : '') + bowl(L[0], L[1]) + '<h1 class="xl" style="margin-top:0">Day ' + day + ', done.</h1>' +
-    '<p class="lead">' + (last ? 'That\'s all 10 chews, ' + dog() + '. Last questions open tomorrow.' : 'Thanks, ' + dog() + '. Same time tomorrow.') + '</p></section>' +
+    '<p class="lead">' + (last ? 'That\'s all 10 chews, ' + dog() + '. Last questions open tomorrow.' : 'Thanks, ' + dog() + '. ' + ((S.lastAns && S.lastAns.health && S.lastAns.health !== 'All good' && S.lastAns.normal !== 'Yes') ? 'We\'ll message you about tomorrow.' : 'Same time tomorrow.')) + '</p></section>' +
     '<div class="foot">' + nextDogBtn() + lateLink(currentDay()) + '<button class="link" data-fix="' + day + '">Oops, fix today\'s answer</button></div>');
 }
 
@@ -646,6 +655,8 @@ function downloadIcs(time) {
 /* ======================= EVENTS ======================= */
 function grabReg() {
   ['dog', 'breed', 'age', 'weight', 'owner', 'phone', 'email', 'address', 'city', 'refOther'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
+  var wu = document.getElementById('wunit'), wi = document.getElementById('weight');
+  if (wu && wi) { S.reg.wunit = wu.value; var wv = parseFloat(wi.value); if (wu.value === 'kg') { S.reg.wshown = wi.value.trim(); S.reg.weight = isNaN(wv) ? '' : String(Math.round(wv * 2.20462 * 10) / 10); } else { S.reg.wshown = ''; S.reg.weight = isNaN(wv) ? '' : String(wv); } }
   var sp = document.getElementById('supps'); if (sp) S.reg.supplements = sp.value.trim();
   var ot = document.getElementById('other'); if (ot) S.reg.other = ot.value.trim();
   var ag = document.getElementById('agree'); if (ag) S.reg.agree = ag.checked;
@@ -654,13 +665,15 @@ function grabReg() {
 var REG = { welcome: welcome, join: join, about: about, checks: checks, you: you };
 function validate(step) {
   var r = S.reg;
-  if (step === 'about' && !r.dog) return "What's your dog's name?";
-  if (step === 'about' && !r.gender) return 'Boy, girl or not sure? Tap one.';
-  if (step === 'checks' && (!r.age || !r.weight || !r.fussy)) return 'Age, weight and fussiness help us pick a good mix.';
-  if (step === 'checks' && (Number(r.weight) < 1 || Number(r.weight) > 250)) return 'Weight looks off. In pounds, please.';
-  if (step === 'you' && !r.flags.length) return 'Tick any that fit, or "Nope, none of these".';
-  if (step === 'you' && !r.usualtime) return 'Pick a usual time of day for the chews.';
-  if (step === 'you' && r.hh && !r.sidebyside) return 'Are the two dogs fed side by side? Tap one.';
+  S.bad = null;
+  var bad = function (m) { S.bad = [].slice.call(arguments, 1); return m; };
+  if (step === 'about' && !r.dog) return bad("What's your dog's name?", '#dog');
+  if (step === 'about' && !r.gender) return bad('Boy, girl or not sure? Tap one.', '[data-g=gender]');
+  if (step === 'checks' && (!r.age || !r.weight || !r.fussy)) return bad('Age, weight and fussiness help us pick a good mix.', !r.age ? '#age' : '#none', !r.weight ? '#weight' : '#none', !r.fussy ? '[data-g=fussy]' : '#none');
+  if (step === 'checks' && (Number(r.weight) < 1 || Number(r.weight) > 250)) return bad('Weight looks off. Check the number and the lb or kg setting.', '#weight');
+  if (step === 'you' && !r.flags.length) return bad('Tick any that fit, or "Nope, none of these".', '.tick');
+  if (step === 'you' && !r.usualtime) return bad('Pick a usual time of day for the chews.', '[data-g=usualtime]');
+  if (step === 'you' && r.hh && !r.sidebyside) return bad('Are the two dogs fed side by side? Tap one.', '[data-g=sidebyside]');
   return '';
 }
 
@@ -742,12 +755,12 @@ app.addEventListener('click', function (e) {
 
   if (el.id === 'submitReg') {
     grabReg();
-    if (!S.reg.owner || !S.reg.phone) { S.err = 'Your name and phone, please, so we can arrange drop-off.'; return you(); }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.reg.email || '')) { S.err = 'Your email, please, in case we need to reach you.'; return you(); }
-    if (!S.reg.address || !S.reg.city) { S.err = 'Your home address and city, please, so we can arrange drop-off.'; return you(); }
-    if (!S.reg.referrer) { S.err = 'Please tell us who referred you.'; return you(); }
-    if (S.reg.referrer === 'Other' && !(S.reg.refOther || '').trim()) { S.err = 'Please tell us who referred you.'; return you(); }
-    if (!S.reg.agree) { S.err = 'Tick the box to say you got it.'; return you(); }
+    if (!S.reg.owner || !S.reg.phone) { S.err = 'Your name and phone, please, so we can arrange drop-off.'; S.bad = [!S.reg.owner ? '#owner' : '#none', !S.reg.phone ? '#phone' : '#none']; return you(); }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.reg.email || '')) { S.err = 'Your email, please, in case we need to reach you.'; S.bad = ['#email']; return you(); }
+    if (!S.reg.address || !S.reg.city) { S.err = 'Your home address and city, please, so we can arrange drop-off.'; S.bad = [!S.reg.address ? '#address' : '#none', !S.reg.city ? '#city' : '#none']; return you(); }
+    if (!S.reg.referrer) { S.err = 'Please tell us who referred you.'; S.bad = ['[data-g=referrer]']; return you(); }
+    if (S.reg.referrer === 'Other' && !(S.reg.refOther || '').trim()) { S.err = 'Please tell us who referred you.'; S.bad = ['#refOther']; return you(); }
+    if (!S.reg.agree) { S.err = 'Tick the box to say you got it.'; S.bad = ['#agree']; return you(); }
     var r = S.reg;
     return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: r.owner, phone: r.phone, email: r.email, address: r.address, city: r.city, hh: r.hh || '', usualtime: r.usualtime, sidebyside: r.sidebyside || '', referrer: r.referrer === 'Other' ? 'Other: ' + (r.refOther || '').trim() : r.referrer }, el, function (res) { S.reviewNote = res.status === 'Needs review'; if (!S.hhKey && res.key) S.hhKey = res.key; S.regCount = (S.regCount || 0) + 1; S.view = 'registered'; registered(); });
   }
