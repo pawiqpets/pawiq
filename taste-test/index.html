@@ -232,7 +232,8 @@ function save(p, btnEl, then) {
 /* ---------- demo bar (only when no backend URL is set) ---------- */
 function demoBar() {
   if (!DEMO) return '';
-  function l(h, t) { return '<a href="#' + h + '">' + t + '</a>'; }
+  // On the live page the preview runs on ?demo=1, so the shortcuts are query links there and #names locally.
+  function l(h, t) { var q = h === 'signup' ? '' : (HASHES[h] || 'k=demo&day=' + h.slice(4)); return '<a href="' + (CONFIG.scriptUrl ? '?demo=1' + (q ? '&' + q : '') : '#' + h) + '">' + t + '</a>'; }
   return '<div class="demo"><span>Preview, nothing is saved:</span>' + l('signup', 'Sign-up') + l('picked', 'Picked') +
     l('day-1', 'Day 1') + l('day-2', 'Day 2') + l('day-3', 'Day 3') + l('day-4', 'Day 4') + l('day-5', 'Day 5') + l('day-6', 'Day 6') + l('day-7', 'Day 7') +
     l('survey', 'Survey') + l('notpicked', 'Not picked') + '</div>';
@@ -325,6 +326,7 @@ function you() {
   paint(formTop(4, 'And you are?') +
     '<div class="sec"><label class="f">Your full name<input type="text" id="owner" maxlength="80" autocomplete="name" value="' + esc(S.reg.owner || '') + '"></label>' +
     '<label class="f">Phone<input type="tel" id="phone" maxlength="30" autocomplete="tel" value="' + esc(S.reg.phone || '') + '"></label>' +
+    '<label class="f">Email<input type="email" id="email" maxlength="120" autocomplete="email" inputmode="email" value="' + esc(S.reg.email || '') + '"></label>' +
     '<label class="f">Home address<input type="text" id="address" maxlength="120" autocomplete="street-address" value="' + esc(S.reg.address || '') + '"></label>' +
     '<label class="f">City<input type="text" id="city" maxlength="60" autocomplete="address-level2" value="' + esc(S.reg.city || '') + '"></label></div>' +
     '<div class="sec"><h3>Who referred you?</h3><div class="grid2">' + ['Roger', 'Ed', 'Rob', 'Other'].map(function (x) { return btn('referrer', x, x); }).join('') + '</div>' +
@@ -643,7 +645,7 @@ function downloadIcs(time) {
 
 /* ======================= EVENTS ======================= */
 function grabReg() {
-  ['dog', 'breed', 'age', 'weight', 'owner', 'phone', 'address', 'city', 'refOther'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
+  ['dog', 'breed', 'age', 'weight', 'owner', 'phone', 'email', 'address', 'city', 'refOther'].forEach(function (id) { var el = document.getElementById(id); if (el) S.reg[id] = el.value.trim(); });
   var sp = document.getElementById('supps'); if (sp) S.reg.supplements = sp.value.trim();
   var ot = document.getElementById('other'); if (ot) S.reg.other = ot.value.trim();
   var ag = document.getElementById('agree'); if (ag) S.reg.agree = ag.checked;
@@ -706,7 +708,7 @@ app.addEventListener('click', function (e) {
   if (el.dataset.go) {
     e.preventDefault(); S.err = ''; grabReg();
     var g = el.dataset.go;
-    if (g === 'again') { S.reg = { flags: [], owner: S.reg.owner, phone: S.reg.phone, address: S.reg.address, city: S.reg.city, referrer: S.reg.referrer, refOther: S.reg.refOther, hh: S.hhKey || '' }; S.ans = {}; S.view = 'join'; return join(); }
+    if (g === 'again') { S.reg = { flags: [], owner: S.reg.owner, phone: S.reg.phone, email: S.reg.email, address: S.reg.address, city: S.reg.city, referrer: S.reg.referrer, refOther: S.reg.refOther, hh: S.hhKey || '' }; S.ans = {}; S.view = 'join'; return join(); }
     if (g === 'picker') return picker();
     if (g === 'home') return home();
     if (g === 'ingredients') { S.view = 'ingredients'; return ingredients(); }
@@ -741,12 +743,13 @@ app.addEventListener('click', function (e) {
   if (el.id === 'submitReg') {
     grabReg();
     if (!S.reg.owner || !S.reg.phone) { S.err = 'Your name and phone, please, so we can arrange drop-off.'; return you(); }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(S.reg.email || '')) { S.err = 'Your email, please, in case we need to reach you.'; return you(); }
     if (!S.reg.address || !S.reg.city) { S.err = 'Your home address and city, please, so we can arrange drop-off.'; return you(); }
     if (!S.reg.referrer) { S.err = 'Please tell us who referred you.'; return you(); }
     if (S.reg.referrer === 'Other' && !(S.reg.refOther || '').trim()) { S.err = 'Please tell us who referred you.'; return you(); }
     if (!S.reg.agree) { S.err = 'Tick the box to say you got it.'; return you(); }
     var r = S.reg;
-    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: r.owner, phone: r.phone, address: r.address, city: r.city, hh: r.hh || '', usualtime: r.usualtime, sidebyside: r.sidebyside || '', referrer: r.referrer === 'Other' ? 'Other: ' + (r.refOther || '').trim() : r.referrer }, el, function (res) { S.reviewNote = res.status === 'Needs review'; if (!S.hhKey && res.key) S.hhKey = res.key; S.regCount = (S.regCount || 0) + 1; S.view = 'registered'; registered(); });
+    return save({ action: 'register', dog: r.dog, breed: r.breed, age: r.age, weight: r.weight, fussy: r.fussy, flags: r.flags.join('; '), supplements: r.supplements, gender: r.gender, other: r.other, owner: r.owner, phone: r.phone, email: r.email, address: r.address, city: r.city, hh: r.hh || '', usualtime: r.usualtime, sidebyside: r.sidebyside || '', referrer: r.referrer === 'Other' ? 'Other: ' + (r.refOther || '').trim() : r.referrer }, el, function (res) { S.reviewNote = res.status === 'Needs review'; if (!S.hhKey && res.key) S.hhKey = res.key; S.regCount = (S.regCount || 0) + 1; S.view = 'registered'; registered(); });
   }
   if (el.id === 'submitLog') {
     var a = S.ans; a.notes = document.getElementById('notes').value;
