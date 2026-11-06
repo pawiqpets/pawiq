@@ -19,7 +19,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=8"
+CSS_HREF = "/assets/learn/learn.css?v=9"
 ORG_ID = SITE + "/#organization"
 HUBS = ["Gut health", "Skin and coat", "Joints and mobility", "Calm and behavior", "Senior and life stages",
         "Food and safety", "Labels and ingredients", "Daily routines", "Seasonal care"]
@@ -37,6 +37,27 @@ NEIGHBOURS = {
 SIZES = (480, 800, 1200)
 e = html.escape
 
+
+
+def label_cells(html):
+    """Phone tables: copy each column heading onto its cells (data-label) so the CSS can stack rows into cards."""
+    def one(m):
+        t = m.group(0)
+        head = re.search(r"<thead>(.*?)</thead>", t, re.S)
+        if not head:
+            return t
+        names = [re.sub(r"<[^>]+>", "", x).strip() for x in re.findall(r"<th[^>]*>(.*?)</th>", head.group(1), re.S)]
+        def row(r):
+            i = [-1]
+            def cell(c):
+                i[0] += 1
+                if c.group(1) == "th" and "scope=\"row\"" in c.group(2): return c.group(0)
+                lab = names[i[0]] if i[0] < len(names) else ""
+                return "<td%s data-label=\"%s\">" % (c.group(2), lab.replace('"', "&quot;")) if c.group(1) == "td" else c.group(0)
+            return re.sub(r"<(td|th)([^>]*)>", cell, r.group(0))
+        body = re.search(r"<tbody>.*?</tbody>", t, re.S)
+        return t.replace(body.group(0), re.sub(r"<tr>.*?</tr>", row, body.group(0), flags=re.S)) if body else t
+    return re.sub(r"<table>.*?</table>", one, html, flags=re.S)
 
 def meta(src, key):
     m = re.search(r"<!-- %s: (.*?) -->" % re.escape(key), src, re.S)
@@ -188,7 +209,7 @@ def render_post(p, date, review_html="", others=()):
         {"@type": "ListItem", "position": 2, "name": "Learn", "item": SITE + "/blogs/learn"},
         {"@type": "ListItem", "position": 3, "name": p["mtitle"].replace(" | pawIQ", ""), "item": p["url"]}]})
     extra = "".join('<script type="application/ld+json">%s</script>\n' % json.dumps(x, ensure_ascii=False) for x in lds)
-    body = p["body"].replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
+    body = label_cells(p["body"]).replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
     body = re.sub(r"<p>pawIQ ", '<p class="closing">pawIQ ', body, count=1)
     # Tag the launch-list link with the post it came from, so signups can be traced to Learn.
     body = body.replace('href="https://www.pawiqpets.com/#signupBlock"', 'href="%s"' % signup_href(p["handle"]))
