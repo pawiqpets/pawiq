@@ -351,8 +351,6 @@ PAGES = [
      "Printable dog boarding checklist: choosing a facility, vaccines, what to pack, emergency contacts and pickup day, from vet school and AVMA guidance.", "Dog boarding checklist.", "tool"),
     ("cold-weather-dog-walk-checklist.html", "tools/cold-weather-dog-walk-checklist.html", "/tools/cold-weather-dog-walk-checklist", "Cold weather dog walk checklist, printable | pawIQ",
      "Printable winter dog walk checklist: what to check before, during and after a cold walk, from veterinary school and AVMA guidance.", "Cold weather dog walk checklist.", "tool"),
-    ("dog-supplement-label-checklist.html", "tools/dog-supplement-label-checklist.html", "/tools/dog-supplement-label-checklist", "Dog supplement label checklist, printable | pawIQ",
-     "Printable checklist for reading a dog supplement label: front panel, guaranteed analysis, ingredients, directions and lot number, from AAFCO and FDA.", "Dog supplement label checklist.", "tool"),
 ]
 
 
@@ -377,7 +375,7 @@ def update_sitemap(posts):
                f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-age-calculator</loc>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-supplement-cost-calculator</loc>\n  </url>"]
-    entries += [f"  <url>\n    <loc>{SITE}/tools</loc>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist", "dog-supplement-label-checklist")]
+    entries += [f"  <url>\n    <loc>{SITE}/tools</loc>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist")]
     entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{p.get('updated') or d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
     s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"
