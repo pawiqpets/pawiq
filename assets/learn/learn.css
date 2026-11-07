@@ -93,7 +93,7 @@ main.wrap.wide h1{margin-top:32px}
 .calc label { font-weight: 600; font-size: 15px; }
 .calc input { font: inherit; padding: 10px 12px; border: 1px solid #b9b9b0; border-radius: 4px; background: #fff; color: inherit; width: 100%; box-sizing: border-box; }
 .calc button { font: inherit; font-weight: 600; margin-top: 6px; padding: 11px 16px; border: 0; border-radius: 4px; background: #00080B; color: #fff; cursor: pointer; }
-.calc-out { font-size: 18px; line-height: 1.4; background: #fff; border: 1px solid #d8d8cf; border-radius: 4px; padding: 14px 16px; max-width: 520px; min-height: 1.4em; }
+.calc-out { font-size: 18px; line-height: 1.4; background: #fff; border: 1px solid #d8d8cf; border-radius: 4px; padding: 14px 16px; max-width: 520px; min-height: 5.6em; box-sizing: border-box; }
 
 /* Checklists */
 .checklist { list-style: none; padding: 0; margin: 10px 0 22px; }

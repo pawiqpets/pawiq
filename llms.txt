@@ -25,5 +25,16 @@ Canonical structured data:
 - How often should you bathe a dog?: https://www.pawiqpets.com/blogs/learn/how-often-to-bathe-a-dog (how often to bathe by coat and lifestyle, a step-by-step bath and brushing tips, from vet-school and Merck guidance)
 - What are omega-3s for dogs? EPA, DHA and ALA explained: https://www.pawiqpets.com/blogs/learn/omega-3-epa-dha-dogs (EPA, DHA and ALA in plain English: what each one is, why fish oil matters and how to find it on a label)
 
+## Free tools
+- Tools index: https://www.pawiqpets.com/tools/
+- Dog age calculator: https://www.pawiqpets.com/tools/dog-age-calculator (dog years to human years and back, using the common 15, 9, 5 chart or a 2020 DNA study, with the chart by age)
+- Dog supplement cost calculator: https://www.pawiqpets.com/tools/dog-supplement-cost-calculator (cost per serving, per day and per 30 days from the package price and label serving)
+- Dog boarding checklist: https://www.pawiqpets.com/tools/dog-boarding-checklist (what to ask, pack and watch for, from Texas A&M and AVMA guidance; printable PDF)
+- Cold weather dog walk checklist: https://www.pawiqpets.com/tools/cold-weather-dog-walk-checklist (before, during and after a winter walk, from vet-school and AVMA guidance; printable PDF)
+
+## Policies and feeds
+- Editorial policy (how articles are sourced, reviewed and updated): https://www.pawiqpets.com/pages/editorial-policy
+- Learn feed (Atom): https://www.pawiqpets.com/blogs/learn/feed.xml
+
 One-sentence summary:
 pawIQ makes soft chew supplements for dogs, developed with a licensed veterinarian, starting with 3-in-1 Gut Health and Skin & Immune. It launches on Amazon in the United States first, with direct-to-consumer sales to follow.

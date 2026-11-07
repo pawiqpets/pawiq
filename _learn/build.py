@@ -19,7 +19,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=15"
+CSS_HREF = "/assets/learn/learn.css?v=16"
 ORG_ID = SITE + "/#organization"
 HUBS = ["Gut health", "Skin and coat", "Joints and mobility", "Calm and behavior", "Senior and life stages",
         "Food and safety", "Labels and ingredients", "Daily routines", "Seasonal care"]
@@ -178,7 +178,7 @@ document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.targ
 """
 
 
-FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/tools">Tools</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
+FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/tools/">Tools</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
 <script>document.querySelectorAll(".table-wrap").forEach(function(w){function f(){w.classList.toggle("more",w.scrollWidth-w.clientWidth-w.scrollLeft>4)}f();w.addEventListener("scroll",f,{passive:true});addEventListener("resize",f)})</script>
 </body>
 </html>
@@ -352,7 +352,7 @@ PAGES = [
      "Free dog years to human years calculator with a chart by age. Convert either way using the common chart or a 2020 DNA study.", "Dog age calculator.", "tool"),
     ("dog-supplement-cost-calculator.html", "tools/dog-supplement-cost-calculator.html", "/tools/dog-supplement-cost-calculator", "Dog supplement cost per day calculator | pawIQ",
      "Free calculator: cost per day and per month for any dog chew, treat or supplement, from the package price and label serving.", "Dog supplement cost calculator.", "tool"),
-    ("tools-index.html", "tools/index.html", "/tools", "Free dog calculators and checklists | pawIQ",
+    ("tools-index.html", "tools/index.html", "/tools/", "Free dog calculators and checklists | pawIQ",
      "Free dog age and supplement cost calculators plus printable checklists for dog boarding and winter dog walks.", "Tools and checklists.", "tool"),
     ("dog-boarding-checklist.html", "tools/dog-boarding-checklist.html", "/tools/dog-boarding-checklist", "Dog boarding checklist: first stay, printable | pawIQ",
      "Printable dog boarding checklist: choosing a facility, vaccines, what to pack, emergency contacts and pickup day, from vet school and AVMA guidance.", "Dog boarding checklist.", "tool"),
@@ -375,7 +375,7 @@ def tool_ld(src, url_path, title, desc, h1, body):
         graph.append({"@type": "WebApplication", "name": h1.rstrip("."), "url": url, "description": desc, "applicationCategory": "UtilitiesApplication",
                       "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
                       "dateModified": TOOL_DATE, "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"}})
-    elif url_path == "/tools":
+    elif url_path == "/tools/":
         tl = re.findall(r'<li><a href="(/tools/[^"]+)">(.*?)</a>', body)
         graph.append({"@type": "CollectionPage", "name": h1.rstrip("."), "url": url, "dateModified": TOOL_DATE, "mainEntity": {"@type": "ItemList",
                       "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": clean(n), "url": SITE + u} for i, (u, n) in enumerate(tl)]}})
@@ -389,7 +389,7 @@ def tool_ld(src, url_path, title, desc, h1, body):
     faqs = [(clean(q), clean(a)) for q, a in re.findall(r"<h2>([^<]*\?)</h2>\s*<p>(.*?)</p>", body, re.S)]
     if faqs:
         graph.append({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faqs]})
-    crumbs = [("Home", SITE + "/"), ("Tools", SITE + "/tools")] + ([(h1.rstrip("."), url)] if url_path != "/tools" else [])
+    crumbs = [("Home", SITE + "/"), ("Tools", SITE + "/tools/")] + ([(h1.rstrip("."), url)] if url_path != "/tools/" else [])
     graph.append({"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]})
     return '<script type="application/ld+json">%s</script>\n' % json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
 
@@ -397,10 +397,16 @@ def tool_ld(src, url_path, title, desc, h1, body):
 def render_page(src, url_path, title, desc, h1, cls=""):
     body = open(os.path.join(ROOT, "_learn", "pages", src), encoding="utf-8").read()
     extra = tool_ld(src, url_path, title, desc, h1, body) if cls == "tool" else ""
+    if url_path == "/pages/editorial-policy":
+        extra = '<script type="application/ld+json">%s</script>\n' % json.dumps({"@context": "https://schema.org", "@graph": [
+            {"@type": "AboutPage", "name": "Editorial policy", "url": SITE + url_path, "description": desc, "dateModified": TOOL_DATE,
+             "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"}},
+            {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                                            {"@type": "ListItem", "position": 2, "name": "Editorial policy", "item": SITE + url_path}]}]}, ensure_ascii=False)
     crumb = ""
     if cls == "tool":
-        crumb = '<p class="crumb"><a href="/">Home</a> / ' + ('Tools' if url_path == "/tools" else '<a href="/tools">Tools</a> / ' + e(h1.rstrip("."))) + '</p>\n'
-    stamp = '<p class="meta">Last updated <time datetime="%s">%s</time> · Built from the sources listed on this page. See our <a href="/pages/editorial-policy">editorial policy</a>.</p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)) if cls == "tool" and url_path != "/tools" else ("" if cls != "tool" else '<p class="meta">Last updated <time datetime="%s">%s</time></p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)))
+        crumb = '<p class="crumb"><a href="/">Home</a> / ' + ('Tools' if url_path == "/tools/" else '<a href="/tools/">Tools</a> / ' + e(h1.rstrip("."))) + '</p>\n'
+    stamp = '<p class="meta">Last updated <time datetime="%s">%s</time> · Built from the sources listed on this page. See our <a href="/pages/editorial-policy">editorial policy</a>.</p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)) if cls == "tool" and url_path != "/tools/" else ("" if cls != "tool" else '<p class="meta">Last updated <time datetime="%s">%s</time></p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)))
     return head(title, desc, SITE + url_path, "website", SITE + "/assets/og-image.png", extra) + f"""<main>
 <article class="wrap post{(" " + cls) if cls else ""}">
 {crumb}<h1>{e(h1)}</h1>
@@ -420,7 +426,7 @@ def update_sitemap(posts):
                f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-age-calculator</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-supplement-cost-calculator</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>"]
-    entries += [f"  <url>\n    <loc>{SITE}/tools</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist")]
+    entries += [f"  <url>\n    <loc>{SITE}/tools/</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist")]
     entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{p.get('updated') or d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
     s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"
