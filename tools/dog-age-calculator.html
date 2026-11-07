@@ -21,7 +21,7 @@ document.addEventListener('click',function(ev){var a=ev.target.closest&&ev.targe
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/learn/learn.css?v=14">
+<link rel="stylesheet" href="/assets/learn/learn.css?v=15">
 <link rel="alternate" type="application/atom+xml" title="pawIQ Learn" href="https://www.pawiqpets.com/blogs/learn/feed.xml">
 </head>
 <body>
@@ -29,33 +29,46 @@ document.addEventListener('click',function(ev){var a=ev.target.closest&&ev.targe
 <main>
 <article class="wrap post tool">
 <h1>Dog age calculator.</h1>
-<p class="standfirst">Enter your dog's age to see a estimate of the human age that matches it, based on a 2020 DNA study. It takes a few seconds and stores nothing.</p>
+<p class="standfirst">Convert dog years to human years, or human years to dog years, with either of two methods. It takes a few seconds and stores nothing.</p>
 
 <form class="calc" id="ageForm" onsubmit="return false">
-  <label for="yrs">Years</label>
-  <input id="yrs" type="number" inputmode="numeric" min="0" max="16" step="1" value="3">
-  <label for="mos">Months</label>
-  <input id="mos" type="number" inputmode="numeric" min="0" max="11" step="1" value="0">
+  <fieldset>
+    <legend>Method</legend>
+    <label><input type="radio" name="method" value="rule" checked> Rule of thumb (15, 9, then 5 a year)</label>
+    <label><input type="radio" name="method" value="dna"> DNA study estimate</label>
+  </fieldset>
+  <fieldset>
+    <legend>Convert</legend>
+    <label><input type="radio" name="dir" value="d2h" checked> Dog age to human age</label>
+    <label><input type="radio" name="dir" value="h2d"> Human age to dog age</label>
+  </fieldset>
+  <div id="d2h">
+    <label for="yrs">Dog years</label>
+    <input id="yrs" type="number" inputmode="numeric" min="0" max="16" step="1" value="3">
+    <label for="mos">Months</label>
+    <input id="mos" type="number" inputmode="numeric" min="0" max="11" step="1" value="0">
+  </div>
+  <div id="h2d" hidden>
+    <label for="hum">Human age in years</label>
+    <input id="hum" type="number" inputmode="numeric" min="1" max="94" step="1" value="29">
+  </div>
   <button type="button" id="go">Work it out</button>
 </form>
 
 <p class="calc-out" id="out" aria-live="polite"></p>
 
-<h2>How does the estimate work?</h2>
-<p>The estimate uses a formula from a 2020 study in the journal Cell Systems, which tracked chemical changes in DNA as 104 dogs, mostly Labrador retrievers, aged and compared them with human patterns: human age = 16 &times; ln(dog age) + 31, with dog age in years.<sup><a href="#src-1">1</a></sup> It is more current than the old "multiply by 7" rule, because dogs age fastest early in life and more slowly later.<sup><a href="#src-1">1</a></sup></p>
+<h2>Which method is more widely used?</h2>
+<p>The rule of thumb is a common one. The AKC reports it as an AVMA breakdown: 15 human years for a medium-sized dog's first year, about 9 for the second, then about 5 for each year after.<sup><a href="#src-2">2</a></sup> The DNA estimate is newer, comes from a single 2020 study and is based on a single breed group.<sup><a href="#src-1">1</a></sup> Neither is an official veterinary standard: the American Animal Hospital Association chose not to convert dog age to human years and describes life stages instead.<sup><a href="#src-3">3</a></sup></p>
 
-<h2>Why does Google say 28 for a 3-year-old?</h2>
-<p>Size-based charts, like the one from Zoetis Petcare, give lower numbers (28 for a 3-year-old under 50 lb) because they work differently and are only rough rules of thumb.<sup><a href="#src-2">2</a></sup> This calculator uses DNA changes instead, so it gives a higher number. Neither says anything about your dog's health.</p>
+<h2>Why do the two methods give different numbers?</h2>
+<p>They measure different things. The rule of thumb is a simple guide to where a dog sits in life, built for a medium-sized dog.<sup><a href="#src-2">2</a></sup> The DNA estimate comes from a formula, human age = 16 &times; ln(dog age) + 31, based on chemical changes in DNA in 104 dogs, mostly Labrador retrievers, aged about 1 month to 16 years.<sup><a href="#src-1">1</a></sup> That is why a 3-year-old dog comes out near 29 with one and 49 with the other. Charts that split by size, such as the one from Zoetis Petcare, put a 3-year-old dog at 28 for dogs under 50 lb and 32 for dogs over 90 lb.<sup><a href="#src-4">4</a></sup></p>
 
-<h2>How accurate is it for my breed?</h2>
-<p>It was built mostly on one breed, Labrador retrievers, so treat the result as a fun, rough guide for any dog. The authors note other breeds could give different results.<sup><a href="#src-1">1</a></sup> Dogs of different sizes and breeds have different lifespans, so the match will not be exact for every dog. It is not medical advice, and it says nothing about your dog's health.</p>
-
-<h2>What should I use this for?</h2>
-<p>Use it as a conversation starter, or to picture where your dog is in life. For anything about your dog's care at a given age, ask your vet.</p>
+<h2>How accurate is it for my dog?</h2>
+<p>Treat every result as a rough, fun guide. Size matters: larger dogs tend to have shorter lifespans than smaller dogs,<sup><a href="#src-2">2</a></sup> and the authors of the DNA study note that other breeds could give different results.<sup><a href="#src-1">1</a></sup> This tool is not medical advice and says nothing about your dog's health. For anything about your dog's care at a given age, ask your vet.</p>
 
 <table>
-  <caption>Estimates from one 2020 study of 104 dogs, mostly Labrador retrievers, that compared DNA changes in dogs and people.<sup><a href="#src-1">1</a></sup> Size-based charts give lower numbers because they work differently.<sup><a href="#src-2">2</a></sup> Neither says anything about your dog's health. Your vet can talk about your dog's life stage.</caption>
-  <thead><tr><th scope="col">Dog age</th><th scope="col">Estimated human age</th></tr></thead>
+  <caption>Dog age and the matching human age by each method<sup><a href="#src-1">1</a>, <a href="#src-2">2</a></sup></caption>
+  <thead><tr><th scope="col">Dog age</th><th scope="col">Rule of thumb</th><th scope="col">DNA estimate</th></tr></thead>
   <tbody id="tbl"></tbody>
 </table>
 
@@ -63,28 +76,54 @@ document.addEventListener('click',function(ev){var a=ev.target.closest&&ev.targe
 
 <script>
 (function(){
-  function est(y){ return 16*Math.log(y)+31; }
+  var MAXD=16, MIND=0.25;
+  function dna(d){ return 16*Math.log(d)+31; }
+  function dnaInv(h){ return Math.exp((h-31)/16); }
+  function rule(d){ return 15*Math.min(d,1)+9*Math.max(0,Math.min(d-1,1))+5*Math.max(0,d-2); }
+  function ruleInv(h){ return h<=15 ? h/15 : (h<=24 ? 1+(h-15)/9 : 2+(h-24)/5); }
+  function val(n){ return document.querySelector('input[name='+n+']:checked').value; }
+  function fmtDog(d){
+    var y=Math.floor(d+1e-9), m=Math.round((d-y)*12);
+    if(m===12){ y+=1; m=0; }
+    var p=[]; if(y) p.push(y+(y===1?" year":" years")); if(m) p.push(m+(m===1?" month":" months"));
+    return p.join(" and ")||"under 1 month";
+  }
   function show(){
-    var y=Math.max(0,parseInt(document.getElementById('yrs').value,10)||0);
-    var m=Math.max(0,Math.min(11,parseInt(document.getElementById('mos').value,10)||0));
-    var t=y+m/12, o=document.getElementById('out');
-    if(t<0.25){ o.textContent="The study covered dogs from about 1 month old, so this calculator starts at 3 months."; return; }
-    if(t>16){ o.textContent="The study covered dogs up to 16 years old, so we do not estimate above that."; return; }
-    var parts=[]; if(y) parts.push(y+"-year"); if(m) parts.push(m+"-month");
-    o.textContent="A "+parts.join(", ")+"-old dog is about "+Math.round(est(t))+" in human years (estimate based on a 2020 DNA study).";
+    var dir=val('dir'), meth=val('method'), o=document.getElementById('out');
+    document.getElementById('d2h').hidden = dir!=='d2h';
+    document.getElementById('h2d').hidden = dir!=='h2d';
+    var label = meth==='rule' ? "rule of thumb" : "2020 DNA study estimate";
+    if(dir==='d2h'){
+      var y=Math.max(0,parseInt(document.getElementById('yrs').value,10)||0);
+      var m=Math.max(0,Math.min(11,parseInt(document.getElementById('mos').value,10)||0));
+      var t=y+m/12;
+      if(t<MIND){ o.textContent="This calculator starts at 3 months."; return; }
+      if(t>MAXD){ o.textContent="We estimate up to 16 years old. The DNA study covered dogs up to 16 years."; return; }
+      var h=meth==='rule'?rule(t):dna(t);
+      o.textContent="A dog aged "+fmtDog(t)+" is about "+Math.round(h)+" in human years ("+label+").";
+    } else {
+      var hv=parseFloat(document.getElementById('hum').value);
+      var lo=Math.ceil(meth==='rule'?rule(MIND):dna(MIND)), hi=Math.floor(meth==='rule'?rule(MAXD):dna(MAXD));
+      if(!(hv>=lo)||hv>hi){ o.textContent="For this method, enter a human age from "+lo+" to "+hi+"."; return; }
+      var d=meth==='rule'?ruleInv(hv):dnaInv(hv);
+      o.textContent="A person aged "+Math.round(hv)+" matches a dog aged about "+fmtDog(d)+" ("+label+").";
+    }
   }
   document.getElementById('go').addEventListener('click',show);
-  ['yrs','mos'].forEach(function(id){document.getElementById(id).addEventListener('input',show);});
-  var rows=[1,2,3,5,7,10,12,15].map(function(a){return '<tr><th scope="row">'+a+' year'+(a>1?'s':'')+'</th><td>'+Math.round(est(a))+'</td></tr>';}).join('');
-  document.getElementById('tbl').innerHTML=rows; show();
+  ['yrs','mos','hum'].forEach(function(id){document.getElementById(id).addEventListener('input',show);});
+  Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(r){r.addEventListener('change',show);});
+  document.getElementById('tbl').innerHTML=[1,2,3,5,7,10,12,15].map(function(a){return '<tr><th scope="row">'+a+' year'+(a>1?'s':'')+'</th><td>'+Math.round(rule(a))+'</td><td>'+Math.round(dna(a))+'</td></tr>';}).join('');
+  show();
 })();
 </script>
 
 <section class="learn-sources">
-  <h2>Source.</h2>
+  <h2>Sources.</h2>
   <ol>
     <li id="src-1">Wang T, et al. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7484147" rel="noopener" target="_blank">Quantitative translation of dog-to-human aging by conserved remodeling of the DNA methylome.</a> Cell Systems, 2020.</li>
-    <li id="src-2"><a href="https://www.zoetispetcare.com/blog/article/convert-dog-years-human-years" rel="noopener" target="_blank">Convert dog years to human years.</a> Zoetis Petcare.</li>
+    <li id="src-2">American Kennel Club. <a href="https://www.akc.org/expert-advice/health/how-to-calculate-dog-years-to-human-years/" rel="noopener" target="_blank">How to calculate dog years to human years.</a> AKC, citing the American Veterinary Medical Association.</li>
+    <li id="src-3">American Animal Hospital Association. <a href="https://www.aaha.org/aaha-guidelines/life-stage-canine-2019/canine-life-stage-definitions" rel="noopener" target="_blank">Canine life stage definitions.</a> AAHA Canine Life Stage Guidelines, 2019.</li>
+    <li id="src-4"><a href="https://www.zoetispetcare.com/blog/article/convert-dog-years-human-years" rel="noopener" target="_blank">Convert dog years to human years.</a> Zoetis Petcare.</li>
   </ol>
 </section>
 
