@@ -1,9 +1,9 @@
-<p class="standfirst">Convert dog years to human years, or human years to dog years, with either of two methods. It takes a few seconds and stores nothing.</p>
+<p class="standfirst">A 1-year-old dog is about 15 in human years by the common chart, or 31 by a 2020 DNA study. A 2-year-old is about 24 or 42, and a 3-year-old is about 29 or 49. Convert any age below, in either direction. It stores nothing.</p>
 
 <form class="calc" id="ageForm" onsubmit="return false">
   <fieldset>
     <legend>Method</legend>
-    <label><input type="radio" name="method" value="rule" checked> Common vet guideline (15, 9, then 5 a year)</label>
+    <label><input type="radio" name="method" value="rule" checked> Common chart (15, 9, then 5 a year)</label>
     <label><input type="radio" name="method" value="dna"> 2020 DNA study</label>
   </fieldset>
   <fieldset>
@@ -24,21 +24,24 @@
   <button type="button" id="go">Work it out</button>
 </form>
 
-<p class="calc-out" id="out" aria-live="polite"></p>
+<p class="calc-out" id="out" aria-live="polite">A dog that is 3 years old is about 29 in human years.</p>
 
 <h2>Which method is more widely used?</h2>
-<p>The vet guideline is a common one. The AKC and the UC Davis veterinary school both report it as an AVMA guideline: 15 human years for a medium-sized dog's first year, about 9 for the second, then about 5 for each year after.<sup><a href="#src-2">2</a>, <a href="#src-5">5</a></sup> The DNA estimate is newer, comes from a single 2020 study and is based on a single breed group.<sup><a href="#src-1">1</a></sup> Neither is an official veterinary standard: the American Animal Hospital Association chose not to convert dog age to human years and describes life stages instead.<sup><a href="#src-3">3</a></sup></p>
+<p>The common chart is the one most dog age charts follow. The AKC reports it as an AVMA guideline: 15 human years for a medium-sized dog's first year, about 9 for the second, then about 5 for each year after.<sup><a href="#src-2">2</a></sup> The DNA estimate is newer, comes from a single 2020 study and is based on a single breed group.<sup><a href="#src-1">1</a></sup> Neither is an official veterinary standard: the American Animal Hospital Association chose not to convert dog age to human years and describes life stages instead.<sup><a href="#src-3">3</a></sup></p>
 
 <h2>Why do the two methods give different numbers?</h2>
-<p>They measure different things. The vet guideline is a simple guide to where a dog sits in life, built for a medium-sized dog.<sup><a href="#src-2">2</a></sup> The DNA estimate comes from a formula, human age = 16 &times; ln(dog age) + 31, based on chemical changes in DNA in 104 dogs, mostly Labrador retrievers, aged about 1 month to 16 years.<sup><a href="#src-1">1</a></sup> That is why a 3-year-old dog comes out near 29 with the guideline and 49 with the DNA study. Charts that split by size, such as the one from Zoetis Petcare, put a 3-year-old dog at 28 for dogs under 50 lb and 32 for dogs over 90 lb, though size charts from different sites do not all agree, so we do not build one in.<sup><a href="#src-4">4</a></sup></p>
+<p>They measure different things. The common chart is a simple guide to where a dog sits in life, built for a medium-sized dog.<sup><a href="#src-2">2</a></sup> The DNA estimate comes from a formula, human age = 16 &times; ln(dog age) + 31, based on chemical changes in DNA in 104 dogs, mostly Labrador retrievers, aged about 1 month to 16 years.<sup><a href="#src-1">1</a></sup> That is why a 3-year-old dog comes out near 29 with the common chart and 49 with the DNA study. Charts that split by size, such as the one from Zoetis Petcare, put a 3-year-old dog at 28 for dogs under 50 lb and 32 for dogs over 90 lb, though size charts from different sites do not all agree, so we do not build one in.<sup><a href="#src-4">4</a></sup></p>
+
+<h2>When is a dog a senior?</h2>
+<p>Size changes this. The AVMA, via UC Davis, treats small dogs as senior from about 7 years old and larger dogs from about 5 to 6.<sup><a href="#src-5">5</a></sup> This calculator cannot tell you your dog's life stage. AAHA describes the life stages, and your vet can place your dog in one.<sup><a href="#src-3">3</a></sup></p>
 
 <h2>How accurate is it for my dog?</h2>
 <p>Treat every result as a rough, fun guide. Size matters: larger dogs tend to have shorter lifespans than smaller dogs,<sup><a href="#src-2">2</a></sup> and the authors of the DNA study note that other breeds could give different results.<sup><a href="#src-1">1</a></sup> This tool is not medical advice and says nothing about your dog's health. For anything about your dog's care at a given age, ask your vet.</p>
 
 <table>
   <caption>Dog age and the matching human age by each method<sup><a href="#src-1">1</a>, <a href="#src-2">2</a></sup></caption>
-  <thead><tr><th scope="col">Dog age</th><th scope="col">Vet guideline</th><th scope="col">DNA study</th></tr></thead>
-  <tbody id="tbl"></tbody>
+  <thead><tr><th scope="col">Dog age</th><th scope="col">Common chart (medium dog)</th><th scope="col">DNA study</th></tr></thead>
+  <tbody id="tbl"><tr><th scope="row">1 year</th><td>15</td><td>31</td></tr><tr><th scope="row">2 years</th><td>24</td><td>42</td></tr><tr><th scope="row">3 years</th><td>29</td><td>49</td></tr><tr><th scope="row">4 years</th><td>34</td><td>53</td></tr><tr><th scope="row">5 years</th><td>39</td><td>57</td></tr><tr><th scope="row">6 years</th><td>44</td><td>60</td></tr><tr><th scope="row">7 years</th><td>49</td><td>62</td></tr><tr><th scope="row">8 years</th><td>54</td><td>64</td></tr><tr><th scope="row">9 years</th><td>59</td><td>66</td></tr><tr><th scope="row">10 years</th><td>64</td><td>68</td></tr><tr><th scope="row">11 years</th><td>69</td><td>69</td></tr><tr><th scope="row">12 years</th><td>74</td><td>71</td></tr><tr><th scope="row">13 years</th><td>79</td><td>72</td></tr><tr><th scope="row">14 years</th><td>84</td><td>73</td></tr><tr><th scope="row">15 years</th><td>89</td><td>74</td></tr><tr><th scope="row">16 years</th><td>94</td><td>75</td></tr></tbody>
 </table>
 
 <p>Want plain-English dog care explainers? <a href="/blogs/learn">Browse the Learn guides</a>.</p>
@@ -80,7 +83,6 @@
   document.getElementById('go').addEventListener('click',show);
   ['yrs','mos','hum'].forEach(function(id){document.getElementById(id).addEventListener('input',show);});
   Array.prototype.forEach.call(document.querySelectorAll('input[type=radio]'),function(r){r.addEventListener('change',show);});
-  document.getElementById('tbl').innerHTML=[1,2,3,5,7,10,12,15].map(function(a){return '<tr><th scope="row">'+a+' year'+(a>1?'s':'')+'</th><td>'+Math.round(rule(a))+'</td><td>'+Math.round(dna(a))+'</td></tr>';}).join('');
   show();
 })();
 </script>

@@ -166,6 +166,8 @@ document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.targ
 <meta property="og:image" content="{e(og_image)}">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)}">
+<meta name="twitter:description" content="{e(desc)}">
 <link rel="preload" href="/assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{CSS_HREF}">
@@ -352,11 +354,11 @@ PAGES = [
     ("editorial-policy.html", "pages/editorial-policy.html", "/pages/editorial-policy", "How we write Learn | pawIQ",
      "Where pawIQ Learn gets its facts, how we use AI, and how we keep guides current.", "How we write Learn.", "quiet"),
     ("dog-age-calculator.html", "tools/dog-age-calculator.html", "/tools/dog-age-calculator", "Dog age calculator: dog years to human years | pawIQ",
-     "Free dog age calculator. See your dog's estimated age in human years using a 2020 study, not the old times-7 rule.", "Dog age calculator.", "tool"),
+     "Free dog years to human years calculator with a chart by age. Convert either way using the common chart or a 2020 DNA study.", "Dog age calculator.", "tool"),
     ("dog-supplement-cost-calculator.html", "tools/dog-supplement-cost-calculator.html", "/tools/dog-supplement-cost-calculator", "Dog supplement cost per day calculator | pawIQ",
      "Free calculator: cost per day and per month for any dog chew, treat or supplement, from the package price and label serving.", "Dog supplement cost calculator.", "tool"),
     ("tools-index.html", "tools/index.html", "/tools", "Free dog calculators and checklists | pawIQ",
-     "Free dog age and supplement cost calculators plus printable checklists for boarding, winter walks and reading a supplement label.", "Tools and checklists.", "tool"),
+     "Free dog age and supplement cost calculators plus printable checklists for dog boarding and winter dog walks.", "Tools and checklists.", "tool"),
     ("dog-boarding-checklist.html", "tools/dog-boarding-checklist.html", "/tools/dog-boarding-checklist", "Dog boarding checklist: first stay, printable | pawIQ",
      "Printable dog boarding checklist: choosing a facility, vaccines, what to pack, emergency contacts and pickup day, from vet school and AVMA guidance.", "Dog boarding checklist.", "tool"),
     ("cold-weather-dog-walk-checklist.html", "tools/cold-weather-dog-walk-checklist.html", "/tools/cold-weather-dog-walk-checklist", "Cold weather dog walk checklist, printable | pawIQ",
@@ -364,12 +366,44 @@ PAGES = [
 ]
 
 
+TOOL_DATE = "2026-11-06"
+CALCS = ("dog-age-calculator", "dog-supplement-cost-calculator")
+
+
+def tool_ld(src, url_path, title, desc, h1, body):
+    """JSON-LD for tool pages: WebApplication (calculators) or ItemList (checklists), FAQPage from question headings, breadcrumbs."""
+    url = SITE + url_path
+    clean = lambda t: html.unescape(re.sub(r"<[^>]+>", "", re.sub(r"<sup>.*?</sup>", "", t, flags=re.S))).strip()
+    graph = []
+    slug = url_path.rsplit("/", 1)[-1]
+    if slug in CALCS:
+        graph.append({"@type": "WebApplication", "name": h1.rstrip("."), "url": url, "description": desc, "applicationCategory": "UtilitiesApplication",
+                      "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+                      "dateModified": TOOL_DATE, "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"}})
+    elif url_path != "/tools":
+        items = [clean(x) for x in re.findall(r'<li><label><input type="checkbox"> <span>(.*?)</span></label></li>', body, re.S)]
+        if items:
+            graph.append({"@type": "ItemList", "name": h1.rstrip("."), "numberOfItems": len(items),
+                          "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": t} for i, t in enumerate(items)]})
+    faqs = [(clean(q), clean(a)) for q, a in re.findall(r"<h2>([^<]*\?)</h2>\s*<p>(.*?)</p>", body, re.S)]
+    if faqs:
+        graph.append({"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faqs]})
+    crumbs = [("Home", SITE + "/"), ("Tools", SITE + "/tools")] + ([(h1.rstrip("."), url)] if url_path != "/tools" else [])
+    graph.append({"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]})
+    return '<script type="application/ld+json">%s</script>\n' % json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
+
+
 def render_page(src, url_path, title, desc, h1, cls=""):
     body = open(os.path.join(ROOT, "_learn", "pages", src), encoding="utf-8").read()
-    return head(title, desc, SITE + url_path, "website", SITE + "/assets/og-image.png") + f"""<main>
+    extra = tool_ld(src, url_path, title, desc, h1, body) if cls == "tool" else ""
+    crumb = ""
+    if cls == "tool":
+        crumb = '<p class="crumb"><a href="/">Home</a> / ' + ('Tools' if url_path == "/tools" else '<a href="/tools">Tools</a> / ' + e(h1.rstrip("."))) + '</p>\n'
+    stamp = '<p class="meta">Last updated <time datetime="%s">%s</time> · Built from the sources listed on this page. See our <a href="/pages/editorial-policy">editorial policy</a>.</p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)) if cls == "tool" and url_path != "/tools" else ""
+    return head(title, desc, SITE + url_path, "website", SITE + "/assets/og-image.png", extra) + f"""<main>
 <article class="wrap post{(" " + cls) if cls else ""}">
-<h1>{e(h1)}</h1>
-{body}
+{crumb}<h1>{e(h1)}</h1>
+{stamp}{body}
 </article>
 </main>
 """ + FOOT
@@ -383,9 +417,9 @@ def update_sitemap(posts):
     latest = max([d for _, d in posts], default=None)
     entries = [f"  <url>\n    <loc>{SITE}/blogs/learn</loc>\n" + (f"    <lastmod>{latest}</lastmod>\n" if latest else "") + "  </url>",
                f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n  </url>",
-               f"  <url>\n    <loc>{SITE}/tools/dog-age-calculator</loc>\n  </url>",
-               f"  <url>\n    <loc>{SITE}/tools/dog-supplement-cost-calculator</loc>\n  </url>"]
-    entries += [f"  <url>\n    <loc>{SITE}/tools</loc>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist")]
+               f"  <url>\n    <loc>{SITE}/tools/dog-age-calculator</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>",
+               f"  <url>\n    <loc>{SITE}/tools/dog-supplement-cost-calculator</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>"]
+    entries += [f"  <url>\n    <loc>{SITE}/tools</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist")]
     entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{p.get('updated') or d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
     s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"
