@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>pawIQ Learn</title>
+  <subtitle>Dog health and care guides from pawIQ.</subtitle>
+  <link rel="self" type="application/atom+xml" href="https://www.pawiqpets.com/blogs/learn/feed.xml"/>
+  <link rel="hub" href="https://pubsubhubbub.appspot.com/"/>
+  <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn"/>
+  <id>https://www.pawiqpets.com/blogs/learn/feed.xml</id>
+  <updated>2026-11-06T00:00:00Z</updated>
+  <author><name>pawIQ</name></author>
+  <entry>
+    <title>What are omega-3s for dogs? EPA, DHA and ALA explained</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/omega-3-epa-dha-dogs"/>
+    <id>https://www.pawiqpets.com/blogs/learn/omega-3-epa-dha-dogs</id>
+    <published>2026-11-06T00:00:00Z</published>
+    <updated>2026-11-06T00:00:00Z</updated>
+    <summary>Omega-3s for dogs, explained: what EPA, DHA and ALA are, why fish oil matters, how they differ from omega-6s and how to find them on a label.</summary>
+  </entry>
+  <entry>
+    <title>How often should you bathe a dog?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/how-often-to-bathe-a-dog"/>
+    <id>https://www.pawiqpets.com/blogs/learn/how-often-to-bathe-a-dog</id>
+    <published>2026-11-05T00:00:00Z</published>
+    <updated>2026-11-05T00:00:00Z</updated>
+    <summary>How often to bathe or wash a dog, by coat and lifestyle, from veterinary guidance. Plus a step-by-step bath, brushing tips and when to call your vet.</summary>
+  </entry>
+  <entry>
+    <title>How do you prepare your dog for boarding for the first time?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/prepare-dog-for-boarding"/>
+    <id>https://www.pawiqpets.com/blogs/learn/prepare-dog-for-boarding</id>
+    <published>2026-11-03T00:00:00Z</published>
+    <updated>2026-11-03T00:00:00Z</updated>
+    <summary>First time boarding your dog? A vet-sourced timeline: touring, vaccines, what to pack and what is normal after pickup.</summary>
+  </entry>
+  <entry>
+    <title>How do I build a daily supplement routine for my dog?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/daily-supplement-routine-for-dogs"/>
+    <id>https://www.pawiqpets.com/blogs/learn/daily-supplement-routine-for-dogs</id>
+    <published>2026-11-02T00:00:00Z</published>
+    <updated>2026-11-02T00:00:00Z</updated>
+    <summary>When to give dog supplements and how to keep it daily: tie the chew to a meal or walk, follow the label, store it out of reach and list it for your vet.</summary>
+  </entry>
+  <entry>
+    <title>Does daylight saving time affect dogs?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/does-daylight-saving-time-affect-dogs"/>
+    <id>https://www.pawiqpets.com/blogs/learn/does-daylight-saving-time-affect-dogs</id>
+    <published>2026-11-01T00:00:00Z</published>
+    <updated>2026-11-02T00:00:00Z</updated>
+    <summary>Daylight saving time can affect dogs through their routine. What a 2025 study of pet and sled dogs found, and how to move meals and walks.</summary>
+  </entry>
+  <entry>
+    <title>What&#x27;s the difference between prebiotics, probiotics and postbiotics for dogs?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/prebiotics-probiotics-postbiotics-dogs"/>
+    <id>https://www.pawiqpets.com/blogs/learn/prebiotics-probiotics-postbiotics-dogs</id>
+    <published>2026-10-28T00:00:00Z</published>
+    <updated>2026-11-02T00:00:00Z</updated>
+    <summary>For dogs: probiotics are live microbes, prebiotics are used by a dog&#x27;s own microbes, postbiotics are inactivated microbes. Compared, with sources.</summary>
+  </entry>
+  <entry>
+    <title>Why do dogs eat grass?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/why-do-dogs-eat-grass"/>
+    <id>https://www.pawiqpets.com/blogs/learn/why-do-dogs-eat-grass</id>
+    <published>2026-10-28T00:00:00Z</published>
+    <updated>2026-11-06T00:00:00Z</updated>
+    <summary>Grass eating is common in dogs and is usually seen as normal behavior. What research shows, when to call your vet, and lawn and plant safety tips.</summary>
+  </entry>
+  <entry>
+    <title>What Thanksgiving foods can dogs eat?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/thanksgiving-foods-dogs"/>
+    <id>https://www.pawiqpets.com/blogs/learn/thanksgiving-foods-dogs</id>
+    <published>2026-10-28T00:00:00Z</published>
+    <updated>2026-11-02T00:00:00Z</updated>
+    <summary>Plain, boneless, skinless turkey is generally safe for dogs in small portions. Skip the stuffing, gravy, bones and pumpkin pie. Here is why.</summary>
+  </entry>
+  <entry>
+    <title>How cold is too cold for dogs?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/how-cold-is-too-cold-for-dogs"/>
+    <id>https://www.pawiqpets.com/blogs/learn/how-cold-is-too-cold-for-dogs</id>
+    <published>2026-10-28T00:00:00Z</published>
+    <updated>2026-11-06T00:00:00Z</updated>
+    <summary>Vet schools: bring pets in or shelter them below 32°F (0°C), puppies and short-haired pets below 40°F (4°C). Signs a dog is too cold, plus paw tips.</summary>
+  </entry>
+  <entry>
+    <title>How do you read a dog supplement label?</title>
+    <link rel="alternate" type="text/html" href="https://www.pawiqpets.com/blogs/learn/how-to-read-a-dog-supplement-label"/>
+    <id>https://www.pawiqpets.com/blogs/learn/how-to-read-a-dog-supplement-label</id>
+    <published>2026-10-28T00:00:00Z</published>
+    <updated>2026-11-02T00:00:00Z</updated>
+    <summary>How to read a dog supplement label, part by part: purpose statement, guaranteed analysis, ingredients, directions, company and lot code.</summary>
+  </entry>
+</feed>

@@ -1,4 +1,4 @@
-name: IndexNow ping
+name: Index ping (IndexNow + WebSub)
 on:
   push:
     branches: [main]
@@ -18,3 +18,7 @@ jobs:
           curl -sS -o /dev/null -w "IndexNow HTTP %{http_code}\n" -X POST https://api.indexnow.org/indexnow \
             -H "Content-Type: application/json; charset=utf-8" \
             -d "{\"host\":\"www.pawiqpets.com\",\"key\":\"$KEY\",\"keyLocation\":\"https://www.pawiqpets.com/$KEY.txt\",\"urlList\":$URLS}"
+      - name: Ping WebSub hub (Google reads the Learn feed from here)
+        run: |
+          curl -sS -o /dev/null -w "WebSub HTTP %{http_code}\n" -X POST https://pubsubhubbub.appspot.com/ \
+            -d "hub.mode=publish" --data-urlencode "hub.url=https://www.pawiqpets.com/blogs/learn/feed.xml"

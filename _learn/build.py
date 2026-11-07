@@ -169,6 +169,7 @@ document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.targ
 <link rel="preload" href="/assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{CSS_HREF}">
+<link rel="alternate" type="application/atom+xml" title="pawIQ Learn" href="{SITE}/blogs/learn/feed.xml">
 {extra}</head>
 <body>
 <header class="site-head"><a class="logo" href="/" aria-label="pawIQ home"><img src="{LOGO}" alt="pawIQ" width="120" height="36"></a><a class="head-link" href="/#signupBlock">Get launch updates</a></header>
@@ -368,6 +369,24 @@ def update_sitemap(posts):
     open(path, "w", encoding="utf-8").write(s)
 
 
+def update_feed(posts):
+    """Atom feed of Learn guides. Submitted in Search Console as a sitemap and pinged to the WebSub hub on deploy."""
+    hub = "https://pubsubhubbub.appspot.com/"
+    furl = SITE + "/blogs/learn/feed.xml"
+    latest = max([(p.get("updated") or d) for p, d in posts], default=datetime.date.today().isoformat())
+    out = ['<?xml version="1.0" encoding="utf-8"?>', '<feed xmlns="http://www.w3.org/2005/Atom">',
+           "  <title>pawIQ Learn</title>", "  <subtitle>Dog health and care guides from pawIQ.</subtitle>",
+           f'  <link rel="self" type="application/atom+xml" href="{furl}"/>', f'  <link rel="hub" href="{hub}"/>',
+           f'  <link rel="alternate" type="text/html" href="{SITE}/blogs/learn"/>', f"  <id>{furl}</id>",
+           f"  <updated>{latest}T00:00:00Z</updated>", "  <author><name>pawIQ</name></author>"]
+    for p, d in posts:
+        out += ["  <entry>", f"    <title>{e(p['title'])}</title>", f'    <link rel="alternate" type="text/html" href="{p["url"]}"/>',
+                f"    <id>{p['url']}</id>", f"    <published>{d}T00:00:00Z</published>",
+                f"    <updated>{p.get('updated') or d}T00:00:00Z</updated>", f"    <summary>{e(p['mdesc'])}</summary>", "  </entry>"]
+    out.append("</feed>")
+    open(os.path.join(ROOT, "blogs", "learn", "feed.xml"), "w", encoding="utf-8").write("\n".join(out) + "\n")
+
+
 def main():
     reg = json.load(open(os.path.join(ROOT, "_learn", "posts.json"), encoding="utf-8"))
     reg = sorted(reg, key=lambda r: r["date"], reverse=True)
@@ -385,6 +404,7 @@ def main():
         open(os.path.join(ROOT, "blogs", "learn", p["handle"] + ".html"), "w", encoding="utf-8").write(render_post(p, d, others=[x for x in posts if x[0]["handle"] != p["handle"]]))
     open(os.path.join(ROOT, "blogs", "learn.html"), "w", encoding="utf-8").write(render_index(posts))
     update_sitemap(posts)
+    update_feed(posts)
     link_report(posts)
     for src, out, url_path, title, desc, h1, cls in PAGES:
         path = os.path.join(ROOT, out)
