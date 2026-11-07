@@ -400,7 +400,7 @@ def render_page(src, url_path, title, desc, h1, cls=""):
     crumb = ""
     if cls == "tool":
         crumb = '<p class="crumb"><a href="/">Home</a> / ' + ('Tools' if url_path == "/tools" else '<a href="/tools">Tools</a> / ' + e(h1.rstrip("."))) + '</p>\n'
-    stamp = '<p class="meta">Last updated <time datetime="%s">%s</time> · Built from the sources listed on this page. See our <a href="/pages/editorial-policy">editorial policy</a>.</p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)) if cls == "tool" and url_path != "/tools" else ""
+    stamp = '<p class="meta">Last updated <time datetime="%s">%s</time> · Built from the sources listed on this page. See our <a href="/pages/editorial-policy">editorial policy</a>.</p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)) if cls == "tool" and url_path != "/tools" else ("" if cls != "tool" else '<p class="meta">Last updated <time datetime="%s">%s</time></p>\n' % (TOOL_DATE, fmt_date(TOOL_DATE)))
     return head(title, desc, SITE + url_path, "website", SITE + "/assets/og-image.png", extra) + f"""<main>
 <article class="wrap post{(" " + cls) if cls else ""}">
 {crumb}<h1>{e(h1)}</h1>
