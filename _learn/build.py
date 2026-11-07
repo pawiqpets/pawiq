@@ -19,7 +19,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=9"
+CSS_HREF = "/assets/learn/learn.css?v=11"
 ORG_ID = SITE + "/#organization"
 HUBS = ["Gut health", "Skin and coat", "Joints and mobility", "Calm and behavior", "Senior and life stages",
         "Food and safety", "Labels and ingredients", "Daily routines", "Seasonal care"]
@@ -37,6 +37,16 @@ NEIGHBOURS = {
 SIZES = (480, 800, 1200)
 e = html.escape
 
+
+
+def mark_wide(html):
+    """Tables with 3 or more columns get class wide (they scroll sideways on a phone); narrower ones fit as is."""
+    def one(m):
+        t = m.group(0)
+        head = re.search(r"<thead>(.*?)</thead>", t, re.S)
+        n = len(re.findall(r"<th[ >]", head.group(1))) if head else 0
+        return t.replace("<table>", '<table class="wide">', 1) if n >= 3 else t
+    return re.sub(r"<table>.*?</table>", one, html, flags=re.S)
 
 
 def label_cells(html):
@@ -166,6 +176,7 @@ document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.targ
 
 
 FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
+<script>document.querySelectorAll(".table-wrap").forEach(function(w){function f(){w.classList.toggle("more",w.scrollWidth-w.clientWidth-w.scrollLeft>4)}f();w.addEventListener("scroll",f,{passive:true});addEventListener("resize",f)})</script>
 </body>
 </html>
 """
@@ -209,7 +220,7 @@ def render_post(p, date, review_html="", others=()):
         {"@type": "ListItem", "position": 2, "name": "Learn", "item": SITE + "/blogs/learn"},
         {"@type": "ListItem", "position": 3, "name": p["mtitle"].replace(" | pawIQ", ""), "item": p["url"]}]})
     extra = "".join('<script type="application/ld+json">%s</script>\n' % json.dumps(x, ensure_ascii=False) for x in lds)
-    body = label_cells(p["body"]).replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
+    body = mark_wide(p["body"]).replace("<table", '<div class="table-wrap"><table').replace("</table>", "</table></div>")
     body = re.sub(r"<p>pawIQ ", '<p class="closing">pawIQ ', body, count=1)
     # Tag the launch-list link with the post it came from, so signups can be traced to Learn.
     body = body.replace('href="https://www.pawiqpets.com/#signupBlock"', 'href="%s"' % signup_href(p["handle"]))

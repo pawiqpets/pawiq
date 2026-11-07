@@ -76,17 +76,14 @@ main.wrap.wide h1{margin-top:32px}
 .hub h2{font-family:Thunder,Impact,sans-serif;font-weight:800;font-size:clamp(32px,6vw,44px);line-height:1;margin:0;padding-top:20px;border-top:1px solid var(--line)}
 .hub .cards{margin-top:20px}
 
-/* Phone tables: no sideways scrolling. Each row becomes a small card, the row heading on top, each cell labelled by its column. */
+/* Phone tables: keep a real table. Compact type, first column stays put, a soft edge shows there is more to swipe. */
+.table-wrap{position:relative}
 @media (max-width:600px){
-  .table-wrap{overflow:visible}
-  .post table,.post table tbody,.post table tr,.post table th,.post table td,.post table caption{display:block}
-  .post table{min-width:0;border:0;background:transparent}
-  .post table caption{border-radius:var(--r) var(--r) 0 0;margin-bottom:0}
-  .post table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .post table tbody tr{background:#fff;border:1px solid var(--line);border-top:0;padding:4px 0}
-  .post table tbody tr+tr{margin-top:10px;border-top:1px solid var(--line);border-radius:var(--r)}
-  .post table tbody tr:first-child{border-radius:0 0 var(--r) var(--r)}
-  .post tbody th[scope=row]{width:auto;border:0;padding:12px 14px 4px;font-size:16px}
-  .post table td{border:0;padding:6px 14px}
-  .post table td[data-label]:not([data-label=""])::before{content:attr(data-label);display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .post table{font-size:14px;line-height:1.4;min-width:0}
+  .post table.wide{min-width:540px}
+  .post th,.post td{padding:10px 10px}
+  .post table.wide caption{padding-right:calc(540px - 100vw + 46px)}
+  .post table.wide tbody th[scope=row]{position:sticky;left:0;background:#fff;box-shadow:1px 0 0 var(--line);width:30%}
+  .table-wrap.more::after{content:"";position:absolute;top:0;right:0;bottom:0;width:26px;pointer-events:none;background:linear-gradient(to left,rgba(0,8,11,.16),rgba(0,8,11,0))}
 }
