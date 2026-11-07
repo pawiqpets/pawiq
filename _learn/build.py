@@ -404,6 +404,16 @@ def seo_lint(posts):
         if "learn-sources" not in p["body"]: print("WARN no sources block:", h)
 
 
+def update_home(posts):
+    """Homepage: the 3 newest Learn guides as plain links between the LATEST markers (internal links for crawling)."""
+    path = os.path.join(ROOT, "index.html")
+    s = open(path, encoding="utf-8").read()
+    top = sorted(posts, key=lambda x: (x[1], x[0].get("updated") or ""), reverse=True)[:3]
+    lis = "".join('<li><a href="/blogs/learn/%s">%s</a></li>' % (p["handle"], e(p["title"])) for p, _ in top)
+    s = re.sub(r"(<!-- LATEST START -->.*?<ul>).*?(</ul></nav>)", lambda m: m.group(1) + lis + m.group(2), s, flags=re.S)
+    open(path, "w", encoding="utf-8").write(s)
+
+
 def main():
     reg = json.load(open(os.path.join(ROOT, "_learn", "posts.json"), encoding="utf-8"))
     reg = sorted(reg, key=lambda r: r["date"], reverse=True)
@@ -422,6 +432,7 @@ def main():
     open(os.path.join(ROOT, "blogs", "learn.html"), "w", encoding="utf-8").write(render_index(posts))
     update_sitemap(posts)
     update_feed(posts)
+    update_home(posts)
     link_report(posts)
     seo_lint(posts)
     for src, out, url_path, title, desc, h1, cls in PAGES:
