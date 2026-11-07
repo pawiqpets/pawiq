@@ -197,12 +197,7 @@ def fmt_date(d):
     return datetime.date.fromisoformat(d).strftime("%B %-d, %Y")
 
 
-TOOL_LINKS = {
-    "prepare-dog-for-boarding": ("/tools/dog-boarding-checklist", "Dog boarding checklist", "Print the dog boarding checklist for your first stay."),
-    "how-cold-is-too-cold-for-dogs": ("/tools/cold-weather-dog-walk-checklist", "Cold weather dog walk checklist", "Print the cold weather dog walk checklist."),
-    "daily-supplement-routine-for-dogs": ("/tools/dog-supplement-cost-calculator", "Dog supplement cost calculator", "Work out what a supplement costs per day with the dog supplement cost calculator."),
-    "how-to-read-a-dog-supplement-label": ("/tools/dog-supplement-cost-calculator", "Dog supplement cost calculator", "Compare products by price per day with the dog supplement cost calculator."),
-}
+TOOL_LINKS = {}
 
 
 def render_post(p, date, review_html="", others=()):
