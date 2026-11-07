@@ -76,14 +76,14 @@ main.wrap.wide h1{margin-top:32px}
 .hub h2{font-family:Thunder,Impact,sans-serif;font-weight:800;font-size:clamp(32px,6vw,44px);line-height:1;margin:0;padding-top:20px;border-top:1px solid var(--line)}
 .hub .cards{margin-top:20px}
 
-/* Phone tables: keep a real table. Compact type, first column stays put, a soft edge shows there is more to swipe. */
+/* Phone tables: keep a real table. Compact type, tight columns, a soft edge shows there is more to swipe. */
 .table-wrap{position:relative}
 @media (max-width:600px){
   .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .post table{font-size:14px;line-height:1.4;min-width:0}
-  .post table.wide{min-width:540px}
-  .post th,.post td{padding:10px 10px}
-  .post table.wide caption{padding-right:calc(540px - 100vw + 46px)}
-  .post table.wide tbody th[scope=row]{position:sticky;left:0;background:#fff;box-shadow:1px 0 0 var(--line);width:30%}
+  .post table.wide{min-width:460px}
+  .post th,.post td{padding:9px 8px}
+  .post table.wide caption{padding-right:calc(460px - 100vw + 46px)}
+  .post table.wide tbody th[scope=row],.post table.wide thead th:first-child{width:1%}
   .table-wrap.more::after{content:"";position:absolute;top:0;right:0;bottom:0;width:26px;pointer-events:none;background:linear-gradient(to left,rgba(0,8,11,.16),rgba(0,8,11,0))}
 }

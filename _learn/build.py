@@ -19,7 +19,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=11"
+CSS_HREF = "/assets/learn/learn.css?v=12"
 ORG_ID = SITE + "/#organization"
 HUBS = ["Gut health", "Skin and coat", "Joints and mobility", "Calm and behavior", "Senior and life stages",
         "Food and safety", "Labels and ingredients", "Daily routines", "Seasonal care"]
