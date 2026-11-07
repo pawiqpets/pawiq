@@ -1,0 +1,60 @@
+name: Index health check
+on:
+  schedule:
+    - cron: "17 15 * * *"   # daily, about 7:17 AM Pacific
+  push:
+    branches: [main]
+    paths: ["blogs/**", "sitemap.xml", "robots.txt", "_learn/posts.json"]
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for deploy on push
+        if: github.event_name == 'push'
+        run: sleep 150
+      - name: Check feed, sitemap, robots and every guide
+        run: |
+          python3 - <<'PY'
+          import json, re, sys, urllib.request, xml.dom.minidom as md
+          S = "https://www.pawiqpets.com"
+          bad = []
+          def get(u):
+              r = urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "pawIQ-health-check"}), timeout=30)
+              return r.status, r.headers.get("content-type", ""), r.read().decode("utf-8", "replace")
+          reg = json.load(open("_learn/posts.json"))
+          handles = [r["handle"] for r in reg]
+          # feed
+          try:
+              st, ct, body = get(S + "/blogs/learn/feed.xml")
+              md.parseString(body)
+              n = body.count("<entry>")
+              if n != len(handles): bad.append(f"feed has {n} entries, registry has {len(handles)}")
+              if 'rel="hub"' not in body: bad.append("feed missing WebSub hub link")
+          except Exception as ex: bad.append(f"feed.xml problem: {ex}")
+          # sitemap
+          try:
+              st, ct, sm = get(S + "/sitemap.xml"); md.parseString(sm)
+              for h in handles:
+                  if f"/blogs/learn/{h}<" not in sm: bad.append(f"sitemap missing {h}")
+          except Exception as ex: bad.append(f"sitemap.xml problem: {ex}")
+          # robots
+          try:
+              st, ct, rb = get(S + "/robots.txt")
+              if re.search(r"(?im)^disallow:\s*/\s*$", rb): bad.append("robots.txt blocks the whole site")
+              if "Sitemap:" not in rb: bad.append("robots.txt missing Sitemap line")
+          except Exception as ex: bad.append(f"robots.txt problem: {ex}")
+          # each guide live, indexable, canonical correct
+          for h in handles:
+              u = f"{S}/blogs/learn/{h}"
+              try:
+                  st, ct, pg = get(u)
+                  if st != 200: bad.append(f"{h}: HTTP {st}")
+                  if re.search(r'<meta name="robots" content="[^"]*noindex', pg): bad.append(f"{h}: noindex tag")
+                  if f'<link rel="canonical" href="{u}">' not in pg: bad.append(f"{h}: canonical wrong or missing")
+              except Exception as ex: bad.append(f"{h}: {ex}")
+          if bad:
+              print("INDEX HEALTH PROBLEMS:"); [print(" -", b) for b in bad]; sys.exit(1)
+          print("Index health OK:", len(handles), "guides, feed, sitemap, robots all good")
+          PY
