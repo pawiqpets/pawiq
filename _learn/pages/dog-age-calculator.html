@@ -3,8 +3,8 @@
 <form class="calc" id="ageForm" onsubmit="return false">
   <fieldset>
     <legend>Method</legend>
-    <label><input type="radio" name="method" value="rule" checked> Rule of thumb (15, 9, then 5 a year)</label>
-    <label><input type="radio" name="method" value="dna"> DNA study estimate</label>
+    <label><input type="radio" name="method" value="rule" checked> Common vet guideline (15, 9, then 5 a year)</label>
+    <label><input type="radio" name="method" value="dna"> 2020 DNA study</label>
   </fieldset>
   <fieldset>
     <legend>Convert</legend>
@@ -27,17 +27,17 @@
 <p class="calc-out" id="out" aria-live="polite"></p>
 
 <h2>Which method is more widely used?</h2>
-<p>The rule of thumb is a common one. The AKC and the UC Davis veterinary school both report it as an AVMA guideline: 15 human years for a medium-sized dog's first year, about 9 for the second, then about 5 for each year after.<sup><a href="#src-2">2</a>, <a href="#src-5">5</a></sup> The DNA estimate is newer, comes from a single 2020 study and is based on a single breed group.<sup><a href="#src-1">1</a></sup> Neither is an official veterinary standard: the American Animal Hospital Association chose not to convert dog age to human years and describes life stages instead.<sup><a href="#src-3">3</a></sup></p>
+<p>The vet guideline is a common one. The AKC and the UC Davis veterinary school both report it as an AVMA guideline: 15 human years for a medium-sized dog's first year, about 9 for the second, then about 5 for each year after.<sup><a href="#src-2">2</a>, <a href="#src-5">5</a></sup> The DNA estimate is newer, comes from a single 2020 study and is based on a single breed group.<sup><a href="#src-1">1</a></sup> Neither is an official veterinary standard: the American Animal Hospital Association chose not to convert dog age to human years and describes life stages instead.<sup><a href="#src-3">3</a></sup></p>
 
 <h2>Why do the two methods give different numbers?</h2>
-<p>They measure different things. The rule of thumb is a simple guide to where a dog sits in life, built for a medium-sized dog.<sup><a href="#src-2">2</a></sup> The DNA estimate comes from a formula, human age = 16 &times; ln(dog age) + 31, based on chemical changes in DNA in 104 dogs, mostly Labrador retrievers, aged about 1 month to 16 years.<sup><a href="#src-1">1</a></sup> That is why a 3-year-old dog comes out near 29 with one and 49 with the other. Charts that split by size, such as the one from Zoetis Petcare, put a 3-year-old dog at 28 for dogs under 50 lb and 32 for dogs over 90 lb, though size charts from different sites do not all agree, so we do not build one in.<sup><a href="#src-4">4</a></sup></p>
+<p>They measure different things. The vet guideline is a simple guide to where a dog sits in life, built for a medium-sized dog.<sup><a href="#src-2">2</a></sup> The DNA estimate comes from a formula, human age = 16 &times; ln(dog age) + 31, based on chemical changes in DNA in 104 dogs, mostly Labrador retrievers, aged about 1 month to 16 years.<sup><a href="#src-1">1</a></sup> That is why a 3-year-old dog comes out near 29 with the guideline and 49 with the DNA study. Charts that split by size, such as the one from Zoetis Petcare, put a 3-year-old dog at 28 for dogs under 50 lb and 32 for dogs over 90 lb, though size charts from different sites do not all agree, so we do not build one in.<sup><a href="#src-4">4</a></sup></p>
 
 <h2>How accurate is it for my dog?</h2>
 <p>Treat every result as a rough, fun guide. Size matters: larger dogs tend to have shorter lifespans than smaller dogs,<sup><a href="#src-2">2</a></sup> and the authors of the DNA study note that other breeds could give different results.<sup><a href="#src-1">1</a></sup> This tool is not medical advice and says nothing about your dog's health. For anything about your dog's care at a given age, ask your vet.</p>
 
 <table>
   <caption>Dog age and the matching human age by each method<sup><a href="#src-1">1</a>, <a href="#src-2">2</a></sup></caption>
-  <thead><tr><th scope="col">Dog age</th><th scope="col">Rule of thumb</th><th scope="col">DNA estimate</th></tr></thead>
+  <thead><tr><th scope="col">Dog age</th><th scope="col">Vet guideline</th><th scope="col">DNA study</th></tr></thead>
   <tbody id="tbl"></tbody>
 </table>
 
@@ -61,7 +61,6 @@
     var dir=val('dir'), meth=val('method'), o=document.getElementById('out');
     document.getElementById('d2h').hidden = dir!=='d2h';
     document.getElementById('h2d').hidden = dir!=='h2d';
-    var label = meth==='rule' ? "rule of thumb" : "2020 DNA study estimate";
     if(dir==='d2h'){
       var y=Math.max(0,parseInt(document.getElementById('yrs').value,10)||0);
       var m=Math.max(0,Math.min(11,parseInt(document.getElementById('mos').value,10)||0));
@@ -69,13 +68,13 @@
       if(t<MIND){ o.textContent="This calculator starts at 3 months."; return; }
       if(t>MAXD){ o.textContent="We estimate up to 16 years old. The DNA study covered dogs up to 16 years."; return; }
       var h=meth==='rule'?rule(t):dna(t);
-      o.textContent="A dog aged "+fmtDog(t)+" is about "+Math.round(h)+" in human years ("+label+").";
+      o.textContent="A dog that is "+fmtDog(t)+" old is about "+Math.round(h)+" in human years.";
     } else {
       var hv=parseFloat(document.getElementById('hum').value);
       var lo=Math.ceil(meth==='rule'?rule(MIND):dna(MIND)), hi=Math.floor(meth==='rule'?rule(MAXD):dna(MAXD));
       if(!(hv>=lo)||hv>hi){ o.textContent="For this method, enter a human age from "+lo+" to "+hi+"."; return; }
       var d=meth==='rule'?ruleInv(hv):dnaInv(hv);
-      o.textContent="A person aged "+Math.round(hv)+" matches a dog aged about "+fmtDog(d)+" ("+label+").";
+      o.textContent="A dog that is "+Math.round(hv)+" human years old is about "+fmtDog(d)+" in dog years.";
     }
   }
   document.getElementById('go').addEventListener('click',show);

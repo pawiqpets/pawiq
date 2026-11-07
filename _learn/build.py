@@ -195,6 +195,14 @@ def fmt_date(d):
     return datetime.date.fromisoformat(d).strftime("%B %-d, %Y")
 
 
+TOOL_LINKS = {
+    "prepare-dog-for-boarding": ("/tools/dog-boarding-checklist", "Dog boarding checklist", "Print the dog boarding checklist for your first stay."),
+    "how-cold-is-too-cold-for-dogs": ("/tools/cold-weather-dog-walk-checklist", "Cold weather dog walk checklist", "Print the cold weather dog walk checklist."),
+    "daily-supplement-routine-for-dogs": ("/tools/dog-supplement-cost-calculator", "Dog supplement cost calculator", "Work out what a supplement costs per day with the dog supplement cost calculator."),
+    "how-to-read-a-dog-supplement-label": ("/tools/dog-supplement-cost-calculator", "Dog supplement cost calculator", "Compare products by price per day with the dog supplement cost calculator."),
+}
+
+
 def render_post(p, date, review_html="", others=()):
     article_ld = {
         "@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"],
@@ -227,6 +235,8 @@ def render_post(p, date, review_html="", others=()):
     body = body.replace('href="https://www.pawiqpets.com/#signupBlock"', 'href="%s"' % signup_href(p["handle"]))
     credit = re.sub(r"Photo by (.*?) on Unsplash",
                     r'Photo by \1 on <a href="%s" rel="noopener" target="_blank">Unsplash</a>' % e(p["hero_page"]), e(p["credit"]))
+    tl = TOOL_LINKS.get(p["handle"])
+    tool_html = ('<p class="related-tool"><strong>Free tool:</strong> <a href="%s">%s</a>. %s</p>\n' % (tl[0], tl[1], tl[2])) if tl else ""
     reviewed = p.get("updated") or date
     date_label = fmt_date(reviewed) if reviewed else "Draft, not published"
     return head(p["mtitle"], p["mdesc"], p["url"], "article", p["hero_img"], extra) + f"""<main>
@@ -239,7 +249,7 @@ def render_post(p, date, review_html="", others=()):
 <figure class="hero"><img src="{e(p["hero_img"])}"{srcset(p)} sizes="(max-width: 1100px) 100vw, 1100px" alt="{e(p["alt"])}" width="1600" height="1067" fetchpriority="high"><figcaption>{credit}</figcaption></figure>
 <article class="wrap post">
 {body}
-</article>
+{tool_html}</article>
 {more_block(related(p, others))}</main>
 {review_html}""" + FOOT
 
