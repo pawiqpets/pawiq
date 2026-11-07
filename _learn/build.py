@@ -19,7 +19,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=13"
+CSS_HREF = "/assets/learn/learn.css?v=14"
 ORG_ID = SITE + "/#organization"
 HUBS = ["Gut health", "Skin and coat", "Joints and mobility", "Calm and behavior", "Senior and life stages",
         "Food and safety", "Labels and ingredients", "Daily routines", "Seasonal care"]
@@ -176,7 +176,7 @@ document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.targ
 """
 
 
-FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/tools/dog-age-calculator">Dog age calculator</a><span aria-hidden="true"> · </span><a href="/tools/dog-supplement-cost-calculator">Cost calculator</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
+FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/tools">Tools</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
 <script>document.querySelectorAll(".table-wrap").forEach(function(w){function f(){w.classList.toggle("more",w.scrollWidth-w.clientWidth-w.scrollLeft>4)}f();w.addEventListener("scroll",f,{passive:true});addEventListener("resize",f)})</script>
 </body>
 </html>
@@ -345,6 +345,14 @@ PAGES = [
      "Free dog age calculator. See your dog's estimated age in human years using a 2020 study, not the old times-7 rule.", "Dog age calculator.", "tool"),
     ("dog-supplement-cost-calculator.html", "tools/dog-supplement-cost-calculator.html", "/tools/dog-supplement-cost-calculator", "Dog supplement cost per day calculator | pawIQ",
      "Free calculator: cost per day and per month for any dog chew, treat or supplement, from the package price and label serving.", "Dog supplement cost calculator.", "tool"),
+    ("tools-index.html", "tools/index.html", "/tools", "Free dog calculators and checklists | pawIQ",
+     "Free dog age and supplement cost calculators plus printable checklists for boarding, winter walks and reading a supplement label.", "Tools and checklists.", "tool"),
+    ("dog-boarding-checklist.html", "tools/dog-boarding-checklist.html", "/tools/dog-boarding-checklist", "Dog boarding checklist: first stay, printable | pawIQ",
+     "Printable dog boarding checklist: choosing a facility, vaccines, what to pack, emergency contacts and pickup day, from vet school and AVMA guidance.", "Dog boarding checklist.", "tool"),
+    ("cold-weather-dog-walk-checklist.html", "tools/cold-weather-dog-walk-checklist.html", "/tools/cold-weather-dog-walk-checklist", "Cold weather dog walk checklist, printable | pawIQ",
+     "Printable winter dog walk checklist: what to check before, during and after a cold walk, from veterinary school and AVMA guidance.", "Cold weather dog walk checklist.", "tool"),
+    ("dog-supplement-label-checklist.html", "tools/dog-supplement-label-checklist.html", "/tools/dog-supplement-label-checklist", "Dog supplement label checklist, printable | pawIQ",
+     "Printable checklist for reading a dog supplement label: front panel, guaranteed analysis, ingredients, directions and lot number, from AAFCO and FDA.", "Dog supplement label checklist.", "tool"),
 ]
 
 
@@ -369,6 +377,7 @@ def update_sitemap(posts):
                f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-age-calculator</loc>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-supplement-cost-calculator</loc>\n  </url>"]
+    entries += [f"  <url>\n    <loc>{SITE}/tools</loc>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist", "dog-supplement-label-checklist")]
     entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{p.get('updated') or d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
     s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"
