@@ -19,7 +19,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://www.pawiqpets.com"
 LOGO = "/assets/learn/logo-charcoal.svg"
-CSS_HREF = "/assets/learn/learn.css?v=12"
+CSS_HREF = "/assets/learn/learn.css?v=13"
 ORG_ID = SITE + "/#organization"
 HUBS = ["Gut health", "Skin and coat", "Joints and mobility", "Calm and behavior", "Senior and life stages",
         "Food and safety", "Labels and ingredients", "Daily routines", "Seasonal care"]
@@ -176,7 +176,7 @@ document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.targ
 """
 
 
-FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
+FOOT = """<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/tools/dog-age-calculator">Dog age calculator</a><span aria-hidden="true"> · </span><a href="/tools/dog-supplement-cost-calculator">Cost calculator</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
 <script>document.querySelectorAll(".table-wrap").forEach(function(w){function f(){w.classList.toggle("more",w.scrollWidth-w.clientWidth-w.scrollLeft>4)}f();w.addEventListener("scroll",f,{passive:true});addEventListener("resize",f)})</script>
 </body>
 </html>
@@ -341,6 +341,10 @@ PAGES = [
      "How pawIQ (Pawz Best Group Inc.) collects, uses and protects your personal information.", "Privacy policy.", ""),
     ("editorial-policy.html", "pages/editorial-policy.html", "/pages/editorial-policy", "How we write Learn | pawIQ",
      "Where pawIQ Learn gets its facts, how we use AI, and how we keep guides current.", "How we write Learn.", "quiet"),
+    ("dog-age-calculator.html", "tools/dog-age-calculator.html", "/tools/dog-age-calculator", "Dog age calculator: dog years to human years | pawIQ",
+     "Free dog age calculator. See your dog's estimated age in human years using a 2020 study, not the old times-7 rule.", "Dog age calculator.", "tool"),
+    ("dog-supplement-cost-calculator.html", "tools/dog-supplement-cost-calculator.html", "/tools/dog-supplement-cost-calculator", "Dog supplement cost per day calculator | pawIQ",
+     "Free calculator: cost per day and per month for any dog chew, treat or supplement, from the package price and label serving.", "Dog supplement cost calculator.", "tool"),
 ]
 
 
@@ -362,7 +366,9 @@ def update_sitemap(posts):
     s = re.sub(r"\n{3,}", "\n\n", s)
     latest = max([d for _, d in posts], default=None)
     entries = [f"  <url>\n    <loc>{SITE}/blogs/learn</loc>\n" + (f"    <lastmod>{latest}</lastmod>\n" if latest else "") + "  </url>",
-               f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n  </url>"]
+               f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n  </url>",
+               f"  <url>\n    <loc>{SITE}/tools/dog-age-calculator</loc>\n  </url>",
+               f"  <url>\n    <loc>{SITE}/tools/dog-supplement-cost-calculator</loc>\n  </url>"]
     entries += [f"  <url>\n    <loc>{p['url']}</loc>\n    <lastmod>{p.get('updated') or d}</lastmod>\n  </url>" for p, d in posts]
     block = "\n  <!-- LEARN START -->\n" + "\n\n".join(entries) + "\n  <!-- LEARN END -->\n"
     s = s.rstrip().replace("</urlset>", "").rstrip() + "\n" + block + "\n</urlset>\n"

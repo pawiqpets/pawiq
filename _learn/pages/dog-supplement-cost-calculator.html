@@ -1,0 +1,37 @@
+<p class="standfirst">Work out what any chew, treat or supplement really costs per day and per month. Use the numbers from the package, and the serving size printed on its label.</p>
+
+<form class="calc" id="costForm" onsubmit="return false">
+  <label for="price">Price of the package ($)</label>
+  <input id="price" type="number" inputmode="decimal" min="0" step="0.01" value="29.99">
+  <label for="count">Chews or servings in the package</label>
+  <input id="count" type="number" inputmode="numeric" min="1" step="1" value="60">
+  <label for="per">Servings per day (as printed on the label)</label>
+  <input id="per" type="number" inputmode="decimal" min="0.25" step="0.25" value="1">
+  <button type="button" id="go">Work it out</button>
+</form>
+
+<p class="calc-out" id="out" aria-live="polite"></p>
+
+<h2>How is the cost worked out?</h2>
+<p>Cost per serving is the package price divided by the number of servings in it. Cost per day is the cost per serving times the servings you give each day. A month is counted as 30 days. Nothing leaves your device.</p>
+
+<h2>Where do I find the serving size?</h2>
+<p>The serving size is on the product's label. The label is the right place to take it from, so use the number printed there for your dog, or ask your vet. This calculator does not suggest an amount for any dog.</p>
+
+<h2>What else should I compare?</h2>
+<p>Price per day is one piece. Compare the ingredient list and what each serving contains too. Our <a href="/blogs/learn/how-to-read-a-dog-supplement-label">guide to reading a supplement label</a> walks through it part by part.</p>
+
+<script>
+(function(){
+  function money(n){ return "$"+n.toFixed(2); }
+  function show(){
+    var p=parseFloat(document.getElementById('price').value), c=parseFloat(document.getElementById('count').value), s=parseFloat(document.getElementById('per').value), o=document.getElementById('out');
+    if(!(p>=0)||!(c>=1)||!(s>0)){ o.textContent="Enter the price, the number of servings in the package, and servings per day."; return; }
+    var perServe=p/c, perDay=perServe*s, days=c/s;
+    o.innerHTML="<strong>"+money(perDay)+" per day</strong>, about "+money(perDay*30)+" per 30 days. Each serving costs "+money(perServe)+", and one package lasts about "+(Math.round(days*10)/10)+" days.";
+  }
+  document.getElementById('go').addEventListener('click',show);
+  ['price','count','per'].forEach(function(id){document.getElementById(id).addEventListener('input',show);});
+  show();
+})();
+</script>

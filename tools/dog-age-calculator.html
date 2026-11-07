@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8HJWP2B6DD"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-8HJWP2B6DD');
+document.addEventListener('click',function(ev){var a=ev.target.closest&&ev.target.closest('a[href*="#signupBlock"]');if(a)gtag('event','learn_signup_click',{link_url:a.href,page_path:location.pathname});});</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dog age calculator: dog years to human years | pawIQ</title>
+<meta name="description" content="Free dog age calculator. See your dog&#x27;s estimated age in human years using a 2020 study, not the old times-7 rule.">
+<link rel="canonical" href="https://www.pawiqpets.com/tools/dog-age-calculator">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#F6F6F1">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.pawiqpets.com/tools/dog-age-calculator">
+<meta property="og:site_name" content="pawIQ">
+<meta property="og:title" content="Dog age calculator: dog years to human years | pawIQ">
+<meta property="og:description" content="Free dog age calculator. See your dog&#x27;s estimated age in human years using a 2020 study, not the old times-7 rule.">
+<meta property="og:image" content="https://www.pawiqpets.com/assets/og-image.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/learn/learn.css?v=13">
+<link rel="alternate" type="application/atom+xml" title="pawIQ Learn" href="https://www.pawiqpets.com/blogs/learn/feed.xml">
+</head>
+<body>
+<header class="site-head"><a class="logo" href="/" aria-label="pawIQ home"><img src="/assets/learn/logo-charcoal.svg" alt="pawIQ" width="120" height="36"></a><a class="head-link" href="/#signupBlock">Get launch updates</a></header>
+<main>
+<article class="wrap post tool">
+<h1>Dog age calculator.</h1>
+<p class="standfirst">Enter your dog's age to see a research-based estimate of the human age that matches it. It takes a few seconds and stores nothing.</p>
+
+<form class="calc" id="ageForm" onsubmit="return false">
+  <label for="yrs">Years</label>
+  <input id="yrs" type="number" inputmode="numeric" min="0" max="25" step="1" value="3">
+  <label for="mos">Months</label>
+  <input id="mos" type="number" inputmode="numeric" min="0" max="11" step="1" value="0">
+  <button type="button" id="go">Work it out</button>
+</form>
+
+<p class="calc-out" id="out" aria-live="polite"></p>
+
+<h2>How does the estimate work?</h2>
+<p>The estimate uses a formula from a 2020 study in the journal Cell Systems, which tracked chemical changes in DNA as 104 Labrador retrievers aged and compared them with human patterns: human age = 16 &times; ln(dog age) + 31, with dog age in years.<sup><a href="#src-1">1</a></sup> It replaces the old "multiply by 7" rule, because dogs age fastest early in life and more slowly later.<sup><a href="#src-1">1</a></sup></p>
+
+<h2>How accurate is it for my breed?</h2>
+<p>It was built on one breed, Labrador retrievers, so treat the result as a fun, rough guide for any dog.<sup><a href="#src-1">1</a></sup> Dogs of different sizes and breeds have different lifespans, so the match will not be exact for every dog. It is not medical advice, and it says nothing about your dog's health.</p>
+
+<h2>What should I use this for?</h2>
+<p>Use it as a conversation starter, or to picture where your dog is in life. For anything about your dog's care at a given age, ask your vet.</p>
+
+<table>
+  <caption>Dog age and the estimated matching human age<sup><a href="#src-1">1</a></sup></caption>
+  <thead><tr><th scope="col">Dog age</th><th scope="col">Estimated human age</th></tr></thead>
+  <tbody id="tbl"></tbody>
+</table>
+
+<p>Want plain-English dog care explainers? <a href="/blogs/learn">Browse the Learn guides</a>.</p>
+
+<script>
+(function(){
+  function est(y){ return 16*Math.log(y)+31; }
+  function show(){
+    var y=Math.max(0,parseInt(document.getElementById('yrs').value,10)||0);
+    var m=Math.max(0,Math.min(11,parseInt(document.getElementById('mos').value,10)||0));
+    var t=y+m/12, o=document.getElementById('out');
+    if(t<0.15){ o.textContent="The study covered dogs from about 2 months old, so this calculator starts there."; return; }
+    if(t>25){ o.textContent="Please enter an age of 25 years or less."; return; }
+    var parts=[]; if(y) parts.push(y+"-year"); if(m) parts.push(m+"-month");
+    o.textContent="A "+parts.join(", ")+"-old dog is about "+Math.round(est(t))+" in human years (estimate).";
+  }
+  document.getElementById('go').addEventListener('click',show);
+  ['yrs','mos'].forEach(function(id){document.getElementById(id).addEventListener('input',show);});
+  var rows=[1,2,3,5,7,10,12,15].map(function(a){return '<tr><th scope="row">'+a+' year'+(a>1?'s':'')+'</th><td>'+Math.round(est(a))+'</td></tr>';}).join('');
+  document.getElementById('tbl').innerHTML=rows; show();
+})();
+</script>
+
+<section class="learn-sources">
+  <h2>Source.</h2>
+  <ol>
+    <li id="src-1">Wang T, et al. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7484147" rel="noopener" target="_blank">Quantitative translation of dog-to-human aging by conserved remodeling of the DNA methylome.</a> Cell Systems, 2020.</li>
+  </ol>
+</section>
+
+</article>
+</main>
+<footer class="site-foot"><a href="/blogs/learn">Learn</a><span aria-hidden="true"> · </span><a href="/tools/dog-age-calculator">Dog age calculator</a><span aria-hidden="true"> · </span><a href="/tools/dog-supplement-cost-calculator">Cost calculator</a><span aria-hidden="true"> · </span><a href="/">Home</a><span aria-hidden="true"> · </span><a href="/#signupBlock">Get launch updates</a><span aria-hidden="true"> · </span><a href="/policies/privacy-policy">Privacy policy</a></footer>
+<script>document.querySelectorAll(".table-wrap").forEach(function(w){function f(){w.classList.toggle("more",w.scrollWidth-w.clientWidth-w.scrollLeft>4)}f();w.addEventListener("scroll",f,{passive:true});addEventListener("resize",f)})</script>
+</body>
+</html>
