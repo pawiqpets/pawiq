@@ -387,6 +387,23 @@ def update_feed(posts):
     open(os.path.join(ROOT, "blogs", "learn", "feed.xml"), "w", encoding="utf-8").write("\n".join(out) + "\n")
 
 
+def seo_lint(posts):
+    """Build-time SEO checks (warnings only): title and meta length, duplicates, hero alt text, H1/title match, canonical host."""
+    seen_t, seen_d = {}, {}
+    for p, _ in posts:
+        h = p["handle"]
+        t, d = p["mtitle"], p["mdesc"]
+        if len(t) > 62: print("WARN title over 62 chars (%d): %s" % (len(t), h))
+        if not 120 <= len(d) <= 165: print("WARN meta description %d chars (aim 120 to 165): %s" % (len(d), h))
+        if t in seen_t: print("WARN duplicate title:", h, "=", seen_t[t])
+        if d in seen_d: print("WARN duplicate meta description:", h, "=", seen_d[d])
+        seen_t[t], seen_d[d] = h, h
+        if len(p["alt"].split()) < 4: print("WARN hero alt text too short:", h)
+        if not p["url"].startswith("https://www.pawiqpets.com/"): print("WARN non-canonical host:", h)
+        if re.search(r"<h1", p["body"]): print("WARN body contains an H1 (template adds one):", h)
+        if "learn-sources" not in p["body"]: print("WARN no sources block:", h)
+
+
 def main():
     reg = json.load(open(os.path.join(ROOT, "_learn", "posts.json"), encoding="utf-8"))
     reg = sorted(reg, key=lambda r: r["date"], reverse=True)
@@ -406,6 +423,7 @@ def main():
     update_sitemap(posts)
     update_feed(posts)
     link_report(posts)
+    seo_lint(posts)
     for src, out, url_path, title, desc, h1, cls in PAGES:
         path = os.path.join(ROOT, out)
         os.makedirs(os.path.dirname(path), exist_ok=True)
