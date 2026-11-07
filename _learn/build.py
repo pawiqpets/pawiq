@@ -375,7 +375,13 @@ def tool_ld(src, url_path, title, desc, h1, body):
         graph.append({"@type": "WebApplication", "name": h1.rstrip("."), "url": url, "description": desc, "applicationCategory": "UtilitiesApplication",
                       "operatingSystem": "Any", "browserRequirements": "Requires JavaScript", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
                       "dateModified": TOOL_DATE, "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"}})
-    elif url_path != "/tools":
+    elif url_path == "/tools":
+        tl = re.findall(r'<li><a href="(/tools/[^"]+)">(.*?)</a>', body)
+        graph.append({"@type": "CollectionPage", "name": h1.rstrip("."), "url": url, "dateModified": TOOL_DATE, "mainEntity": {"@type": "ItemList",
+                      "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": clean(n), "url": SITE + u} for i, (u, n) in enumerate(tl)]}})
+    else:
+        graph.append({"@type": "WebPage", "name": h1.rstrip("."), "url": url, "description": desc, "dateModified": TOOL_DATE,
+                      "publisher": {"@type": "Organization", "name": "pawIQ", "url": SITE + "/"}})
         items = [clean(x) for x in re.findall(r'<li><label><input type="checkbox"> <span>(.*?)</span></label></li>', body, re.S)]
         if items:
             graph.append({"@type": "ItemList", "name": h1.rstrip("."), "numberOfItems": len(items),
@@ -411,7 +417,7 @@ def update_sitemap(posts):
     s = re.sub(r"\n{3,}", "\n\n", s)
     latest = max([d for _, d in posts], default=None)
     entries = [f"  <url>\n    <loc>{SITE}/blogs/learn</loc>\n" + (f"    <lastmod>{latest}</lastmod>\n" if latest else "") + "  </url>",
-               f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n  </url>",
+               f"  <url>\n    <loc>{SITE}/pages/editorial-policy</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-age-calculator</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>",
                f"  <url>\n    <loc>{SITE}/tools/dog-supplement-cost-calculator</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>"]
     entries += [f"  <url>\n    <loc>{SITE}/tools</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>"] + [f"  <url>\n    <loc>{SITE}/tools/{h}</loc>\n    <lastmod>{TOOL_DATE}</lastmod>\n  </url>" for h in ("dog-boarding-checklist", "cold-weather-dog-walk-checklist")]
