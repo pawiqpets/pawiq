@@ -246,6 +246,9 @@ def render_post(p, date, review_html="", others=()):
 DIGESTIVE_SYMPTOMS = re.compile(r"\b(stool|poop|diarrh\w*|vomit\w*|stomach upset|upset stomach|upset (?:your|a|the) (?:dog's )?stomach|gurgl\w*|constipat\w*|gas|bloat\w*)\b", re.I)
 
 
+LOAD = {}  # how many related-cards each post has been given so far: spreads links so no guide is left with almost none (Nov 6, 2026)
+
+
 def related(p, others):
     """Up to 3 related posts: same hub, then neighbouring hubs, then newest. Evergreen posts never show seasonal ones."""
     pool = [x for x in others if not (p.get("hub") != "Seasonal care" and x[0].get("hub") == "Seasonal care")]
@@ -256,9 +259,12 @@ def related(p, others):
     order = [hub] + NEIGHBOURS.get(hub, []) if hub else []
     picks = []
     for h in order:
-        picks += [x for x in pool if x[0].get("hub") == h and x not in picks]
-    picks += [x for x in pool if x not in picks]
-    return picks[:3]
+        picks += sorted([x for x in pool if x[0].get("hub") == h and x not in picks], key=lambda x: LOAD.get(x[0]["handle"], 0))
+    picks += sorted([x for x in pool if x not in picks], key=lambda x: LOAD.get(x[0]["handle"], 0))
+    picks = picks[:3]
+    for x in picks:
+        LOAD[x[0]["handle"]] = LOAD.get(x[0]["handle"], 0) + 1
+    return picks
 
 
 def more_block(others):
