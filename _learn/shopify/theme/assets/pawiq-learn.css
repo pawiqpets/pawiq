@@ -54,6 +54,7 @@
 .plx .post.quiet h1{font-family:Satoshi,system-ui,sans-serif;font-weight:700;font-size:24px;line-height:1.3;letter-spacing:0;margin:40px 0 16px}
 .plx .post.quiet h2{font-family:Satoshi,system-ui,sans-serif;font-weight:700;font-size:17px;line-height:1.4;letter-spacing:0;margin:28px 0 6px}
 .plx .post h2,.plx .post h3{text-wrap:pretty}
+.plx .post sup::before{content:'\2060'}
 .plx .post sup{font-size:.6em;line-height:0;vertical-align:super;margin-left:1px}
 .plx .post table caption{caption-side:top;text-align:left;background:var(--ink);color:var(--cream);padding:18px 14px 10px;font-family:Thunder,Impact,sans-serif;font-weight:800;font-size:clamp(23px,6vw,26px);line-height:1.05;letter-spacing:.4px;text-wrap:balance;border-radius:var(--r) var(--r) 0 0}
 .plx .post table caption sup{font-family:Satoshi,system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:0;margin-left:2px}
