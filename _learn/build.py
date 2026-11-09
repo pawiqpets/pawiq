@@ -318,7 +318,7 @@ def render_index(posts):
 <h1>Learn.</h1>
 <p class="standfirst">Plain answers to the questions dog owners ask, with every fact linked to its source.</p>
 {empty}{sections}
-<p class="edit-note"><a href="/pages/editorial-policy">How we write Learn</a></p>
+<p class="edit-note">Educational information, not veterinary advice. <a href="/pages/editorial-policy">How we write Learn</a></p>
 </main>
 """ + FOOT
 
