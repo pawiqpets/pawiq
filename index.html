@@ -11,10 +11,10 @@
 </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0A1628" />
+  <meta name="theme-color" content="#F6F6F1" />
   <title>pawIQ | Soft chew supplements for dogs</title>
 
-  <meta name="description" content="Developed with a licensed veterinarian. Launching soon on Amazon. Get launch updates." />
+  <meta name="description" content="Soft chew supplements for dogs. Launching soon. Get the launch email." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://www.pawiqpets.com/" />
 
@@ -23,7 +23,7 @@
   <meta property="og:url" content="https://www.pawiqpets.com/" />
   <meta property="og:site_name" content="pawIQ" />
   <meta property="og:title" content="pawIQ | Soft chew supplements for dogs" />
-  <meta property="og:description" content="Developed with a licensed veterinarian. Launching soon on Amazon. Get launch updates." />
+  <meta property="og:description" content="Soft chew supplements for dogs. Launching soon. Get the launch email." />
   <meta property="og:image" content="https://www.pawiqpets.com/assets/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -33,13 +33,12 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="pawIQ | Soft chew supplements for dogs" />
-  <meta name="twitter:description" content="Developed with a licensed veterinarian. Launching soon on Amazon. Get launch updates." />
+  <meta name="twitter:description" content="Soft chew supplements for dogs. Launching soon. Get the launch email." />
   <meta name="twitter:image" content="https://www.pawiqpets.com/assets/og-image.png" />
 
   <!-- Preload critical assets -->
-  <link rel="preload" href="./assets/comingsoon-poster.jpg" as="image" />
-  <link rel="preload" href="./assets/fonts/Thunder-LC.ttf" as="font" type="font/truetype" crossorigin="anonymous" />
-  <link rel="preload" href="./assets/fonts/Satoshi-Variable.ttf" as="font" type="font/truetype" crossorigin="anonymous" />
+  <link rel="preload" href="./assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="./assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin />
 
   <!-- Schema: WebSite -->
   <script type="application/ld+json">
@@ -98,895 +97,320 @@
     }
   </script>
 
+
   <style>
-    @font-face {
-      font-family: 'Thunder';
-      src: url('./assets/fonts/Thunder-LC.ttf') format('truetype');
-      font-weight: 700 800;
-      font-display: swap;
+    @font-face { font-family: 'Thunder'; src: url('./assets/fonts/Thunder-LC.woff2') format('woff2'); font-weight: 700 800; font-display: swap; }
+    @font-face { font-family: 'Satoshi'; src: url('./assets/fonts/Satoshi-Variable.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }
+
+    :root {
+      --ink: #00080B;
+      --cream: #F6F6F1;
+      --circle: #7AC3FF;
+      --accent: #5EC6FF;
+      --mint: #4FD6A5;
+      --grey1: #F3F3F3;
+      --grey2: #E6E6E6;
+      --muted: rgba(0,8,11,0.7);
     }
-    @font-face {
-      font-family: 'Satoshi';
-      src: url('./assets/fonts/Satoshi-Variable.ttf') format('truetype');
-      font-weight: 300 400 500;
-      font-display: swap;
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Satoshi', system-ui, -apple-system, Arial, sans-serif;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    a { color: var(--ink); }
+    button { font: inherit; color: inherit; border-radius: 2px; }
+    :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+    .wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+    .thunder, h1, h2 { font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; }
+
+    /* Header */
+    .site-head { padding-top: 22px; }
+    .site-head a { display: inline-block; line-height: 0; }
+    .site-head img { width: 118px; height: auto; display: block; }
+
+    /* Top section */
+    .top { padding: 28px 0; }
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(64px, 8vw + 32.8px, 148px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+    .lede { margin: 0 0 22px; font-size: 18px; max-width: 34ch; }
+    .signup { max-width: 560px; }
+
+    .fade-swap { transition: opacity 320ms ease-in-out; }
+    .is-hidden { opacity: 0 !important; pointer-events: none !important; }
+    .is-gone { display: none; }
+    .hidden { display: none; }
+
+    .form-row { display: flex; gap: 8px; }
+    .email, .post-q-input {
+      flex: 1 1 auto; min-width: 0; height: 54px;
+      border: 1.5px solid var(--ink); border-radius: 2px;
+      background: #fff; color: var(--ink);
+      padding: 0 14px; font: inherit; font-size: 16px; font-weight: 400;
+    }
+    .email::placeholder, .post-q-input::placeholder { color: var(--muted); opacity: 1; }
+    .btn-solid {
+      flex: 0 0 auto; height: 54px; padding: 0 18px; border: 0; border-radius: 2px;
+      background: var(--ink); color: var(--cream); cursor: pointer;
+      font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: 0.2px;
+    }
+    .btn-solid:hover { background: #1b2427; }
+    .consent {
+      display: flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 6px;
+      font-size: 15px; cursor: pointer;
+    }
+    .consent input { width: 22px; height: 22px; margin: 0; flex: 0 0 auto; accent-color: var(--ink); }
+    .post-q { display: grid; gap: 12px; }
+    .post-q-title { font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 32px; line-height: 1; }
+    .post-q-prompt { font-size: 18px; }
+    .post-q-form { display: flex; gap: 8px; }
+    .post-q-form .btn-solid { width: 54px; padding: 0; font-family: 'Satoshi', sans-serif; font-size: 22px; }
+    .success { font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 32px; }
+
+    /* While you wait */
+    .wait { position: relative; overflow: clip; padding-bottom: 24px; }
+    .wait-grid { display: block; padding-top: 232px; }
+    .latest-h { margin: 0 0 18px; font-size: clamp(40px, 9vw, 64px); line-height: 1; }
+    .latest ul { list-style: none; margin: 0; padding: 0; }
+    .latest li { border-top: 1px solid var(--ink); }
+    .latest li:last-child { border-bottom: 1px solid var(--ink); }
+    .latest a {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      min-height: 56px; padding: 12px 0; font-size: 17px; line-height: 1.3; text-decoration: none;
+    }
+    .latest a::after { content: "\2192"; content: "\2192" / ""; flex: 0 0 auto; font-size: 20px; }
+    .latest a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .more { margin-top: 12px; display: flex; flex-direction: column; align-items: flex-start; }
+    .more a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 17px; }
+    .more svg { width: 20px; height: 20px; fill: var(--ink); flex: 0 0 auto; }
+
+    .circle {
+      position: absolute; top: 0; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: var(--circle); overflow: hidden;
+    }
+    .circle img {
+      position: absolute; left: 24px; bottom: 0; width: 96px; height: auto;
+      transform: translateY(100%);
+      transition: transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .circle.up img { transform: translateY(25%); }
+    @media (prefers-reduced-motion: reduce) {
+      .circle img { transform: translateY(25%); transition: none; }
     }
 
-    html, body { height: 100%; }
-
-body {
-  margin: 0;
-  background: #000;
-  font-family: system-ui, -apple-system, Arial, sans-serif;
-  overflow-x: hidden;
-}
-
-.bg-video {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-.bg-video.soft-restart {
-  opacity: 0.85;
-  filter: blur(2px);
-  transition: opacity 180ms ease, filter 180ms ease;
-}
-
-.seo-h1 {
-  position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.bg-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  z-index: 1;
-}
-
-/* Foreground content */
-.page {
-  position: relative;
-  z-index: 3;
-
-  min-height: 100vh;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 22px 20px 18px;
-  text-align: center;
-  color: #fff;
-  box-sizing: border-box;
-}
-
-.center {
-  display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 6px;
-  margin-top: 2em;
-}
-
-.center img {
-  width: min(160px, 45vw);
-  height: auto;
-  display: block;
-  cursor: pointer;
-}
-
-.sub {
-  font-size: 16px;
-  letter-spacing: 0.2px;
-  opacity: 0.95;
-}
-
-/* Signup block near bottom, visible on load */
-.signup {
-  width: min(520px, 100%);
-  margin: 0 auto;
-  display: grid;
-  gap: 10px;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* Fade swap between signup and question */
-.fade-swap {
-  transition: opacity 320ms ease-in-out;
-}
-
-.is-hidden {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.is-gone {
-  display: none;
-}
-
-.signup-title {
-  font-size: 16px;
-  font-weight: 300;
-  letter-spacing: 0.2px;
-  opacity: 0.95;
-  margin-bottom: 10px;
-}
-
-.email {
-  width: min(260px, 100%);
-  margin: 0 auto;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(0,0,0,0.30);
-  color: #fff;
-  padding: 12px 14px;
-  border-radius: 10px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.email::placeholder { color: rgba(255,255,255,0.65); }
-
-.consent {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: center;
-  text-align: center;
-  font-size: 13px;
-  line-height: 1.3;
-  color: rgba(255,255,255,0.9);
-  max-width: 360px;
-  margin: 6px auto 0;
-}
-
-.consent input { margin-top: 2px; }
-
-.learn-link {
-  display: block;
-  width: fit-content;
-  margin: 14px auto 0;
-  font-size: 13px;
-  color: rgba(255,255,255,0.75);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.learn-link:hover, .learn-link:focus-visible { color: #fff; }
-.consent-link { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-.consent-line { white-space: nowrap; }
-.foot-links { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 14px; }
-.foot-links .learn-link { margin: 0; }
-.latest { margin: 18px auto 0; max-width: 420px; text-align: center; }
-@media (max-width: 600px) { .latest { max-width: 270px; margin-top: 14px; } .latest a { font-size: 13px; } .latest ul { gap: 5px; } }
-.latest-h { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
-.latest ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
-.latest a { color: rgba(255,255,255,0.88); font-size: 14px; line-height: 1.3; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.28); }
-.latest a:hover, .latest a:focus-visible { color: #fff; border-bottom-color: #fff; }
-
-.consent { width: fit-content; max-width: 100%; align-items: center; }
-.consent input { margin-top: 0; flex-shrink: 0; }
-@media (max-width: 360px) { .consent { font-size: 12px; gap: 8px; } }
-#emailGateCard .gate-consent { justify-content: center; }
-.gate-consent-text { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-
-.btn {
-  width: auto;
-  margin: 6px auto 0;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-}
-
-.btn:hover .btn-icon {
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.45);
-}
-
-.btn:active .btn-icon {
-  background: rgba(255,255,255,0.14);
-}
-
-.btn-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.35);
-  display: grid;
-  place-items: center;
-  font-size: 18px;
-  line-height: 1;
-  color: #fff;
-  transition: background 150ms ease, border-color 150ms ease;
-}
-
-/* Post-signup question */
-.post-q {
-  width: min(520px, 100%);
-  margin: 10px auto 0;
-  display: grid;
-  gap: 8px;
-}
-
-.post-q-title {
-  font-size: 15px;
-  font-weight: 400;
-  letter-spacing: 0.2px;
-  opacity: 0.95;
-}
-
-.post-q-prompt {
-  font-size: 15px;
-  line-height: 1.35;
-  opacity: 0.95;
-}
-
-.post-q-form {
-  display: grid;
-  gap: 10px;
-}
-
-.post-q-input {
-  width: min(420px, 100%);
-  margin: 0 auto;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(0,0,0,0.30);
-  color: #fff;
-  padding: 12px 14px;
-  border-radius: 10px;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.post-q-input::placeholder { color: rgba(255,255,255,0.65); }
-
-.success {
-  font-size: 14px;
-  font-weight: 400;
-  margin-top: 0;
-  opacity: 0.95;
-}
-
-.hidden { display: none; }
-
-@media (max-height: 700px) {
-  .page { padding: 18px 18px 14px; }
-  .signup { gap: 8px; }
-  .sub, .signup-title { font-size: 15px; }
-  .email { width: min(240px, 100%); padding: 10px 12px; }
-  .btn-icon { width: 32px; height: 32px; }
-}
-
-/* Mobile framing: shift focal point slightly left */
-@media (max-width: 768px){
-  .bg-video{
-    object-position: 30% 50%;
-  }
-  .email, .post-q-input {
-    font-size: 16px;
-  }
-}
-
-/* ============================================================
-   PAW TRIGGER
-   ============================================================ */
-#pawTrigger {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 500;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
-  touch-action: manipulation;
-  font-size: 30px;
-  line-height: 1;
-  animation: pawFloat 2.2s ease-in-out infinite;
-  filter: brightness(0) invert(1) drop-shadow(0 3px 8px rgba(0,0,0,0.6));
-  transition: filter 150ms ease;
-}
-
-#pawTrigger:hover {
-  filter: brightness(0) invert(1) drop-shadow(0 3px 14px rgba(255,255,255,0.5));
-}
-
-#pawTrigger.hidden {
-  display: none;
-}
-
-@keyframes pawFloat {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-8px); }
-}
-
-@media (max-width: 768px) {
-  #pawTrigger {
-    bottom: calc(env(safe-area-inset-bottom) + 20px);
-    right: 20px;
-  }
-}
-
-/* ============================================================
-   GAME OVERLAY
-   ============================================================ */
-#gameOverlay {
-  position: fixed;
-  inset: 0;
-  z-index: 400;
-  background: #0A1628;
-  opacity: 0;
-  pointer-events: none;
-  display: none;
-  transition: opacity 0.4s ease;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-#gameOverlay.active {
-  display: flex;
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* Thunder + Satoshi */
-.thunder {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-}
-
-.satoshi {
-  font-family: 'Satoshi', system-ui, sans-serif;
-}
-
-/* Close button */
-#gameClose {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 410;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: none;
-  background: rgba(255,255,255,0.10);
-  border-radius: 50%;
-  color: #fff;
-  font-size: 22px;
-  line-height: 1;
-  transition: background 150ms ease;
-  border: 1px solid rgba(255,255,255,0.15);
-}
-
-#gameClose:hover {
-  background: rgba(255,255,255,0.20);
-}
-
-/* Ambient bg canvas */
-#ambientCanvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Game canvas */
-#gameCanvas {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: block;
-  pointer-events: none;
-}
-
-#gameOverlay.active #gameCanvas {
-  pointer-events: all;
-}
-
-/* HUD */
-#gameHUD {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 32px;
-  padding: 18px 20px 14px;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-#gameHUD .hud-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-#gameHUD .hud-label {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.50);
-}
-
-#scoreDisplay {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: 26px;
-  color: #2FEAA0;
-  line-height: 1;
-}
-
-#heartsDisplay {
-  font-size: 20px;
-  line-height: 1;
-  color: #FF6B8A;
-  letter-spacing: 2px;
-}
-
-/* Screens inside overlay */
-.game-screen {
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  box-sizing: border-box;
-  transition: opacity 0.4s ease;
-  pointer-events: all;
-}
-
-.game-screen.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Intro screen */
-#introScreen .intro-logo {
-  width: min(120px, 40vw);
-  margin-bottom: 16px;
-}
-
-#introScreen .intro-eyebrow {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #4EC9F0;
-  margin-bottom: 12px;
-}
-
-#introScreen .intro-headline {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: clamp(32px, 6vw, 56px);
-  color: #fff;
-  line-height: 1.05;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-#introScreen .intro-headline span {
-  color: #2FEAA0;
-}
-
-#introScreen .intro-desc {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 15px;
-  color: rgba(255,255,255,0.80);
-  text-align: center;
-  max-width: 380px;
-  line-height: 1.55;
-  margin-bottom: 24px;
-}
-
-#introScreen .legend {
-  display: flex;
-  gap: 28px;
-  margin-bottom: 28px;
-  align-items: center;
-}
-
-#introScreen .legend-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-#introScreen .legend-canvas {
-  width: 48px;
-  height: 36px;
-}
-
-#introScreen .legend-label {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 11px;
-  color: rgba(255,255,255,0.70);
-  text-align: center;
-  line-height: 1.3;
-}
-
-.game-cta-btn {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: 16px;
-  background: #2FEAA0;
-  color: #0A1628;
-  border: none;
-  border-radius: 999px;
-  padding: 16px 48px;
-  cursor: pointer;
-  transition: transform 150ms ease, background 150ms ease;
-  letter-spacing: 0.3px;
-}
-
-.game-cta-btn:hover {
-  background: #25d48e;
-  transform: scale(1.04);
-}
-
-/* End screen */
-#endScreen {
-  background: #0A1628;
-}
-
-#endScreen .end-icon {
-  font-size: 52px;
-  margin-bottom: 12px;
-}
-
-#endScreen .end-headline {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: clamp(28px, 5vw, 44px);
-  color: #fff;
-  text-align: center;
-  margin-bottom: 8px;
-  line-height: 1.1;
-}
-
-#endScreen .end-score {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: 32px;
-  color: #2FEAA0;
-  margin-bottom: 8px;
-}
-
-#endScreen .end-sub {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 14px;
-  color: rgba(255,255,255,0.80);
-  text-align: center;
-  max-width: 320px;
-  line-height: 1.55;
-  margin-bottom: 24px;
-}
-
-/* Slo-mo text overlay */
-#slomoText {
-  position: absolute;
-  inset: 0;
-  z-index: 7;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-#slomoText.visible {
-  opacity: 1;
-}
-
-#slomoText .slomo-line1 {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: clamp(24px, 4vw, 36px);
-  color: #fff;
-  text-align: center;
-}
-
-#slomoText .slomo-line2 {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 15px;
-  color: rgba(255,255,255,0.80);
-  font-style: italic;
-  text-align: center;
-}
-
-/* Email gate */
-#emailGate {
-  position: absolute;
-  inset: 0;
-  z-index: 8;
-  background: rgba(10,22,40,0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  box-sizing: border-box;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-
-#emailGate.visible {
-  opacity: 1;
-  pointer-events: all;
-}
-
-#emailGateCard {
-  background: #0F2040;
-  border: 1px solid rgba(255,255,255,0.20);
-  border-radius: 24px;
-  padding: 36px 28px;
-  max-width: 380px;
-  width: 100%;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-@keyframes pawBob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-#emailGateCard .gate-paw {
-  font-size: 52px;
-  display: block;
-  margin-bottom: 16px;
-  animation: pawBob 1.6s ease-in-out infinite;
-}
-
-#emailGateCard .gate-eyebrow {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #4EC9F0;
-  margin-bottom: 10px;
-}
-
-#emailGateCard .gate-headline {
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: clamp(22px, 4vw, 28px);
-  color: #fff;
-  line-height: 1.1;
-  margin-bottom: 10px;
-}
-
-#emailGateCard .gate-headline span {
-  color: #F5C842;
-}
-
-#emailGateCard .gate-body {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 14px;
-  color: rgba(255,255,255,0.80);
-  line-height: 1.55;
-  margin-bottom: 20px;
-}
-
-#gateEmailInput {
-  width: 100%;
-  box-sizing: border-box;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.20);
-  color: #fff;
-  padding: 12px 14px;
-  border-radius: 12px;
-  outline: none;
-  font-size: 16px;
-  font-family: 'Satoshi', system-ui, sans-serif;
-  margin-bottom: 12px;
-  transition: border-color 200ms ease;
-}
-
-#gateEmailInput:focus {
-  border-color: #2FEAA0;
-}
-
-#gateEmailInput::placeholder {
-  color: rgba(255,255,255,0.45);
-}
-
-#emailGateCard .gate-consent {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-#emailGateCard .gate-consent input {
-  margin-top: 2px;
-  accent-color: #2FEAA0;
-  flex-shrink: 0;
-}
-
-#emailGateCard .gate-consent label {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,0.70);
-  line-height: 1.4;
-}
-
-#gateSubmitBtn {
-  width: 100%;
-  font-family: 'Thunder', sans-serif;
-  font-weight: 800;
-  font-size: 16px;
-  background: #2FEAA0;
-  color: #0A1628;
-  border: none;
-  border-radius: 12px;
-  padding: 14px;
-  cursor: pointer;
-  transition: background 150ms ease, transform 150ms ease;
-  margin-bottom: 12px;
-  letter-spacing: 0.3px;
-}
-
-#gateSubmitBtn:hover {
-  background: #25d48e;
-  transform: scale(1.02);
-}
-
-#gateSkipLink {
-  font-family: 'Satoshi', system-ui, sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,0.50);
-  text-decoration: underline;
-  cursor: pointer;
-  background: none;
-  border: none;
-  display: block;
-  margin: 0 auto;
-}
-
-#gateSkipLink:hover {
-  color: rgba(255,255,255,0.80);
-}
-
+    /* Footer row */
+    .foot { padding: 12px 0 24px; }
+    .foot .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .foot-links { display: flex; align-items: center; flex-wrap: wrap; }
+    .foot-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; padding-right: 14px; }
+    .foot-links a + a { padding-left: 14px; border-left: 1px solid var(--ink); }
+    #pawTrigger {
+      flex: 0 0 auto; width: 44px; height: 44px; padding: 0; display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--ink); border-radius: 2px; background: var(--cream); color: var(--ink); cursor: pointer;
+      touch-action: manipulation;
+    }
+    #pawTrigger svg { width: 24px; height: 24px; fill: currentColor; }
+    #pawTrigger.hidden { display: none; }
+
+    @media (max-width: 899px) {
+      .top { min-height: calc(100svh - 130px); }
+    }
+    @media (min-width: 900px) {
+      .lede { font-size: 20px; }
+      .top { padding-bottom: 72px; }
+      .wait { overflow: visible; }
+      .wait-grid {
+        display: grid; grid-template-columns: 1fr 320px; grid-template-areas: "list circle" "more .";
+        column-gap: 48px; padding-top: 24px;
+      }
+      .latest { grid-area: list; align-self: end; }
+      .more { grid-area: more; }
+      .latest a { font-size: 18px; }
+      .circle { position: relative; top: auto; right: auto; grid-area: circle; align-self: end; justify-self: end; width: 300px; height: 300px; }
+      .circle img { left: calc(50% - 62px); width: 124px; }
+    }
+
+    /* ============================================================
+       GAME OVERLAY (colours restyled to the pawIQ palette)
+       ============================================================ */
+    #gameOverlay {
+      position: fixed; inset: 0; z-index: 400; background: var(--cream); color: var(--ink);
+      opacity: 0; pointer-events: none; display: none; transition: opacity 0.4s ease;
+      flex-direction: column; align-items: center; justify-content: center; overflow: hidden;
+    }
+    #gameOverlay.active { display: flex; opacity: 1; pointer-events: all; }
+    #gameClose {
+      position: absolute; top: 16px; right: 16px; z-index: 410; width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      background: var(--cream); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 2px;
+      font-size: 22px; line-height: 1;
+    }
+    #ambientCanvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    #gameCanvas { position: absolute; inset: 0; z-index: 1; display: block; pointer-events: none; }
+    #gameOverlay.active #gameCanvas { pointer-events: all; }
+
+    #gameHUD {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 5; display: flex; justify-content: center;
+      align-items: flex-start; gap: 32px; padding: 18px 20px 14px; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    #gameHUD .hud-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    #gameHUD .hud-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink); }
+    #scoreDisplay { font-family: 'Thunder', sans-serif; font-weight: 800; font-size: 26px; color: var(--ink); line-height: 1; }
+    #heartsDisplay { font-size: 20px; line-height: 1; color: var(--ink); letter-spacing: 2px; }
+
+    .game-screen {
+      position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 24px; transition: opacity 0.4s ease; pointer-events: all;
+    }
+    .game-screen.hidden { opacity: 0; pointer-events: none; }
+    #introScreen .intro-logo { width: min(120px, 40vw); margin-bottom: 16px; }
+    #introScreen .intro-headline { font-family: 'Thunder', sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 56px); color: var(--ink); line-height: 1.05; text-align: center; margin-bottom: 10px; }
+    #introScreen .intro-headline span { color: var(--ink); }
+    #introScreen .intro-desc { font-size: 15px; color: var(--ink); text-align: center; max-width: 380px; line-height: 1.55; margin: 0 0 24px; }
+    #introScreen .legend { display: flex; gap: 28px; margin-bottom: 28px; align-items: center; }
+    #introScreen .legend-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    #introScreen .legend-canvas { width: 48px; height: 36px; }
+    #introScreen .legend-label { font-size: 12px; color: var(--ink); text-align: center; line-height: 1.3; }
+    .game-cta-btn {
+      font-family: 'Thunder', sans-serif; font-weight: 800; font-size: 18px; background: var(--ink); color: var(--cream);
+      border: none; border-radius: 2px; padding: 16px 48px; min-height: 48px; cursor: pointer; letter-spacing: 0.3px;
+    }
+    .game-cta-btn:hover { background: #1b2427; }
+    #endScreen { background: var(--cream); }
+    #endScreen .end-icon { font-size: 52px; margin-bottom: 12px; }
+    #endScreen .end-headline { font-family: 'Thunder', sans-serif; font-weight: 800; font-size: clamp(28px, 5vw, 44px); color: var(--ink); text-align: center; margin-bottom: 8px; line-height: 1.1; }
+    #endScreen .end-score { font-family: 'Thunder', sans-serif; font-weight: 800; font-size: 32px; color: var(--ink); margin-bottom: 8px; }
+    #endScreen .end-sub { font-size: 14px; color: var(--ink); text-align: center; max-width: 320px; line-height: 1.55; margin: 0 0 24px; }
+    #slomoText { position: absolute; inset: 0; z-index: 7; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+    #slomoText.visible { opacity: 1; }
+    #slomoText .slomo-line1 { font-family: 'Thunder', sans-serif; font-weight: 800; font-size: clamp(24px, 4vw, 36px); color: var(--ink); text-align: center; }
+    #slomoText .slomo-line2 { font-size: 15px; color: var(--ink); font-style: italic; text-align: center; }
+
+    #emailGate {
+      position: absolute; inset: 0; z-index: 8; background: rgba(246,246,241,0.94);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+    }
+    #emailGate.visible { opacity: 1; pointer-events: all; }
+    #emailGateCard { background: #fff; border: 1.5px solid var(--ink); border-radius: 2px; padding: 32px 24px; max-width: 380px; width: 100%; text-align: center; }
+    @keyframes pawBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    #emailGateCard .gate-paw { font-size: 48px; display: block; margin-bottom: 12px; animation: pawBob 1.6s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { #emailGateCard .gate-paw { animation: none; } }
+    #emailGateCard .gate-eyebrow { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink); margin-bottom: 10px; }
+    #emailGateCard .gate-headline { font-family: 'Thunder', sans-serif; font-weight: 800; font-size: clamp(24px, 4vw, 30px); color: var(--ink); line-height: 1.1; margin-bottom: 10px; }
+    #emailGateCard .gate-headline span { color: var(--ink); }
+    #emailGateCard .gate-body { font-size: 14px; color: var(--ink); line-height: 1.55; margin: 0 0 20px; }
+    #gateEmailInput { width: 100%; background: #fff; border: 1.5px solid var(--ink); color: var(--ink); padding: 12px 14px; border-radius: 2px; font-size: 16px; font-family: 'Satoshi', system-ui, sans-serif; margin-bottom: 12px; }
+    #gateEmailInput::placeholder { color: var(--muted); opacity: 1; }
+    #emailGateCard .gate-consent { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 16px; text-align: left; }
+    #emailGateCard .gate-consent input { accent-color: var(--ink); flex-shrink: 0; width: 20px; height: 20px; margin: 0; }
+    #emailGateCard .gate-consent label { font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .gate-consent-text { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .consent-link { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+    .consent-line { }
+    #gateSubmitBtn { width: 100%; font-family: 'Thunder', sans-serif; font-weight: 800; font-size: 18px; background: var(--ink); color: var(--cream); border: none; border-radius: 2px; padding: 14px; cursor: pointer; margin-bottom: 12px; letter-spacing: 0.3px; }
+    #gateSkipLink { font-size: 14px; color: var(--ink); text-decoration: underline; cursor: pointer; background: none; border: none; display: block; margin: 0 auto; min-height: 44px; padding: 0 12px; }
   </style>
 </head>
 
 <body>
-<video
-  id="bgVideo"
-  class="bg-video"
-  autoplay
-  muted
-  playsinline
-  preload="metadata"
-  poster="./assets/comingsoon-poster.jpg"
-  disablepictureinpicture
->
-  <source src="./assets/comingsoon.mp4?v=2" type="video/mp4" />
-</video>
-
-<div class="page">
-  <div class="center">
-    <a href="/">
-    <img src="./assets/logo-white.png" alt="pawIQ logo" />
-    </a>
-
-    <h1 class="seo-h1">
-    pawIQ | Soft chew supplements for dogs
-    </h1>
-
-    <div class="sub">Smart Habits. Coming Soon.</div>
+<header class="site-head">
+  <div class="wrap">
+    <a href="/"><picture><source srcset="./assets/coming-soon/logo-charcoal.webp" type="image/webp" /><img src="./assets/coming-soon/logo-charcoal.png" alt="pawIQ" width="118" height="37" /></picture></a>
   </div>
+</header>
 
-  <div class="signup">
-    <div id="signupBlock" class="fade-swap">
-    <div class="signup-title">Get all the updates.</div>
+<main>
+<section class="top">
+  <div class="wrap">
+    <h1>Almost ready.</h1>
+    <p class="lede">Soft chew supplements for dogs. Leave your email and you will hear first when we launch.</p>
 
-    <form id="signupForm" action="https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec" method="POST">
-      <input type="text" name="company" style="display:none">
-      <input type="hidden" name="page" value="https://www.pawiqpets.com/" />
-      <input type="hidden" name="user_agent" id="uaField" value="" />
+    <div class="signup">
+      <div id="signupBlock" class="fade-swap">
+        <form id="signupForm" action="https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec" method="POST">
+          <input type="text" name="company" style="display:none">
+          <input type="hidden" name="page" value="https://www.pawiqpets.com/" />
+          <input type="hidden" name="user_agent" id="uaField" value="" />
 
-      <input
-        class="email"
-        type="email"
-        name="email"
-        placeholder="Email address"
-        required
-        inputmode="email"
-        autocomplete="email"
-        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        title="Please enter a valid email address (example: name@example.com)"
-      />
+          <div class="form-row">
+            <input
+              class="email"
+              type="email"
+              name="email"
+              placeholder="Email address"
+              aria-label="Email address"
+              required
+              inputmode="email"
+              autocomplete="email"
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              title="Please enter a valid email address (example: name@example.com)"
+            />
+            <button class="btn-solid" id="ctaBtn" type="submit" aria-label="Notify me.">Let me know.</button>
+          </div>
 
-      <label class="consent">
-        <input type="checkbox" name="consent" value="yes" required />
-        <span class="consent-line">I agree to receive email updates from pawIQ.</span>
-      </label>
+          <label class="consent">
+            <input type="checkbox" name="consent" value="yes" required />
+            <span class="consent-line">I agree to receive email updates from pawIQ.</span>
+          </label>
+        </form>
+      </div>
 
-      <button class="btn" type="submit" aria-label="Notify me.">
-        <span class="btn-icon" aria-hidden="true">→</span>
-      </button>
-
-    </form>
-
+      <div id="postQuestion" class="post-q fade-swap hidden is-gone is-hidden" aria-live="polite">
+        <div class="post-q-title">Thank you. One quick question.</div>
+        <div id="postQPrompt" class="post-q-prompt fade-swap"></div>
+        <form id="postQForm" class="post-q-form fade-swap">
+          <input type="hidden" id="postQPromptId" value="" />
+          <input
+            id="postQAnswer"
+            class="post-q-input"
+            type="text"
+            placeholder="One sentence is enough."
+            aria-label="Your answer"
+            maxlength="240"
+            autocomplete="off"
+          />
+          <button class="btn-solid" type="submit" aria-label="Send feedback"><span aria-hidden="true">&rarr;</span></button>
+        </form>
+        <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div id="postQuestion" class="post-q fade-swap hidden is-gone is-hidden" aria-live="polite">
-      <div class="post-q-title">Thank you. One quick question.</div>
-      <div id="postQPrompt" class="post-q-prompt fade-swap"></div>
-      <form id="postQForm" class="post-q-form fade-swap">
-        <input type="hidden" id="postQPromptId" value="" />
-
-        <input
-          id="postQAnswer"
-          class="post-q-input"
-          type="text"
-          placeholder="One sentence is enough."
-          maxlength="240"
-          autocomplete="off"
-        />
-
-        <button class="btn" type="submit" aria-label="Send feedback">
-          <span class="btn-icon" aria-hidden="true">→</span>
-        </button>
-
-      </form>
-
-      <div id="postQThanks" class="success fade-swap hidden is-hidden" aria-live="polite">Appreciate it.</div>
-    </div>
-
-    <div class="foot-links"><a class="learn-link" href="/tools/">Tools</a><a class="learn-link" href="/blogs/learn">Learn</a><a class="learn-link" href="/policies/privacy-policy">Privacy Policy</a></div>
-
+<section class="wait">
+  <div class="wrap wait-grid">
     <!-- LATEST START -->
-    <nav class="latest" aria-label="Latest Learn guides"><div class="latest-h">Latest from Learn</div><ul><li><a href="/blogs/learn/christmas-tree-water-dogs">Is Christmas tree water bad for dogs?</a></li><li><a href="/blogs/learn/senior-dog-nutrition">What changes in a senior dog&#x27;s nutrition?</a></li><li><a href="/blogs/learn/omega-3-epa-dha-dogs">What are omega-3s for dogs? EPA, DHA and ALA explained</a></li></ul></nav>
+    <nav class="latest" aria-label="Latest Learn guides"><h2 class="latest-h">While you wait.</h2><ul><li><a href="/blogs/learn/christmas-tree-water-dogs">Is Christmas tree water bad for dogs?</a></li><li><a href="/blogs/learn/senior-dog-nutrition">What changes in a senior dog&#x27;s nutrition?</a></li><li><a href="/blogs/learn/omega-3-epa-dha-dogs">What are omega-3s for dogs? EPA, DHA and ALA explained</a></li></ul></nav>
     <!-- LATEST END -->
 
-  </div>
-</div>
+    <div class="more">
+      <a href="/blogs/learn" id="allLearn">All Learn guides</a>
+      <a href="https://www.instagram.com/pawiqpets/" id="igLink" data-network="instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg><span>@pawiqpets on Instagram</span></a>
+      <a href="https://www.tiktok.com/@pawiqpets" id="ttLink" data-network="tiktok" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg><span>@pawiqpets on TikTok</span></a>
+    </div>
 
-<!-- PAW TRIGGER BUTTON -->
-<button id="pawTrigger" aria-label="Play Treat Catcher game">🐾</button>
+    <div class="circle" id="circle" aria-hidden="true"><img src="./assets/coming-soon/winston-head-deadpan-happy.svg" alt="" aria-hidden="true" width="96" height="113" loading="lazy" /></div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-links"><a class="learn-link" href="/tools/">Tools</a><a class="learn-link" href="/blogs/learn">Learn</a><a class="learn-link" href="/policies/privacy-policy">Privacy Policy</a></div>
+    <button id="pawTrigger" type="button" aria-label="Play Treat Catcher game"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="4.6" cy="11" rx="2.3" ry="3"/><ellipse cx="9" cy="5.8" rx="2.3" ry="3.1"/><ellipse cx="15" cy="5.8" rx="2.3" ry="3.1"/><ellipse cx="19.4" cy="11" rx="2.3" ry="3"/><path d="M12 11.2c-3.3 0-6.2 3.6-6.2 6.2 0 1.9 1.6 2.8 3.2 2.8 1.2 0 2-.5 3-.5s1.8.5 3 .5c1.6 0 3.2-.9 3.2-2.8 0-2.6-2.9-6.2-6.2-6.2z"/></svg></button>
+  </div>
+</footer>
 
 <!-- GAME OVERLAY -->
 <div id="gameOverlay" role="dialog" aria-modal="true" aria-label="Treat Catcher Game">
@@ -1033,7 +457,7 @@ body {
 
   <!-- Intro screen -->
   <div id="introScreen" class="game-screen">
-    <img src="./assets/logo-white.png" alt="pawIQ" class="intro-logo" onerror="this.style.display='none'" />
+    <img src="./assets/coming-soon/logo-charcoal.png" alt="pawIQ" class="intro-logo" onerror="this.style.display='none'" />
     <div class="intro-headline">Catch the <span>Good Stuff.</span></div>
     <p class="intro-desc">Help your pup catch the supplements. Dodge the chocolate. Simple, right? (It's a metaphor.)</p>
     <div class="legend">
@@ -1059,13 +483,13 @@ body {
     <!-- Name capture + leaderboard (lose state only) -->
     <div id="leaderboardSection" style="display:none; width:100%; max-width:320px; margin-bottom:16px;">
       <div id="nameCapture" style="margin-bottom:14px;">
-        <input id="playerNameInput" type="text" maxlength="20" placeholder="Enter your name for the board" autocomplete="off"
-          style="width:100%;box-sizing:border-box;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.20);color:#fff;padding:11px 14px;border-radius:10px;outline:none;font-size:16px;font-family:'Satoshi',system-ui,sans-serif;margin-bottom:8px;" />
-        <div id="nameError" style="color:#FF6B8A;font-size:12px;font-family:'Satoshi',system-ui,sans-serif;min-height:16px;margin-bottom:4px;"></div>
-        <button id="submitNameBtn" style="width:100%;font-family:'Thunder',sans-serif;font-weight:800;font-size:15px;background:#2FEAA0;color:#0A1628;border:none;border-radius:10px;padding:12px;cursor:pointer;letter-spacing:0.3px;">Add to Leaderboard</button>
+        <input id="playerNameInput" aria-label="Your name" type="text" maxlength="20" placeholder="Enter your name for the board" autocomplete="off"
+          style="width:100%;box-sizing:border-box;background:#fff;border:1.5px solid #00080B;color:#00080B;padding:11px 14px;border-radius:2px;outline:none;font-size:16px;font-family:'Satoshi',system-ui,sans-serif;margin-bottom:8px;" />
+        <div id="nameError" style="color:#00080B;font-size:12px;font-family:'Satoshi',system-ui,sans-serif;min-height:16px;margin-bottom:4px;"></div>
+        <button id="submitNameBtn" style="width:100%;font-family:'Thunder',sans-serif;font-weight:800;font-size:15px;background:#00080B;color:#F6F6F1;border:none;border-radius:2px;padding:12px;cursor:pointer;letter-spacing:0.3px;">Add to Leaderboard</button>
       </div>
       <div id="leaderboardDisplay" style="display:none;">
-        <div style="font-family:'Satoshi',system-ui,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#4EC9F0;margin-bottom:10px;">Top 3</div>
+        <div style="font-family:'Satoshi',system-ui,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#00080B;margin-bottom:10px;">Top 3</div>
         <div id="leaderboardRows"></div>
       </div>
     </div>
@@ -1233,58 +657,44 @@ body {
     });
   }
 
-  /* Background video: play -> wait 10s -> restart gently */
+  /* ============================================================
+     TRACKING, SOCIAL CONSTANT, WINSTON PEEK
+     ============================================================ */
+  // Confirm this handle with Roger before launch.
+  const TIKTOK_HANDLE = "pawiqpets";
   (function () {
-    const video = document.getElementById("bgVideo");
-    if (!video) return;
-
-    const WAIT_MS = 10000;
-    const IS_MOBILE = window.matchMedia("(max-width: 768px)").matches;
-
-    let timer = null;
-
-    function restartGently() {
-      try {
-        video.classList.add("soft-restart");
-
-        window.setTimeout(() => {
-          video.pause();
-          video.currentTime = 0;
-
-          const p = video.play();
-          if (p && typeof p.catch === "function") p.catch(() => {});
-
-          window.setTimeout(() => {
-            video.classList.remove("soft-restart");
-          }, 180);
-        }, 80);
-      } catch (e) {
-        video.classList.remove("soft-restart");
+    const tt = document.getElementById("ttLink");
+    if (tt) {
+      tt.href = "https://www.tiktok.com/@" + TIKTOK_HANDLE;
+      const s = tt.querySelector("span");
+      if (s) s.textContent = "@" + TIKTOK_HANDLE + " on TikTok";
+    }
+    const send = (name, params) => { try { if (typeof gtag === "function") gtag("event", name, params || {}); } catch (e) {} };
+    const cta = document.getElementById("ctaBtn");
+    if (cta) cta.addEventListener("click", () => send("cta_click"));
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest ? e.target.closest("a") : null;
+      if (!a) return;
+      if (a.closest(".latest") || a.id === "allLearn") {
+        send("learn_click", { link_text: (a.textContent || "").trim() });
+      } else if (a.dataset && a.dataset.network) {
+        send("social_click", { network: a.dataset.network });
       }
-    }
-
-    function scheduleRestart() {
-      if (timer) window.clearTimeout(timer);
-      timer = window.setTimeout(restartGently, WAIT_MS);
-    }
-
-    video.addEventListener("ended", () => {
-      if (IS_MOBILE) return;
-      scheduleRestart();
     });
 
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        if (timer) window.clearTimeout(timer);
-        timer = null;
-        return;
-      }
-
-      if (IS_MOBILE) return;
-
-      if (video.ended) scheduleRestart();
-    });
-
+    const circle = document.getElementById("circle");
+    if (!circle) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) { circle.classList.add("up"); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting && en.intersectionRatio >= 0.6) {
+          circle.classList.add("up");
+          io.disconnect();
+        }
+      });
+    }, { threshold: [0.6] });
+    io.observe(circle);
   })();
 
   /* ============================================================
@@ -1348,6 +758,7 @@ body {
 
     // Open/close game
     function openGame() {
+      try { if (typeof gtag === 'function') gtag('event', 'game_open'); } catch (err) {}
       gameOverlay.style.display = 'flex';
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -1573,7 +984,7 @@ body {
         ambientDots.forEach(d => {
           d.y -= d.speed;
           if (d.y < -5) { d.y = ambientCanvas.height + 5; d.x = Math.random() * ambientCanvas.width; }
-          actx.fillStyle = `rgba(78,201,240,${d.opacity})`;
+          actx.fillStyle = `rgba(94,198,255,${d.opacity})`;
           actx.beginPath();
           actx.arc(d.x, d.y, d.r, 0, Math.PI*2);
           actx.fill();
@@ -1722,7 +1133,7 @@ body {
           if (item.type === 'chew') {
             score++;
             updateHUD();
-            spawnParticles(item.x, item.y, '#2FEAA0');
+            spawnParticles(item.x, item.y, '#5EC6FF');
 
             // Check win
             if (score >= winScore) {
@@ -1740,7 +1151,7 @@ body {
             // Caught bad item
             lives--;
             updateHUD();
-            spawnParticles(item.x, item.y, '#FF6B8A');
+            spawnParticles(item.x, item.y, '#00080B');
             if (lives <= 0) {
               setTimeout(() => showEndScreen(false), 100);
               gameState = 'over';
@@ -1755,7 +1166,7 @@ body {
           if (item.type === 'chew') {
             lives--;
             updateHUD();
-            spawnParticles(item.x, gameCanvas.height - 10, '#FF6B8A');
+            spawnParticles(item.x, gameCanvas.height - 10, '#00080B');
             if (lives <= 0) {
               setTimeout(() => showEndScreen(false), 100);
               gameState = 'over';
@@ -1829,7 +1240,7 @@ body {
       if (honeypot && honeypot.value) { resumeAfterGate(); return; }
 
       if (!email || !consent) {
-        gateEmailInput.style.borderColor = '#FF6B8A';
+        gateEmailInput.style.borderColor = '#5EC6FF';
         setTimeout(() => { gateEmailInput.style.borderColor = ''; }, 1500);
         return;
       }
@@ -1862,7 +1273,7 @@ body {
       resumeAfterGate();
     });
 
-    // Leaderboard — shared via Google Sheets
+    // Leaderboard: shared via Google Sheets
     const LB_READ_URL = 'https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec?action=leaderboard';
 
     function fetchLeaderboard(cb) {
@@ -1892,15 +1303,15 @@ body {
       if (!el) return;
       const medals = ['🥇','🥈','🥉'];
       el.innerHTML = lb.map((e, i) => `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,0.06);border-radius:8px;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#F3F3F3;border-radius:2px;margin-bottom:6px;">
           <span style="font-size:18px;margin-right:10px;">${medals[i]}</span>
-          <span style="font-family:'Satoshi',system-ui,sans-serif;font-size:14px;color:#fff;flex:1;text-align:left;">${e.name}</span>
-          <span style="font-family:'Thunder',sans-serif;font-weight:800;font-size:18px;color:#2FEAA0;">${e.score}</span>
+          <span style="font-family:'Satoshi',system-ui,sans-serif;font-size:14px;color:#00080B;flex:1;text-align:left;">${e.name}</span>
+          <span style="font-family:'Thunder',sans-serif;font-weight:800;font-size:18px;color:#00080B;">${e.score}</span>
         </div>
       `).join('');
     }
 
-    // Profanity filter — blocks exact matches and common leetspeak variants
+    // Profanity filter: blocks exact matches and common leetspeak variants
     const blocklist = [
       'fuck','shit','ass','bitch','cunt','dick','cock','pussy','penis','vagina','nigger','nigga',
       'faggot','fag','whore','slut','bastard','asshole','motherfucker','retard','twat','wank',
