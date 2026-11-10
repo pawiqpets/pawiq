@@ -228,7 +228,7 @@
     #gameClose {
       position: absolute; top: 16px; right: 16px; z-index: 410; width: 44px; height: 44px;
       display: flex; align-items: center; justify-content: center; cursor: pointer;
-      background: var(--cream); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 2px;
+      background: var(--cream); color: var(--ink); border: 1.5px solid var(--ink); border-radius: 12px;
       font-size: 22px; line-height: 1;
     }
     #ambientCanvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -260,7 +260,7 @@
     #introScreen .legend-label { font-size: 12px; color: var(--ink); text-align: center; line-height: 1.3; }
     .game-cta-btn {
       font-family: 'Thunder', sans-serif; font-weight: 800; font-size: 18px; background: var(--ink); color: var(--cream);
-      border: none; border-radius: 2px; padding: 16px 48px; min-height: 48px; cursor: pointer; letter-spacing: 0.3px;
+      border: none; border-radius: 12px; padding: 16px 48px; min-height: 48px; cursor: pointer; letter-spacing: 0.3px;
     }
     .game-cta-btn:hover { background: #1b2427; }
     #endScreen { background: var(--cream); }
@@ -287,7 +287,7 @@
     #emailGateCard .gate-headline { font-family: 'Thunder', sans-serif; font-weight: 800; font-size: clamp(24px, 4vw, 30px); color: var(--ink); line-height: 1.1; margin-bottom: 10px; }
     #emailGateCard .gate-headline span { color: var(--ink); }
     #emailGateCard .gate-body { font-size: 14px; color: var(--ink); line-height: 1.55; margin: 0 0 20px; }
-    #gateEmailInput { width: 100%; background: #fff; border: 1.5px solid var(--ink); color: var(--ink); padding: 12px 14px; border-radius: 2px; font-size: 16px; font-family: 'Satoshi', system-ui, sans-serif; margin-bottom: 12px; }
+    #gateEmailInput { width: 100%; background: #fff; border: 1.5px solid var(--ink); color: var(--ink); padding: 12px 14px; border-radius: 12px; font-size: 16px; font-family: 'Satoshi', system-ui, sans-serif; margin-bottom: 12px; }
     #gateEmailInput::placeholder { color: #595959; opacity: 1; }
     #emailGateCard .gate-consent { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 16px; text-align: left; }
     #emailGateCard .gate-consent input { accent-color: var(--ink); flex-shrink: 0; width: 20px; height: 20px; margin: 0; }
@@ -295,7 +295,7 @@
     .gate-consent-text { display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .consent-link { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
     .consent-line { }
-    #gateSubmitBtn { width: 100%; font-family: 'Thunder', sans-serif; font-weight: 800; font-size: 18px; background: var(--ink); color: var(--cream); border: none; border-radius: 2px; padding: 14px; cursor: pointer; margin-bottom: 12px; letter-spacing: 0.3px; }
+    #gateSubmitBtn { width: 100%; font-family: 'Thunder', sans-serif; font-weight: 800; font-size: 18px; background: var(--ink); color: var(--cream); border: none; border-radius: 12px; padding: 14px; cursor: pointer; margin-bottom: 12px; letter-spacing: 0.3px; }
     #gateSkipLink { font-size: 14px; color: var(--ink); text-decoration: underline; cursor: pointer; background: none; border: none; display: block; margin: 0 auto; min-height: 44px; padding: 0 12px; }
   </style>
 </head>
@@ -445,9 +445,9 @@
     <div id="leaderboardSection" style="display:none; width:100%; max-width:320px; margin-bottom:16px;">
       <div id="nameCapture" style="margin-bottom:14px;">
         <input id="playerNameInput" aria-label="Your name" type="text" maxlength="20" placeholder="Enter your name for the board" autocomplete="off"
-          style="width:100%;box-sizing:border-box;background:#fff;border:1.5px solid #00080B;color:#00080B;padding:11px 14px;border-radius:2px;outline:none;font-size:16px;font-family:'Satoshi',system-ui,sans-serif;margin-bottom:8px;" />
+          style="width:100%;box-sizing:border-box;background:#fff;border:1.5px solid #00080B;color:#00080B;padding:11px 14px;border-radius:12px;outline:none;font-size:16px;font-family:'Satoshi',system-ui,sans-serif;margin-bottom:8px;" />
         <div id="nameError" style="color:#00080B;font-size:12px;font-family:'Satoshi',system-ui,sans-serif;min-height:16px;margin-bottom:4px;"></div>
-        <button id="submitNameBtn" style="width:100%;font-family:'Thunder',sans-serif;font-weight:800;font-size:15px;background:#00080B;color:#F6F6F1;border:none;border-radius:2px;padding:12px;cursor:pointer;letter-spacing:0.3px;">Add to Leaderboard</button>
+        <button id="submitNameBtn" style="width:100%;font-family:'Thunder',sans-serif;font-weight:800;font-size:15px;background:#00080B;color:#F6F6F1;border:none;border-radius:12px;padding:12px;cursor:pointer;letter-spacing:0.3px;">Add to Leaderboard</button>
       </div>
       <div id="leaderboardDisplay" style="display:none;">
         <div style="font-family:'Satoshi',system-ui,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#00080B;margin-bottom:10px;">Top 3</div>
