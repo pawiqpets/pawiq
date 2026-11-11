@@ -39,6 +39,10 @@
   <!-- Preload critical assets -->
   <link rel="preload" href="./assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="./assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="./assets/coming-soon/winston-head-deadpan.svg" as="image" type="image/svg+xml" />
+  <link rel="preload" href="./assets/coming-soon/winston-head-deadpan-look-up-left.svg" as="image" type="image/svg+xml" />
+  <link rel="preload" href="./assets/coming-soon/winston-head-deadpan-look-up-right.svg" as="image" type="image/svg+xml" />
+  <link rel="preload" href="./assets/coming-soon/winston-head-deadpan-happy.svg" as="image" type="image/svg+xml" />
 
   <!-- Schema: WebSite -->
   <script type="application/ld+json">
@@ -115,23 +119,28 @@
     button { font: inherit; color: inherit; }
     :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
     h1, h2 { font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; margin: 0; line-height: .95; }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
 
     header.wrap { padding-top: 20px; }
     .logo { display: block; height: 28px; width: auto; }
     header a { display: inline-block; line-height: 0; padding: 8px 0; margin: -8px 0; }
 
     h1 { font-size: 64px; margin-top: 24px; }
-    .lede { font-size: 17px; line-height: 1.45; margin: 12px 0 20px; max-width: 34ch; }
+    .lede { font-size: 15px; line-height: 1.45; margin: 12px 0 20px; max-width: 34ch; }
     .field {
-      display: block; width: 100%; height: 52px; border: 1.5px solid var(--ink); border-radius: 12px; background: #fff;
-      color: var(--ink); padding: 0 16px; font: inherit; font-size: 17px;
+      display: block; width: 100%; height: 46px; border: 1.5px solid var(--ink); border-radius: 12px; background: #fff;
+      color: var(--ink); padding: 0 16px; font: inherit; font-size: 16px;
     }
     .field::placeholder, .post-q-input::placeholder { color: #595959; opacity: 1; }
     .go {
-      display: block; width: 100%; height: 52px; margin-top: 8px; border: 0; border-radius: 12px; background: var(--ink);
-      color: var(--cream); font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: .5px; cursor: pointer;
+      --nudge: 3px; /* Thunder sits high in its box; measured so the glyph gaps above and below match */
+      display: flex; align-items: center; justify-content: center; width: 100%; height: 46px; margin-top: 8px; padding: var(--nudge, 0px) 0 0;
+      border: 0; border-radius: 12px; background: var(--ink); color: var(--cream);
+      font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 20px; line-height: 1; letter-spacing: .5px; cursor: pointer;
+      transition: background-color 150ms ease;
     }
+    .go:hover { background: #1b2427; }
+    .go:active { transform: translateY(1px); }
     .consent { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 4px; font-size: 14px; cursor: pointer; }
     .consent input {
       appearance: none; -webkit-appearance: none; flex: 0 0 auto; width: 22px; height: 22px; margin: 0;
@@ -152,7 +161,8 @@
     .post-q-title { font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 32px; line-height: 1; }
     .post-q-prompt { font-size: 17px; }
     .post-q-form { display: flex; gap: 8px; }
-    .post-q-input { flex: 1 1 auto; min-width: 0; height: 52px; border: 1.5px solid var(--ink); border-radius: 12px; background: #fff; color: var(--ink); padding: 0 16px; font: inherit; font-size: 17px; }
+    .post-q-input { flex: 1 1 auto; min-width: 0; height: 46px; border: 1.5px solid var(--ink); border-radius: 12px; background: #fff; color: var(--ink); padding: 0 16px; font: inherit; font-size: 16px; }
+    .post-q-form .go, .post-q-form .go:active { --nudge: 0px; }
     .post-q-form .go { width: 56px; margin-top: 0; font-family: 'Satoshi', sans-serif; font-size: 22px; flex: 0 0 auto; }
     .success { font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 32px; }
 
@@ -160,12 +170,17 @@
     .panel { grid-area: panel; background: var(--cream); border-radius: 16px; padding: 16px 16px 4px; }
     .phead { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
     .panel h2 { font-size: 30px; line-height: 1; margin: 4px 0 0; }
-    .peek { --b: 13px; position: relative; flex: 0 0 auto; width: 60px; height: 60px; border-radius: 50%; background: #7AC3FF; overflow: hidden; }
+    .peek { --wh: 48px; --b: 13px; position: relative; flex: 0 0 auto; width: 60px; height: 60px; border-radius: 50%; background: #7AC3FF; overflow: hidden; }
     .peek img {
-      position: absolute; left: 50%; margin-left: -24px; width: 48px; height: auto; bottom: calc(-1 * var(--b));
-      transform: translateY(calc(100% - var(--b))); transition: transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+      position: absolute; left: 50%; margin-left: calc(var(--wh) / -2); width: var(--wh); height: auto; bottom: calc(-1 * var(--b));
+      transform-origin: 50% 75%; transform: translateY(calc(100% - var(--b)));
     }
-    .peek.up img { transform: translateY(0); }
+    /* deadpan, look-up-left and look-up-right are framed differently from deadpan-happy; these offsets line their drawing up with it */
+    .peek img[data-f="d"] { width: calc(var(--wh) * 1.0517); margin-left: calc(var(--wh) * -0.5438); bottom: calc(-1 * (var(--b) + var(--wh) * 0.0364)); }
+    .peek.up img { transform: translateY(0); transition: transform 1.2s ease-out; }
+    .peek.up.settled img { transition: transform 300ms ease; }
+    .peek.up.settled.look-l img { transform: translateY(-2px) rotate(-8deg); }
+    .peek.up.settled.look-r img { transform: translateY(-2px) rotate(8deg); }
     .latest ul { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid rgba(0,8,11,.22); }
     .latest li { border-top: 1px solid rgba(0,8,11,.22); }
     .latest li:nth-child(3) { display: none; }
@@ -190,30 +205,37 @@
     p.copy { font-size: 13px; margin: 0; }
     @media (prefers-reduced-motion: reduce) {
       .paw { animation: none; }
-      .peek img { transform: translateY(0); transition: none; }
+      .peek img { transform: translateY(0) !important; transition: none !important; }
     }
 
     @media (min-width: 900px) {
       .wrap { padding: 0 40px; }
       header.wrap { padding-top: 32px; }
       .logo { height: 34px; }
-      main.grid { grid-template-columns: minmax(0, 1fr) 420px; grid-template-areas: "hero panel" "follow panel"; column-gap: 56px; row-gap: 0; align-items: start; align-content: center; padding-top: 40px; }
-      .hero { padding-bottom: 0; }
-      h1 { font-size: 136px; margin-top: 0; white-space: nowrap; }
-      .lede { font-size: 21px; }
+      main.grid {
+        --h1: clamp(64px, min(9.444vw, (min(100vw, 1240px) - 556px) / 4.2), 148px);
+        grid-template-columns: minmax(0, 1fr) 420px; grid-template-areas: "hero panel" "follow panel";
+        column-gap: 56px; row-gap: 0; align-items: start; align-content: start; padding-top: clamp(48px, 9vh, 130px);
+      }
+      .hero { padding-bottom: 0; min-width: 0; }
+      h1 { font-size: var(--h1); margin-top: 0; white-space: nowrap; }
+      .lede { font-size: 18px; }
       .consent { font-size: 15px; }
       .formrow { display: flex; gap: 10px; max-width: 600px; }
-      .field { height: 60px; font-size: 18px; }
-      .go { width: auto; padding: 0 26px; height: 60px; font-size: 26px; margin-top: 0; flex: none; }
-      .panel { padding: 24px 24px 8px; margin-top: 1px; }
+      .field { height: 52px; font-size: 17px; }
+      .go { --nudge: 4px; width: auto; padding: var(--nudge, 0px) 26px 0; height: 52px; font-size: 22px; margin-top: 0; flex: none; }
+      .post-q-input { height: 52px; font-size: 17px; }
+      .panel { display: flex; flex-direction: column; align-self: stretch; padding: 24px 24px 8px; margin-top: calc(var(--h1) * 0.0074); }
+      .panel .all { margin-top: auto; margin-bottom: 14px; align-self: flex-start; }
       .phead { margin-bottom: 16px; }
       .panel h2 { font-size: 34px; }
-      .peek { --b: 16px; width: 72px; height: 72px; }
-      .peek img { width: 58px; margin-left: -29px; }
+      .peek { --wh: 58px; --b: 16px; width: 72px; height: 72px; }
       .latest li:nth-child(3) { display: block; }
       .follow { margin-top: 32px; }
+      .follow span { font-size: 14px; }
       footer.wrap { margin-top: 40px; }
-      p.legal { font-size: 13px; }
+      p.legal { font-size: 12px; max-width: 640px; }
+      p.copy { font-size: 12px; }
     }
 
     /* ============================================================
@@ -635,17 +657,86 @@
       }
     });
 
+    /* Winston: rises once with the deadpan face, glances up-left or up-right while the visitor waits,
+       and switches to deadpan-happy (for good) on the first sign of life. */
     const peek = document.getElementById("peek");
     const panel = document.querySelector(".panel");
-    if (!peek || !panel) return;
+    const img = peek ? peek.querySelector("img") : null;
+    if (!peek || !panel || !img) return;
+    const BASE = "./assets/coming-soon/";
+    const FRAMES = {
+      d: BASE + "winston-head-deadpan.svg",
+      l: BASE + "winston-head-deadpan-look-up-left.svg",
+      r: BASE + "winston-head-deadpan-look-up-right.svg",
+      h: BASE + "winston-head-deadpan-happy.svg"
+    };
+    const setFrame = (k) => {
+      img.src = FRAMES[k];
+      if (k === "h") img.removeAttribute("data-f"); else img.setAttribute("data-f", "d");
+    };
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce || !("IntersectionObserver" in window)) { peek.classList.add("up"); return; }
-    const io = new IntersectionObserver((entries) => {
+    if (reduce || !("IntersectionObserver" in window)) {
+      setFrame("h");
+      peek.classList.add("up", "settled");
+      return;
+    }
+    Object.keys(FRAMES).forEach((k) => { const im = new Image(); im.src = FRAMES[k]; if (im.decode) im.decode().catch(() => {}); });
+
+    let risen = false, done = false, lastSide = null, timer = null, riseTimer = null, io = null;
+    const field = document.querySelector(".field");
+    const actEvents = ["pointerdown", "keydown", "wheel", "scroll", "touchstart"];
+
+    const clearTimer = () => { if (timer) { window.clearTimeout(timer); timer = null; } };
+    const rand = (lo, hi) => lo + Math.random() * (hi - lo);
+    const endLook = () => {
+      peek.classList.remove("look-l", "look-r");
+      setFrame("d");
+    };
+    const schedule = (ms) => { clearTimer(); timer = window.setTimeout(look, ms); };
+    function look() {
+      if (done || document.hidden) return;
+      const side = lastSide ? (Math.random() < 0.7 ? (lastSide === "l" ? "r" : "l") : lastSide) : (Math.random() < 0.5 ? "l" : "r");
+      lastSide = side;
+      setFrame(side);
+      peek.classList.add(side === "l" ? "look-l" : "look-r");
+      clearTimer();
+      timer = window.setTimeout(() => { endLook(); schedule(rand(3000, 5000)); }, 1100);
+    }
+    function onVisibility() {
+      if (done || !risen) return;
+      if (document.hidden) { clearTimer(); endLook(); } else { schedule(rand(3000, 5000)); }
+    }
+    function onAct() {
+      if (done) return;
+      done = true;
+      clearTimer();
+      if (riseTimer) { window.clearTimeout(riseTimer); riseTimer = null; }
+      actEvents.forEach((ev) => window.removeEventListener(ev, onAct, true));
+      if (field) field.removeEventListener("focus", onAct);
+      document.removeEventListener("visibilitychange", onVisibility);
+      peek.classList.remove("look-l", "look-r");
+      setFrame("h");
+    }
+    function rise() {
+      if (io) { io.disconnect(); io = null; }
+      risen = true;
+      if (!done) setFrame("d"); else setFrame("h");
+      peek.classList.add("up");
+      if (done) return;
+      riseTimer = window.setTimeout(() => {
+        riseTimer = null;
+        peek.classList.add("settled");
+        schedule(1500);
+      }, 1200);
+    }
+    setFrame("d");
+    actEvents.forEach((ev) => window.addEventListener(ev, onAct, { capture: true, passive: true }));
+    if (field) field.addEventListener("focus", onAct);
+    document.addEventListener("visibilitychange", onVisibility);
+
+    io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
-        if (en.isIntersecting && (en.intersectionRatio >= 0.6 || en.intersectionRect.height >= 0.6 * window.innerHeight)) {
-          peek.classList.add("up");
-          io.disconnect();
-        }
+        if (!risen && en.isIntersecting && (en.intersectionRatio >= 0.6 || en.intersectionRect.height >= 0.6 * window.innerHeight)) rise();
       });
     }, { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] });
     io.observe(panel);
