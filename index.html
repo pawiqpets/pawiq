@@ -187,7 +187,7 @@
     .latest a::after { content: "\2192"; content: "\2192" / ""; flex: 0 0 auto; font-size: 18px; }
     .all { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; margin: 14px 0; border: 1.5px solid var(--ink); border-radius: 999px; font-size: 15px; text-decoration: none; }
     .all::after { content: "\2192"; content: "\2192" / ""; font-size: 16px; }
-    .follow { grid-area: follow; display: flex; align-items: center; gap: 0; margin-top: 16px; }
+    .follow { grid-area: follow; display: flex; align-items: center; gap: 0; margin-top: 32px; }
     .follow span { font-size: 15px; margin-right: 4px; }
     .icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; }
     .icon svg { width: 24px; height: 24px; fill: var(--ink); }
@@ -681,7 +681,8 @@
     Object.keys(FRAMES).forEach((k) => { const im = new Image(); im.src = FRAMES[k]; if (im.decode) im.decode().catch(() => {}); });
 
     const BLINKS = 3, CLOSED_MS = 160, BETWEEN_MS = 380;
-    let risen = false, done = false, timer = null, riseTimer = null, io = null;
+    const RISE_DELAY_MS = 1000; /* pause after the panel is in view before his head appears */
+    let risen = false, pending = false, done = false, timer = null, riseTimer = null, io = null;
     const field = document.querySelector(".field");
     const actEvents = ["pointerdown", "keydown", "wheel", "scroll", "touchstart"];
 
@@ -726,7 +727,11 @@
 
     io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
-        if (!risen && en.isIntersecting && (en.intersectionRatio >= 0.6 || en.intersectionRect.height >= 0.6 * window.innerHeight)) rise();
+        if (!risen && !pending && en.isIntersecting && (en.intersectionRatio >= 0.6 || en.intersectionRect.height >= 0.6 * window.innerHeight)) {
+          pending = true;
+          if (io) { io.disconnect(); io = null; }
+          window.setTimeout(rise, RISE_DELAY_MS);
+        }
       });
     }, { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] });
     io.observe(panel);
