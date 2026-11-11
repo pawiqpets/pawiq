@@ -39,9 +39,8 @@
   <!-- Preload critical assets -->
   <link rel="preload" href="./assets/fonts/Thunder-LC.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="./assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="./assets/coming-soon/winston-head-deadpan.svg" as="image" type="image/svg+xml" />
-  <link rel="preload" href="./assets/coming-soon/winston-head-deadpan-look-up-left.svg" as="image" type="image/svg+xml" />
-  <link rel="preload" href="./assets/coming-soon/winston-head-deadpan-look-up-right.svg" as="image" type="image/svg+xml" />
+  <link rel="preload" href="./assets/coming-soon/winston-head-unimpressed.svg" as="image" type="image/svg+xml" />
+  <link rel="preload" href="./assets/coming-soon/winston-head-unimpressed-blink.svg" as="image" type="image/svg+xml" />
   <link rel="preload" href="./assets/coming-soon/winston-head-deadpan-happy.svg" as="image" type="image/svg+xml" />
 
   <!-- Schema: WebSite -->
@@ -175,12 +174,12 @@
       position: absolute; left: 50%; margin-left: calc(var(--wh) / -2); width: var(--wh); height: auto; bottom: calc(-1 * var(--b));
       transform-origin: 50% 75%; transform: translateY(calc(100% - var(--b)));
     }
-    /* deadpan, look-up-left and look-up-right are framed differently from deadpan-happy; these offsets line their drawing up with it */
-    .peek img[data-f="d"] { width: calc(var(--wh) * 1.0517); margin-left: calc(var(--wh) * -0.5438); bottom: calc(-1 * (var(--b) + var(--wh) * 0.0364)); }
+    /* unimpressed and blink are framed differently from deadpan-happy; these offsets line their drawing up with it */
+    .peek img[data-f="u"] {
+      width: calc(var(--wh) * 0.9948); margin-left: calc(var(--wh) * -0.4974); bottom: calc(-1 * (var(--b) - var(--wh) * 0.0674));
+      transform: translateY(calc(100% - var(--b) + var(--wh) * 0.0674));
+    }
     .peek.up img { transform: translateY(0); transition: transform 1.2s ease-out; }
-    .peek.up.settled img { transition: transform 300ms ease; }
-    .peek.up.settled.look-l img { transform: translateY(-2px) rotate(-8deg); }
-    .peek.up.settled.look-r img { transform: translateY(-2px) rotate(8deg); }
     .latest ul { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid rgba(0,8,11,.22); }
     .latest li { border-top: 1px solid rgba(0,8,11,.22); }
     .latest li:nth-child(3) { display: none; }
@@ -657,54 +656,50 @@
       }
     });
 
-    /* Winston: rises once with the deadpan face, glances up-left or up-right while the visitor waits,
-       and switches to deadpan-happy (for good) on the first sign of life. */
+    /* Winston: rises once looking unimpressed, blinks in bursts with pauses in between, and switches to
+       deadpan-happy (for good) the first time the visitor does anything on the page. */
     const peek = document.getElementById("peek");
     const panel = document.querySelector(".panel");
     const img = peek ? peek.querySelector("img") : null;
     if (!peek || !panel || !img) return;
     const BASE = "./assets/coming-soon/";
     const FRAMES = {
-      d: BASE + "winston-head-deadpan.svg",
-      l: BASE + "winston-head-deadpan-look-up-left.svg",
-      r: BASE + "winston-head-deadpan-look-up-right.svg",
+      u: BASE + "winston-head-unimpressed.svg",
+      b: BASE + "winston-head-unimpressed-blink.svg",
       h: BASE + "winston-head-deadpan-happy.svg"
     };
     const setFrame = (k) => {
       img.src = FRAMES[k];
-      if (k === "h") img.removeAttribute("data-f"); else img.setAttribute("data-f", "d");
+      if (k === "h") img.removeAttribute("data-f"); else img.setAttribute("data-f", "u");
     };
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce || !("IntersectionObserver" in window)) {
       setFrame("h");
-      peek.classList.add("up", "settled");
+      peek.classList.add("up");
       return;
     }
     Object.keys(FRAMES).forEach((k) => { const im = new Image(); im.src = FRAMES[k]; if (im.decode) im.decode().catch(() => {}); });
 
-    let risen = false, done = false, lastSide = null, timer = null, riseTimer = null, io = null;
+    const BLINKS = 3, CLOSED_MS = 160, BETWEEN_MS = 380;
+    let risen = false, done = false, timer = null, riseTimer = null, io = null;
     const field = document.querySelector(".field");
     const actEvents = ["pointerdown", "keydown", "wheel", "scroll", "touchstart"];
 
     const clearTimer = () => { if (timer) { window.clearTimeout(timer); timer = null; } };
     const rand = (lo, hi) => lo + Math.random() * (hi - lo);
-    const endLook = () => {
-      peek.classList.remove("look-l", "look-r");
-      setFrame("d");
-    };
-    const schedule = (ms) => { clearTimer(); timer = window.setTimeout(look, ms); };
-    function look() {
+    function burst(count) {
       if (done || document.hidden) return;
-      const side = lastSide ? (Math.random() < 0.7 ? (lastSide === "l" ? "r" : "l") : lastSide) : (Math.random() < 0.5 ? "l" : "r");
-      lastSide = side;
-      setFrame(side);
-      peek.classList.add(side === "l" ? "look-l" : "look-r");
-      clearTimer();
-      timer = window.setTimeout(() => { endLook(); schedule(rand(3000, 5000)); }, 1100);
+      setFrame("b");
+      timer = window.setTimeout(() => {
+        setFrame("u");
+        if (count + 1 < BLINKS) timer = window.setTimeout(() => burst(count + 1), BETWEEN_MS);
+        else timer = window.setTimeout(() => burst(0), rand(2500, 3500));
+      }, CLOSED_MS);
     }
     function onVisibility() {
       if (done || !risen) return;
-      if (document.hidden) { clearTimer(); endLook(); } else { schedule(rand(3000, 5000)); }
+      clearTimer();
+      if (document.hidden) setFrame("u"); else timer = window.setTimeout(() => burst(0), 1000);
     }
     function onAct() {
       if (done) return;
@@ -714,22 +709,17 @@
       actEvents.forEach((ev) => window.removeEventListener(ev, onAct, true));
       if (field) field.removeEventListener("focus", onAct);
       document.removeEventListener("visibilitychange", onVisibility);
-      peek.classList.remove("look-l", "look-r");
       setFrame("h");
     }
     function rise() {
       if (io) { io.disconnect(); io = null; }
       risen = true;
-      if (!done) setFrame("d"); else setFrame("h");
+      setFrame(done ? "h" : "u");
       peek.classList.add("up");
       if (done) return;
-      riseTimer = window.setTimeout(() => {
-        riseTimer = null;
-        peek.classList.add("settled");
-        schedule(1500);
-      }, 1200);
+      riseTimer = window.setTimeout(() => { riseTimer = null; timer = window.setTimeout(() => burst(0), 1000); }, 1200);
     }
-    setFrame("d");
+    setFrame("u");
     actEvents.forEach((ev) => window.addEventListener(ev, onAct, { capture: true, passive: true }));
     if (field) field.addEventListener("focus", onAct);
     document.addEventListener("visibilitychange", onVisibility);
