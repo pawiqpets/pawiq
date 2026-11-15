@@ -152,6 +152,9 @@ def head(title, desc, url, og_type, og_image, extra=""):
 <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{GA_ID}');
 document.addEventListener('click',function(ev){{var a=ev.target.closest&&ev.target.closest('a[href*="#signupBlock"]');if(a)gtag('event','learn_signup_click',{{link_url:a.href,page_path:location.pathname}});}});</script>
 <meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
