@@ -124,8 +124,8 @@
     .logo { display: block; height: 28px; width: auto; }
     header a { display: inline-block; line-height: 0; padding: 8px 0; margin: -8px 0; }
 
-    h1 { font-size: 64px; margin-top: 40px; }
-    .lede { font-size: 15px; line-height: 1.45; margin: 16px 0 24px; max-width: 34ch; }
+    h1 { grid-area: h1; font-size: 64px; margin-top: 40px; }
+    .lede { grid-area: lede; font-size: 15px; line-height: 1.45; margin: 16px 0 0; max-width: 34ch; }
     .field {
       display: block; width: 100%; height: 46px; border: 1.5px solid var(--ink); border-radius: 12px; background: #fff;
       color: var(--ink); padding: 0 16px; font: inherit; font-size: 16px;
@@ -149,7 +149,8 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3.2L13 4.8' fill='none' stroke='%2300080B' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     }
     .consent input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-    .hero { grid-area: hero; padding-bottom: 48px; }
+    .hero { display: contents; }
+    #signupBlock, #postQuestion { grid-area: form; }
 
     .fade-swap { transition: opacity 320ms ease-in-out; }
     .is-hidden { opacity: 0 !important; pointer-events: none !important; }
@@ -165,11 +166,9 @@
     .post-q-form .go { width: 56px; margin-top: 0; font-family: 'Satoshi', sans-serif; font-size: 22px; flex: 0 0 auto; }
     .success { font-family: 'Thunder', 'Satoshi', sans-serif; font-weight: 800; font-size: 32px; }
 
-    main.grid { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "hero" "panel" "follow"; align-content: start; }
-    .panel { grid-area: panel; background: var(--cream); border-radius: 16px; padding: 12px 16px 4px; }
-    .phead { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 2px; }
-    .panel h2 { font-size: 30px; line-height: 1; margin: 2px 0 0; }
-    .peek { --wh: 48px; --b: 13px; position: relative; flex: 0 0 auto; width: 60px; height: 60px; border-radius: 50%; background: #7AC3FF; overflow: hidden; }
+    main.grid { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "h1" "lede" "circle" "form" "wait"; align-content: start; }
+    main.grid > * { min-width: 0; }
+    .peek { --wh: 112px; --b: 31px; grid-area: circle; justify-self: center; position: relative; width: 150px; height: 150px; margin: 4px 0 24px; border-radius: 50%; background: var(--cream); overflow: hidden; }
     .peek img {
       position: absolute; left: 50%; margin-left: calc(var(--wh) / -2); width: var(--wh); height: auto; bottom: calc(-1 * var(--b));
       transform-origin: 50% 75%; transform: translateY(calc(100% - var(--b)));
@@ -180,14 +179,20 @@
       transform: translateY(calc(100% - var(--b) + var(--wh) * 0.0674));
     }
     .peek.up img { transform: translateY(0); transition: transform 1.2s ease-out; }
+    /* While you wait: plain text on the blue page. --t is one line of link text; the invisible ::before areas make every tap target 44px tall without overlapping */
+    .wait { grid-area: wait; margin-top: 28px; --t: 18.9px; }
+    .wait h2 { font-size: 22px; line-height: 1; margin: 0 0 10px; }
     .latest ul { list-style: none; margin: 0; padding: 0; }
-    .latest li + li { border-top: 1px solid rgba(0,8,11,.22); }
+    .latest li + li { margin-top: 8px; }
     .latest li:nth-child(3) { display: none; }
-    .latest a { display: flex; align-items: center; min-height: 52px; padding: 8px 0; font-size: 16px; line-height: 1.35; text-decoration: none; }
-    .all { position: relative; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 11px; margin: 12px 0 16px; border: 1.25px solid #00080B; border-radius: 999px; font-size: 13px; text-decoration: none; }
-    .all::before { content: ""; position: absolute; inset: -10px -6px; } /* invisible tap area, 44px or more tall */
-    .all::after { content: "\2192"; content: "\2192" / ""; font-size: 13px; }
-    .follow { grid-area: follow; display: flex; align-items: center; gap: 0; margin: 24px 0 0; }
+    .latest a, .all { position: relative; display: block; width: fit-content; font-size: 14px; line-height: 1.35; color: var(--ink); }
+    .latest a { text-decoration: underline; text-underline-offset: 3px; }
+    .latest a::before { content: ""; position: absolute; left: -4px; right: -4px; top: calc(var(--t) - 41px); bottom: -4px; }
+    .latest li + li a::before { top: -4px; bottom: calc(var(--t) - 41px); }
+    .all { margin-top: calc(66px - 2 * var(--t)); text-decoration: none; }
+    .all::before { content: ""; position: absolute; left: -4px; right: -4px; top: calc(var(--t) - 24.7px); bottom: -19.9px; }
+    .all::after { content: "\2192"; content: "\2192" / ""; margin-left: 6px; }
+    .follow { display: flex; align-items: center; gap: 0; margin: 20px 0 0; }
     .follow span { font-size: 15px; margin-right: 4px; }
     .icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; }
     .icon svg { width: 24px; height: 24px; fill: var(--ink); }
@@ -213,22 +218,20 @@
       .logo { height: 34px; }
       main.grid {
         --h1: clamp(64px, min(9.444vw, (min(100vw, 1240px) - 556px) / 4.2), 148px);
-        grid-template-columns: minmax(0, 1fr) 420px; grid-template-rows: auto auto; grid-template-areas: "hero panel" "hero follow";
+        grid-template-columns: minmax(0, 1fr) 420px; grid-template-areas: "h1 circle" "lede circle" "form circle" "wait .";
         column-gap: 56px; row-gap: 0; align-items: start; align-content: center; padding-top: clamp(32px, 4vh, 56px); padding-bottom: clamp(32px, 4vh, 56px);
       }
-      .hero { padding-bottom: 0; min-width: 0; }
       h1 { font-size: var(--h1); margin-top: 0; white-space: nowrap; }
-      .lede { font-size: 18px; }
+      .lede { font-size: 18px; margin: 16px 0 24px; }
       .consent { font-size: 15px; }
       .formrow { display: flex; gap: 10px; max-width: 600px; }
       .field { height: 52px; font-size: 17px; }
       .go { --nudge: 4px; width: auto; padding: var(--nudge, 0px) 26px 0; height: 52px; font-size: 22px; margin-top: 0; flex: none; }
       .post-q-input { height: 52px; font-size: 17px; }
-      .panel { padding: 16px 24px 8px; margin-top: calc(var(--h1) * 0.0074); }
-      .phead { margin-bottom: 4px; }
-      .panel h2 { font-size: 34px; }
-      .peek { --wh: 58px; --b: 16px; width: 72px; height: 72px; }
-      .follow { align-self: end; margin: 0; }
+      .peek { --wh: 186px; --b: 52px; width: 250px; height: 250px; margin: 0; align-self: center; }
+      .wait { margin-top: 48px; --t: 21.6px; }
+      .wait h2 { font-size: 24px; }
+      .latest a, .all { font-size: 16px; }
       .follow span { font-size: 14px; }
       footer.wrap { margin-top: 0; padding-top: 0; }
       footer .inner { padding-top: 4px; }
@@ -330,6 +333,8 @@
     <h1>Almost ready.</h1>
     <p class="lede">Soft chew supplements that support your dog&rsquo;s everyday health. Leave your email and you will hear first when we launch.</p>
 
+    <div class="peek" id="peek" aria-hidden="true"><img src="./assets/coming-soon/winston-head-deadpan-happy.svg" alt="" aria-hidden="true" width="48" height="57" /></div>
+
     <div id="signupBlock" class="fade-swap">
       <form id="signupForm" action="https://script.google.com/macros/s/AKfycbw6PuYM1BH9OMDLZjissJ6gjEDLKCFDfh7E1bSyZ5LFBeUA7w15Xusd-lBFktjaXdFz-A/exec" method="POST">
         <input type="text" name="company" style="display:none">
@@ -369,23 +374,19 @@
     </div>
   </section>
 
-  <div class="panel">
-    <div class="phead">
-      <h2>While you wait.</h2>
-      <div class="peek" id="peek" aria-hidden="true"><img src="./assets/coming-soon/winston-head-deadpan-happy.svg" alt="" aria-hidden="true" width="48" height="57" /></div>
-    </div>
+
+  <section class="wait">
+    <h2>While you wait.</h2>
     <!-- LATEST START -->
     <nav class="latest" aria-label="Latest Learn guides"><ul><li><a href="/blogs/learn/is-dog-shedding-normal">Why is my dog shedding so much?</a></li><li><a href="/blogs/learn/how-to-tell-if-your-dog-is-overweight">How can you tell if your dog is overweight?</a></li><li><a href="/blogs/learn/calm-dog-during-fireworks">How do I calm my dog during fireworks?</a></li></ul></nav>
     <!-- LATEST END -->
     <a class="all" id="allLearn" href="/blogs/learn">All Learn guides</a>
-  </div>
-
-
-  <div class="follow">
-    <span>Follow along.</span>
-    <a class="icon" href="https://www.instagram.com/pawiqpets/" data-network="instagram" target="_blank" rel="noopener" aria-label="pawIQ on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a>
-    <a class="icon" href="https://www.tiktok.com/@pawiqpets" data-network="tiktok" target="_blank" rel="noopener" aria-label="pawIQ on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
-  </div>
+    <div class="follow">
+      <span>Follow along.</span>
+      <a class="icon" href="https://www.instagram.com/pawiqpets/" data-network="instagram" target="_blank" rel="noopener" aria-label="pawIQ on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a>
+      <a class="icon" href="https://www.tiktok.com/@pawiqpets" data-network="tiktok" target="_blank" rel="noopener" aria-label="pawIQ on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+    </div>
+  </section>
 </main>
 
 <footer class="wrap">
@@ -659,9 +660,8 @@
     /* Winston: rises once looking unimpressed, blinks in bursts with pauses in between, and switches to
        deadpan-happy (for good) the first time the visitor does anything on the page. */
     const peek = document.getElementById("peek");
-    const panel = document.querySelector(".panel");
     const img = peek ? peek.querySelector("img") : null;
-    if (!peek || !panel || !img) return;
+    if (!peek || !img) return;
     const BASE = "./assets/coming-soon/";
     const FRAMES = {
       u: BASE + "winston-head-unimpressed.svg",
@@ -681,7 +681,7 @@
     Object.keys(FRAMES).forEach((k) => { const im = new Image(); im.src = FRAMES[k]; if (im.decode) im.decode().catch(() => {}); });
 
     const BLINKS = 3, CLOSED_MS = 160, BETWEEN_MS = 380;
-    const RISE_DELAY_MS = 1000; /* pause after the panel is in view before his head appears */
+    const RISE_DELAY_MS = 1000; /* pause after the circle is in view before his head appears */
     let risen = false, pending = false, done = false, timer = null, riseTimer = null, io = null;
     const field = document.querySelector(".field");
     const actEvents = ["pointerdown", "keydown", "wheel", "scroll", "touchstart"];
@@ -734,7 +734,7 @@
         }
       });
     }, { threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] });
-    io.observe(panel);
+    io.observe(peek);
   })();
 
   /* ============================================================
