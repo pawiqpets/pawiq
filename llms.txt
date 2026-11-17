@@ -1,47 +1,46 @@
-# pawIQ: canonical facts
+# pawIQ
 
-Canonical homepage: https://www.pawiqpets.com/
+> pawIQ makes soft chew supplements for dogs, developed with a licensed veterinarian, starting with 3-in-1 Gut Health and Skin & Immune. It launches on Amazon in the United States first, with direct-to-consumer sales to follow.
+
+Canonical homepage: [https://www.pawiqpets.com/](https://www.pawiqpets.com/)
 Primary category: Pet Supplements (Dogs)
 Products: 3-in-1 Gut Health (prebiotic + probiotic + postbiotic soft chews for dogs); Skin & Immune (skin, coat + immune support soft chews for dogs)
 Coming soon: Calming Chew; Hip & Joint Chew
 Primary market: United States (Canada later)
 Launch sequence: Amazon first; DTC shortly after
 
-Canonical structured data:
-- Product metadata (JSON-LD): https://www.pawiqpets.com/product.jsonld
-- FAQs (JSON-LD): https://www.pawiqpets.com/faq.jsonld
-- Sitemap: https://www.pawiqpets.com/sitemap.xml
+## Structured data
+- [Product metadata (JSON-LD)](https://www.pawiqpets.com/product.jsonld)
+- [FAQs (JSON-LD)](https://www.pawiqpets.com/faq.jsonld)
+- [Sitemap](https://www.pawiqpets.com/sitemap.xml)
 
 ## Learn (educational articles)
-- Index: https://www.pawiqpets.com/blogs/learn
-- Prebiotics vs probiotics vs postbiotics for dogs: https://www.pawiqpets.com/blogs/learn/prebiotics-probiotics-postbiotics-dogs (scientific definitions of each term, with ISAPP sources)
-- Why do dogs eat grass?: https://www.pawiqpets.com/blogs/learn/why-do-dogs-eat-grass (what owner surveys and vet schools say, when to call the vet, lawn chemicals)
-- What Thanksgiving foods can dogs eat?: https://www.pawiqpets.com/blogs/learn/thanksgiving-foods-dogs (which dishes are fine to share and which to skip, from AVMA, FDA and Merck)
-- How cold is too cold for dogs?: https://www.pawiqpets.com/blogs/learn/how-cold-is-too-cold-for-dogs (vet-school temperature markers, signs a dog is cold, winter paw care)
-- Does daylight saving time affect dogs?: https://www.pawiqpets.com/blogs/learn/does-daylight-saving-time-affect-dogs (what a 2025 study of pet and sled dogs found, and how to move meals and walks after the clock change)
-- How do you read a dog supplement label?: https://www.pawiqpets.com/blogs/learn/how-to-read-a-dog-supplement-label (each part of a dog supplement label explained, from AAFCO and FDA guidance)
-- How do I build a daily supplement routine for my dog?: https://www.pawiqpets.com/blogs/learn/daily-supplement-routine-for-dogs (how to fit a daily chew into meals and walks, keep it consistent and track it for your vet)
-- How do you prepare your dog for boarding for the first time?: https://www.pawiqpets.com/blogs/learn/prepare-dog-for-boarding (step-by-step first-stay timeline, vaccines, packing list and what is normal after pickup)
-- How often should you bathe a dog?: https://www.pawiqpets.com/blogs/learn/how-often-to-bathe-a-dog (how often to bathe by coat and lifestyle, a step-by-step bath and brushing tips, from vet-school and Merck guidance)
-- What are omega-3s for dogs? EPA, DHA and ALA explained: https://www.pawiqpets.com/blogs/learn/omega-3-epa-dha-dogs (EPA, DHA and ALA in plain English: what each one is, why fish oil matters and how to find it on a label)
-- What changes in a senior dog's nutrition?: https://www.pawiqpets.com/blogs/learn/senior-dog-nutrition (As dogs age, many need fewer calories, food that is easier to digest and closer attention to weight. Here is what changes in calories, food type and weight checks, and when)
-- Is Christmas tree water bad for dogs?: https://www.pawiqpets.com/blogs/learn/christmas-tree-water-dogs (It can be. Tree water can upset a dog's stomach, and needles, tinsel, lights and holiday plants carry their own risks. Here is how to set up a safer season)
-- What Christmas foods can't dogs eat?: https://www.pawiqpets.com/blogs/learn/holiday-foods-toxic-to-dogs (December means cookie tins on the coffee table and plates left on the counter. Here is what to keep out of reach this holiday season, and who to call if your dog gets there first)
-- How do I calm my dog during fireworks?: https://www.pawiqpets.com/blogs/learn/calm-dog-during-fireworks (A safe room, an early walk, a secure yard and a current ID tag make up this New Year's Eve plan for fireworks)
-- How can you tell if your dog is overweight?: https://www.pawiqpets.com/blogs/learn/how-to-tell-if-your-dog-is-overweight (The scale is only part of the story. Here is a simple hands-on check of the ribs, waist, tummy and tail base, built from veterinary guidance, plus when to ask your vet)
-- Why is my dog shedding so much?: https://www.pawiqpets.com/blogs/learn/is-dog-shedding-normal (A plain guide to the hair growth cycle, the spring and fall shed and the signs that mean it is time for a vet visit)
-- Why does my dog get an upset stomach after boarding, travel or a change in routine?: https://www.pawiqpets.com/blogs/learn/dog-upset-stomach-after-boarding (What stress, a diet change and car travel can do to a dog's stomach, and the signs and timing that mean it is time to call your vet)
+- [Learn index](https://www.pawiqpets.com/blogs/learn)
+- [Prebiotics vs probiotics vs postbiotics for dogs](https://www.pawiqpets.com/blogs/learn/prebiotics-probiotics-postbiotics-dogs): scientific definitions of each term, with ISAPP sources
+- [Why do dogs eat grass?](https://www.pawiqpets.com/blogs/learn/why-do-dogs-eat-grass): what owner surveys and vet schools say, when to call the vet, lawn chemicals
+- [What Thanksgiving foods can dogs eat?](https://www.pawiqpets.com/blogs/learn/thanksgiving-foods-dogs): which dishes are fine to share and which to skip, from AVMA, FDA and Merck
+- [How cold is too cold for dogs?](https://www.pawiqpets.com/blogs/learn/how-cold-is-too-cold-for-dogs): vet-school temperature markers, signs a dog is cold, winter paw care
+- [Does daylight saving time affect dogs?](https://www.pawiqpets.com/blogs/learn/does-daylight-saving-time-affect-dogs): what a 2025 study of pet and sled dogs found, and how to move meals and walks after the clock change
+- [How do you read a dog supplement label?](https://www.pawiqpets.com/blogs/learn/how-to-read-a-dog-supplement-label): each part of a dog supplement label explained, from AAFCO and FDA guidance
+- [How do I build a daily supplement routine for my dog?](https://www.pawiqpets.com/blogs/learn/daily-supplement-routine-for-dogs): how to fit a daily chew into meals and walks, keep it consistent and track it for your vet
+- [How do you prepare your dog for boarding for the first time?](https://www.pawiqpets.com/blogs/learn/prepare-dog-for-boarding): step-by-step first-stay timeline, vaccines, packing list and what is normal after pickup
+- [How often should you bathe a dog?](https://www.pawiqpets.com/blogs/learn/how-often-to-bathe-a-dog): how often to bathe by coat and lifestyle, a step-by-step bath and brushing tips, from vet-school and Merck guidance
+- [What are omega-3s for dogs? EPA, DHA and ALA explained](https://www.pawiqpets.com/blogs/learn/omega-3-epa-dha-dogs): EPA, DHA and ALA in plain English: what each one is, why fish oil matters and how to find it on a label
+- [What changes in a senior dog's nutrition?](https://www.pawiqpets.com/blogs/learn/senior-dog-nutrition): As dogs age, many need fewer calories, food that is easier to digest and closer attention to weight. Here is what changes in calories, food type and weight checks, and when
+- [Is Christmas tree water bad for dogs?](https://www.pawiqpets.com/blogs/learn/christmas-tree-water-dogs): It can be. Tree water can upset a dog's stomach, and needles, tinsel, lights and holiday plants carry their own risks. Here is how to set up a safer season
+- [What Christmas foods can't dogs eat?](https://www.pawiqpets.com/blogs/learn/holiday-foods-toxic-to-dogs): December means cookie tins on the coffee table and plates left on the counter. Here is what to keep out of reach this holiday season, and who to call if your dog gets there first
+- [How do I calm my dog during fireworks?](https://www.pawiqpets.com/blogs/learn/calm-dog-during-fireworks): A safe room, an early walk, a secure yard and a current ID tag make up this New Year's Eve plan for fireworks
+- [How can you tell if your dog is overweight?](https://www.pawiqpets.com/blogs/learn/how-to-tell-if-your-dog-is-overweight): The scale is only part of the story. Here is a simple hands-on check of the ribs, waist, tummy and tail base, built from veterinary guidance, plus when to ask your vet
+- [Why is my dog shedding so much?](https://www.pawiqpets.com/blogs/learn/is-dog-shedding-normal): A plain guide to the hair growth cycle, the spring and fall shed and the signs that mean it is time for a vet visit
+- [Why does my dog get an upset stomach after boarding, travel or a change in routine?](https://www.pawiqpets.com/blogs/learn/dog-upset-stomach-after-boarding): What stress, a diet change and car travel can do to a dog's stomach, and the signs and timing that mean it is time to call your vet
 
 ## Free tools
-- Tools index: https://www.pawiqpets.com/tools/
-- Dog age calculator: https://www.pawiqpets.com/tools/dog-age-calculator (dog years to human years and back, using the common 15, 9, 5 chart or a 2020 DNA study, with the chart by age)
-- Dog supplement cost calculator: https://www.pawiqpets.com/tools/dog-supplement-cost-calculator (cost per serving, per day and per 30 days from the package price and label serving)
-- Dog boarding checklist: https://www.pawiqpets.com/tools/dog-boarding-checklist (what to ask, pack and watch for, from Texas A&M and AVMA guidance; printable PDF)
-- Cold weather dog walk checklist: https://www.pawiqpets.com/tools/cold-weather-dog-walk-checklist (before, during and after a winter walk, from vet-school and AVMA guidance; printable PDF)
+- [Tools index](https://www.pawiqpets.com/tools/)
+- [Dog age calculator](https://www.pawiqpets.com/tools/dog-age-calculator): dog years to human years and back, using the common 15, 9, 5 chart or a 2020 DNA study, with the chart by age
+- [Dog supplement cost calculator](https://www.pawiqpets.com/tools/dog-supplement-cost-calculator): cost per serving, per day and per 30 days from the package price and label serving
+- [Dog boarding checklist](https://www.pawiqpets.com/tools/dog-boarding-checklist): what to ask, pack and watch for, from Texas A&M and AVMA guidance; printable PDF
+- [Cold weather dog walk checklist](https://www.pawiqpets.com/tools/cold-weather-dog-walk-checklist): before, during and after a winter walk, from vet-school and AVMA guidance; printable PDF
 
 ## Policies and feeds
-- Editorial policy (how articles are sourced, reviewed and updated): https://www.pawiqpets.com/pages/editorial-policy
-- Learn feed (Atom): https://www.pawiqpets.com/blogs/learn/feed.xml
-
-One-sentence summary:
-pawIQ makes soft chew supplements for dogs, developed with a licensed veterinarian, starting with 3-in-1 Gut Health and Skin & Immune. It launches on Amazon in the United States first, with direct-to-consumer sales to follow.
+- [Editorial policy](https://www.pawiqpets.com/pages/editorial-policy): how articles are sourced, reviewed and updated
+- [Learn feed (Atom)](https://www.pawiqpets.com/blogs/learn/feed.xml)
