@@ -244,7 +244,7 @@ def render_post(p, date, review_html="", others=()):
 <p class="crumb"><a href="/">Home</a> / <a href="/blogs/learn">Learn</a></p>
 <h1>{e(p["title"])}</h1>
 <p class="standfirst">{e(p["standfirst"])}</p>
-<p class="meta">Written by the pawIQ team · {("Last reviewed <time datetime=\"%s\">%s</time>" % (reviewed, date_label)) if reviewed else date_label} · {p["mins"]} min read</p>
+<p class="meta">Written by the pawIQ team · {("Last updated <time datetime=\"%s\">%s</time>" % (reviewed, date_label)) if reviewed else date_label} · {p["mins"]} min read</p>
 </div>
 <figure class="hero"><img src="{e(p["hero_img"])}"{srcset(p)} sizes="(max-width: 1100px) 100vw, 1100px" alt="{e(p["alt"])}" width="1600" height="1067" fetchpriority="high"><figcaption>{credit}</figcaption></figure>
 <article class="wrap post">

@@ -41,7 +41,7 @@
     <p class="crumb"><a href="/">Home</a> / <a href="{{ blog.url }}">Learn</a></p>
     <h1>{{ article.title | escape }}</h1>
     {%- if article.excerpt != blank -%}<p class="standfirst">{{ article.excerpt | strip_html }}</p>{%- endif -%}
-    <p class="meta">Written by the pawIQ team · Last reviewed <time datetime="{{ lx_reviewed | date: '%Y-%m-%d' }}">{{ lx_reviewed | date: '%B %-d, %Y' }}</time> · {{ lx_mins }} min read</p>
+    <p class="meta">Written by the pawIQ team · Last updated <time datetime="{{ lx_reviewed | date: '%Y-%m-%d' }}">{{ lx_reviewed | date: '%B %-d, %Y' }}</time> · {{ lx_mins }} min read</p>
   </div>
 
   {%- if article.image -%}
